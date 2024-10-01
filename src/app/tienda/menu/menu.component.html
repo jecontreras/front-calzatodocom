@@ -129,17 +129,17 @@
                     </div>
                 </div>
             </section> -->
-            <div class="row colorFondo">
-                <div class="col">
-                    <ul>
-                        <li><a href="#" [routerLink]="['/tienda/inicio']">Inicio</a></li>
+            <div class="row">
+                <div class="col colorFondo">
+                    <ul style="background-color: #080808;">
+                        <li><a href="#" [routerLink]="['/tienda/inicio']" class="colorFondo">Inicio</a></li>
                         <li><a href="#" [routerLink]="[ '/tienda/productos' ]">Catálogo</a></li>
-                        <li><a href="#" [routerLink]="[ '/tienda/detallepedido' ]" *ngIf="dataUser.id">Mis Pedidos</a></li>
-                        <li><a (click)="loginWithFacebook()" class="pointer" >Login Facebook</a></li>
+                        <!-- <li><a href="#" [routerLink]="[ '/tienda/detallepedido' ]" *ngIf="dataUser.id">Mis Pedidos</a></li> -->
+                        <!-- <li><a (click)="loginWithFacebook()" class="pointer" >Login Facebook</a></li> -->
                         <!--<li><a href="#" *ngIf="!dataUser.id" [routerLink]="[ '/login' ]">Inicar Seccion</a></li>-->
                         <!--<li><a href="#" *ngIf="dataUser.id" [routerLink]="[ '/config/pedidos' ]">Admin</a></li>-->
                         <!--<li><a href="#" *ngIf="!dataUser.id" [routerLink]="[ '/registro' ]">Registrarse</a></li>-->
-                        <li><a href="#" [routerLink]="[ '/tienda/contacto' ]">Contactos</a></li>
+                        <!-- <li><a href="#" [routerLink]="[ '/tienda/contacto' ]">Contactos</a></li> -->
                     </ul>
                 </div>
             </div>

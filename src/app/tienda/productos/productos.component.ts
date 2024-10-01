@@ -4,13 +4,14 @@ import { CategoriasService } from 'src/app/servicesComponents/categorias.service
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Store } from '@ngrx/store';
 import { CART } from 'src/app/interfaces/sotarage';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { InfoProductoComponent } from '../info-producto/info-producto.component';
 import { ProductoHistorialAction, CartAction, BuscadorAction } from 'src/app/redux/app.actions';
 import * as _ from 'lodash';
 import { ToolsService } from 'src/app/services/tools.service';
 import { FormatosService } from 'src/app/services/formatos.service';
 import { ChecktDialogComponent } from '../checkt-dialog/checkt-dialog.component';
+import { PizzaPartyComponent } from '../catalogo/catalogo.component';
 
 @Component({
   selector: 'app-productos',
@@ -28,7 +29,7 @@ export class ProductosComponent implements OnInit {
     page: 0,
     limit: 10
   };
-  
+
   listCategorias:any = [];
   dataSeleccionda:string;
   listProductosHistorial: any = [];
@@ -41,6 +42,14 @@ export class ProductosComponent implements OnInit {
   busqueda:any = {};
 
   tiendaInfo:any = {};
+  durationInSeconds = 5;
+  dataSelectCategory:any = [];
+  listBanner: any = [
+    {image: "https://lokomproaqui.com/assets/imagenes/banner5.png"},
+    {image: "https://lokomproaqui.com/assets/imagenes/banner4.png"}
+  ];
+  breakpoint: number = 6;
+  urlCategory:string;
 
   constructor(
     private _productos: ProductoService,
@@ -49,8 +58,9 @@ export class ProductosComponent implements OnInit {
     private _store: Store<CART>,
     public dialog: MatDialog,
     private _tools: ToolsService,
-    public _formato: FormatosService
-  ) { 
+    public _formato: FormatosService,
+    private _snackBar: MatSnackBar,
+  ) {
     this._store.subscribe((store: any) => {
       store = store.name;
       if(!store) return false;
@@ -64,11 +74,17 @@ export class ProductosComponent implements OnInit {
     this.getProductos();
     this.getCategorias();
     this.getProductosRecomendado();
+    this.urlCategory = 'tienda/index/';
+    setInterval(()=>{
+      this.breakpoint = (window.innerWidth <= 500) ? 1 : 6;
+      this.openSnackBar();
+    }, 50000 );
   }
 
   getCategorias(){
-    this._categorias.get( { where:{ cat_activo: 0 }, limit: 100 } ).subscribe((res:any)=>{ 
+    this._categorias.get( { where:{ cat_activo: 0 }, limit: 100 } ).subscribe((res:any)=>{
       this.listCategorias = res.data;
+      this.listCategorias.unshift( { cat_nombre: "Todos", id: 0 } );
     });
   }
 
@@ -76,12 +92,25 @@ export class ProductosComponent implements OnInit {
     this.query = { where:{ pro_activo: 0 }, page: 0, limit: 10 };
     if( obj.id ) this.query.where.pro_categoria = obj.id;
     this.listProductos = [];
+    this.notscrolly = true;
+    this.notEmptyPost = true;
     this.getProductos();
     this.dataSeleccionda = obj.cat_nombre;
   }
 
+  eventorOver( item:any, drawer:any ){
+    //console.log( item )
+    item.check = !item.check;
+    for( let row of this.listCategorias ) { if( row.id != item.id ) row.check = false; }
+    if( !item.subCategoria ) item.subCategoria = [];
+    if( item.subCategoria.length === 0 ) {
+      this.SeleccionCategoria( item );
+      drawer.toggle();
+    }else this.dataSelectCategory = item.subCategoria;
+  }
+
   searchColor( color:string ){
-    this.query.where.color= color; 
+    this.query.where.color= color;
   }
 
   onScroll(){
@@ -92,11 +121,21 @@ export class ProductosComponent implements OnInit {
      }
    }
 
+   handlePageNext(){
+    this.notscrolly = false;
+    this.query.page++;
+    this.query.limit = 30;
+    this.getProductos();
+  }
+
+
   getProductos(){
     this.spinner.show();
-    this._productos.get(this.query).subscribe((res:any)=>{ 
+    if( this.tiendaInfo.id ) this.query.where.empresa = this.tiendaInfo.id;
+    else this.query.where.empresa = 4;
+    this._productos.get(this.query).subscribe((res:any)=>{
       this.listProductos = _.unionBy(this.listProductos || [], res.data, 'id');
-      console.log("******",res)
+      //console.log("******",res)
       this.spinner.hide();
       this.loader = false;
       if (res.data.length === 0 ) {
@@ -107,9 +146,9 @@ export class ProductosComponent implements OnInit {
   }
 
   getProductosRecomendado(){
-    this._productos.get( { where:{ pro_activo: 0 }, sort: "createdAt DESC", page: 0, limit: 5 }).subscribe((res:any)=>{ console.log(res); this.listProductosRecomendar = res.data; }, ( error )=> { console.error(error); });
+    this._productos.get( { where:{ pro_activo: 0 }, sort: "createdAt DESC", page: 0, limit: 5 }).subscribe((res:any)=>{ this.listProductosRecomendar = res.data; }, ( error )=> { console.error(error); });
   }
-  
+
   viewProducto( obj:any ){
     const dialogRef = this.dialog.open(InfoProductoComponent,{
       width: '855px',
@@ -165,7 +204,7 @@ export class ProductosComponent implements OnInit {
     this.loader = true;
     this.seartxt = this.seartxt.trim();
     this.listProductos = [];
-    this.notscrolly = true; 
+    this.notscrolly = true;
     this.notEmptyPost = true;
     this.query = { where:{ pro_activo: 0 } ,limit: 15, page: 0 };
     if (this.seartxt) {
@@ -214,9 +253,22 @@ export class ProductosComponent implements OnInit {
     this.getProductos();
   }
 
+  openSnackBar() {
+    this._snackBar.openFromComponent(PizzaPartyComponent, {
+      duration: this.durationInSeconds * 1000,
+    });
+  }
+
   borrarBusqueda(){
     let accion = new BuscadorAction({}, 'drop');
     this._store.dispatch( accion );
+  }
+
+  handleAsesor(){
+    let url = `https://wa.me/57${ this.tiendaInfo.numeroCelular }?text=${encodeURIComponent(`
+      Hola, Servicio al cliente necesito más información gracias
+    `)}`
+    window.open(url);
   }
 
 }

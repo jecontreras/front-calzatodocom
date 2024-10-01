@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
 import { FormpuntosComponent } from '../../form/formpuntos/formpuntos.component';
+import * as moment from 'moment';
 
 declare interface DataTable {
   headerRow: string[];
@@ -26,6 +27,7 @@ declare const $: any;
 export class VentasComponent implements OnInit {
 
   dataTable: DataTable;
+  dataTable2: DataTable;
   pagina = 10;
   paginas = 0;
   loader = true;
@@ -36,7 +38,15 @@ export class VentasComponent implements OnInit {
     },
     page: 0
   };
-  Header:any = [ 'Acciones','Tipo Venta','Vendedor','Nombre Cliente','Teléfono Cliente','Fecha Venta','Productos','Cantidad','Precio','Imagen Producto','Estado', 'Motivo Rechazo', 'Tallas' ];
+  query2:any = {
+    where:{
+      ven_sw_eliminado: 0,
+      ven_estado: 0
+    },
+    sort: "createdAt ASC",
+    page: 0
+  };
+  Header:any = [ 'Acciones','Nombre Cliente','Teléfono Cliente','Fecha Venta','Cantidad','Precio','Imagen Producto','Estado', 'Tallas' ];
   $:any;
   public datoBusqueda = '';
 
@@ -44,6 +54,9 @@ export class VentasComponent implements OnInit {
   notEmptyPost:boolean = true;
   dataUser:any = {};
   activando:boolean = false;
+  dateHoy = moment().format("DD/MM/YYYY");
+  sumCantidad:any = 0;
+  ShopConfig:any = {};
 
   constructor(
     public dialog: MatDialog,
@@ -58,16 +71,38 @@ export class VentasComponent implements OnInit {
       this.activando = false;
       if(this.dataUser.usu_perfil.prf_descripcion != 'administrador') this.query.where.usu_clave_int = this.dataUser.id;
       if(this.dataUser.usu_perfil.prf_descripcion == 'administrador') this.activando = true;
+      this.ShopConfig = store.configuracion || {};
     });
    }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.dataTable = {
       headerRow: this.Header,
       footerRow: this.Header,
       dataRows: []
     };
+    this.dataTable2 = {
+      headerRow: this.Header,
+      footerRow: this.Header,
+      dataRows: []
+    };
     this.cargarTodos();
+    this.cargarTodos2();
+    this.sumCantidad = await this.getVentasHoy();
+  }
+
+  getVentasHoy(){
+    return new Promise( resolve =>{
+      this._ventas.getCount( {
+        "where": {
+          "ven_sw_eliminado": 0,
+          "ven_estado": {
+              "!=": 4
+          },
+          "create": this.dateHoy
+      }
+      } ).subscribe( res => resolve( res.data ) )
+    })
   }
 
   crear(obj:any){
@@ -75,9 +110,36 @@ export class VentasComponent implements OnInit {
       data: {datos: obj || {}}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe( async ( result ) => {
       console.log(`Dialog result: ${result}`);
+      if(result == 'creo') this.cargarTodos();
+      if( obj.id ) {
+        let filtro:any = await this.getDetallado( obj.id );
+          if( !filtro ) return false;
+          let idx = _.findIndex( this.dataTable.dataRows, [ 'id', obj.id ] );
+          console.log("**",idx)
+          if( idx >= 0 ) {
+            console.log("**",this.dataTable['dataRows'][idx], filtro)
+            this.dataTable['dataRows'][idx] = { ven_estado: filtro.ven_estado, ...filtro};
+          }
+
+          idx = _.findIndex( this.dataTable2.dataRows, [ 'id', obj.id ] );
+          console.log("**",idx)
+          if( idx >= 0 ) {
+            console.log("**",this.dataTable2['dataRows'][idx], filtro)
+            this.dataTable2['dataRows'][idx] = { ven_estado: filtro.ven_estado, ...filtro};
+          }
+      }
     });
+  }
+
+  async getDetallado( id:any ){
+    return new Promise( resolve => {
+      this._ventas.get( { where: { id: id } } ).subscribe(( res:any )=>{
+        res = res.data[0];
+        resolve( res || false )
+      },()=> resolve( false ) );
+    })
   }
 
   darPuntos(){
@@ -113,9 +175,14 @@ export class VentasComponent implements OnInit {
        this.cargarTodos();
      }
   }
+  onScroll2(){
+    this.query2.page++;
+    this.cargarTodos2();
+  }
 
   cargarTodos() {
     this.spinner.show();
+    this.query.where.empresa = this.ShopConfig.id;
     this._ventas.get(this.query)
     .subscribe(
       (response: any) => {
@@ -125,7 +192,7 @@ export class VentasComponent implements OnInit {
         this.dataTable.dataRows = _.unionBy(this.dataTable.dataRows || [], this.dataTable.dataRows, 'id');
         this.loader = false;
           this.spinner.hide();
-          
+
           if (response.data.length === 0 ) {
             this.notEmptyPost =  false;
           }
@@ -136,9 +203,24 @@ export class VentasComponent implements OnInit {
       });
   }
 
-  buscar() {
+  cargarTodos2() {
+    this.spinner.show();
+    this._ventas.get( this.query2 )
+    .subscribe(
+      (response: any) => {
+        this.dataTable2.headerRow = this.dataTable2.headerRow;
+        this.dataTable2.footerRow = this.dataTable2.footerRow;
+        this.dataTable2.dataRows.push(... response.data)
+        this.dataTable2.dataRows = _.unionBy(this.dataTable2.dataRows || [], this.dataTable2.dataRows, 'id');
+      },
+      error => {
+        console.log('Error', error);
+      });
+  }
+
+  async buscar() {
     this.loader = false;
-    this.notscrolly = true 
+    this.notscrolly = true
     this.notEmptyPost = true;
     this.dataTable.dataRows = [];
     //console.log(this.datoBusqueda);
@@ -187,6 +269,7 @@ export class VentasComponent implements OnInit {
         },
       ];
       this.cargarTodos();
+      this.sumCantidad = await this.getVentasHoy();
     }
   }
 

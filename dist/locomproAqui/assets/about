@@ -1,0 +1,69 @@
+<!-- / slider -->
+<!-- Start Promo section -->
+<section id="aa-promo">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="aa-promo-area">
+                    <div class="row">
+                        <!-- promo left -->
+                        <div class="col-md-5 no-padding">
+                            <div class="aa-promo-left">
+                                <div class="aa-promo-banner">
+                                    <img src="./assets/imagenes/450x450.jpg" alt="img">
+                                    <div class="aa-prom-content">
+                                        <span>75% Off</span>
+                                        <h4><a href="#">Para mujeres</a></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- promo right -->
+                        <div class="col-md-7 no-padding">
+                            <div class="aa-promo-right">
+                                <div class="aa-single-promo-right">
+                                    <div class="aa-promo-banner">
+                                        <img src="./assets/imagenes/300x320.jpg" alt="img">
+                                        <div class="aa-prom-content">
+                                            <span>Artículo exclusivo</span>
+                                            <h4><a href="#">Para mujeres</a></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aa-single-promo-right">
+                                    <div class="aa-promo-banner">
+                                        <img src="./assets/imagenes/300x320.jpg" alt="img">
+                                        <div class="aa-prom-content">
+                                            <span>Sale Off</span>
+                                            <h4><a href="#">En los zapatos</a></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aa-single-promo-right">
+                                    <div class="aa-promo-banner">
+                                        <img src="./assets/imagenes/300x320.jpg" alt="img">
+                                        <div class="aa-prom-content">
+                                            <span>Los recién llegados</span>
+                                            <h4><a href="#">Para niñ@s</a></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aa-single-promo-right">
+                                    <div class="aa-promo-banner">
+                                        <img src="./assets/imagenes/300x320.jpg" alt="img">
+                                        <div class="aa-prom-content">
+                                            <span>25% Off</span>
+                                            <h4><a href="#">Para bolsas</a></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / Promo section -->
+<!-- Products section -->

@@ -15,7 +15,7 @@
                                         <label for="">Contraseña<span>*</span></label>
                                         <input type="password" [(ngModel)]="data.usu_clave" (click)="submit()"
                                             (change)="submit()" placeholder="Contraseña">
-                                        <button type="submit" class="aa-browse-btn">Iniciar Seccion</button>
+                                        <button type="submit" class="aa-browse-btn" (click)="submit()">Iniciar Seccion</button>
                                         <p class="aa-lost-password"><a cdkFocusInitial target="_blank" class="pointer"
                                                 *ngIf="!disableRestarure"
                                                 [href]="'https://wa.me/573148487506?text=Hola Servicio al cliente, como esta, saludo cordial, necesito recuperar las credenciales de mi cuenta ' + data.usu_email "><span>Recuperar

@@ -11,10 +11,10 @@
                                 <div class="aa-footer-widget">
                                     <h3>Menú principal</h3>
                                     <ul class="aa-footer-nav">
-                                        <li><a href="#">Inicio</a></li>
-                                        <li><a href="#">Productos</a></li>
-                                        <li><a href="#">Sobre nosotras </a></li>
-                                        <li><a href="#">Contacto</a></li>
+                                        <li><a class="pointer" [routerLink]="[ '/tienda' ]" >Inicio</a></li>
+                                        <li><a class="pointer" [routerLink]="[ '/tienda/productos' ]">Productos</a></li>
+                                        <li><a class="pointer" [routerLink]="[ '/tienda' ]">Sobre nosotras </a></li>
+                                        <li><a class="pointer" (click)="handleContacto()">Contacto</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -51,15 +51,15 @@
                                     <div class="aa-footer-widget">
                                         <h3>Contactos</h3>
                                         <address>
-                                            <p> 25 Astor Pl, NY 10003, USA</p>
-                                            <p><span class="fa fa-phone"></span>+1 212-982-4589</p>
-                                            <p><span class="fa fa-envelope"></span>dailyshop@gmail.com</p>
+                                            <!--<p> 25 Astor Pl, NY 10003, USA</p>-->
+                                            <p><span class="fa fa-phone"></span>+57{{ tiendaInfo.numeroCelular }} </p>
+                                            <p><span class="fa fa-envelope"></span>{{ tiendaInfo.emailTienda }} </p>
                                         </address>
                                         <div class="aa-footer-social">
-                                            <a href="#"><span class="fa fa-facebook"></span></a>
-                                            <a href="#"><span class="fa fa-twitter"></span></a>
-                                            <a href="#"><span class="fa fa-google-plus"></span></a>
-                                            <a href="#"><span class="fa fa-youtube"></span></a>
+                                            <a class="pointer"><span class="fa fa-facebook"></span></a>
+                                            <a class="pointer"><span class="fa fa-twitter"></span></a>
+                                            <a class="pointer"><span class="fa fa-google-plus"></span></a>
+                                            <a class="pointer"><span class="fa fa-youtube"></span></a>
                                         </div>
                                     </div>
                                 </div>

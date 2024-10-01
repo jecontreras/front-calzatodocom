@@ -283,6 +283,13 @@ export class HeaderComponent implements OnInit {
       },
       {
         icons: 'settings',
+        nombre: 'Testimonios',
+        url: '/config/testimonios',
+        disable: this.rolUser == 'administrador',
+        submenus:[]
+      },
+      {
+        icons: 'settings',
         nombre: 'Usuarios',
         url: '/config/usuarios',
         disable: this.rolUser == 'administrador',

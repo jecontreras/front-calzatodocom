@@ -13,6 +13,7 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { ReferidosComponent } from './components/referidos/referidos.component';
 import { PedidosComponent } from './components/pedidos/pedidos.component';
 import { ConfigComponent } from './components/config/config.component';
+import { TestimonioComponent } from './components/testimonio/testimonio.component';
 
 const dashboardRoutes: Routes = [
  {
@@ -26,7 +27,8 @@ const dashboardRoutes: Routes = [
      {path: 'productos', component: ProductosComponent},
      {path: 'usuarios', component: UsuariosComponent},
      {path: 'ventas', component: VentasComponent},
-     { path: 'pedidos', component: PedidosComponent },
+     {path: 'testimonios', component: TestimonioComponent},
+     {path: 'pedidos', component: PedidosComponent },
      {path: 'cobros', component: CobrosComponent},
      {path: 'bancos', component: BancosComponent},
      {path: 'perfil', component: PerfilComponent},

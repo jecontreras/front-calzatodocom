@@ -8,6 +8,7 @@ import { ContactoComponent } from './contacto/contacto.component';
 import { CarritoComponent } from './carrito/carrito.component';
 import { ChecktComponent } from './checkt/checkt.component';
 import { DetallePedidoComponent } from './detalle-pedido/detalle-pedido.component';
+import { CatalogoComponent } from './catalogo/catalogo.component';
 
 
 const routes: Routes = [
@@ -17,7 +18,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: TiendaComponent
+            component: ProductosComponent
           },
           {
             path: 'inicio',
@@ -46,6 +47,10 @@ const routes: Routes = [
           {
             path: 'detallepedido',
             component: DetallePedidoComponent
+          },
+          {
+            path: 'catalogo/:id',
+            component: CatalogoComponent
           }
         ]
       },
@@ -54,7 +59,7 @@ const routes: Routes = [
       //   redirectTo: '',
       //   pathMatch: 'full'
       // },
-      
+
       /*{
         path: '',
         redirectTo: 'login',

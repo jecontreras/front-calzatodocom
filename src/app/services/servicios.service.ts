@@ -58,8 +58,12 @@ export class ServiciosService {
       });
     }
   }
-  private ejecutarQuery(url: string, data, METODO){
+  private ejecutarQuery(url: string, data, METODO){ //console.log("ejecutarQuery", url, data)
     return this.http[METODO]( url, data );
+  }
+
+  ejecutarPeticion(url: string, data, METODO){ console.log("ejecutarPeticion", url, data)
+    return this.http[METODO]( URL+"/"+ url, data );
   }
 
   querys(query:string, datas:any, METODO:string){

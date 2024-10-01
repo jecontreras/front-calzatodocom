@@ -12,23 +12,26 @@ import { ConfiguracionAction } from './redux/app.actions';
 export class AppComponent {
   title = 'locomproAqui';
   empresa:any = {};
+  dominio:string;
 
   constructor(
     private _config: ConfiguracionService,
     private _store: Store<STORAGES>,
   ){
     this._store.subscribe((store: any) => {
-      console.log(store);
+      //console.log(store);
       store = store.name;
       this.empresa = store.configuracion || {};
     });
-
+    this.dominio = window.location.host;
+    console.log("******HOST", this.dominio)
+    if( this.dominio === 'localhost:4200' ) this.dominio = "calzatodocom.web.app";
     this.getEmpresa();
   }
 
   getEmpresa(){
-    this._config.get({ where: {}, limit: 1 }).subscribe(( res:any )=>{
-      console.log(res);
+    this._config.get({ where: { dominio: this.dominio }, limit: 1 }).subscribe(( res:any )=>{
+      //console.log(res);
       res = res.data[0];
       if( !res ) return false;
       if( res.id != this.empresa.id){

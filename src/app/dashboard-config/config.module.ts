@@ -37,6 +37,11 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { NgImageSliderModule } from 'ng-image-slider';
 import { HeaderComponent } from './components/header/header.component';
 import { ConfigComponent } from './components/config/config.component';
+import { NgxCurrencyModule } from 'ngx-currency';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { TestimonioComponent } from './components/testimonio/testimonio.component';
+import { FormTestimonioComponent } from './form/form-testimonio/form-testimonio.component';
+
 
 @NgModule({
   entryComponents: [
@@ -47,7 +52,8 @@ import { ConfigComponent } from './components/config/config.component';
     FormventasComponent,
     FormcobrosComponent,
     FormpuntosComponent,
-    ViewProductosComponent
+    ViewProductosComponent,
+    FormTestimonioComponent
   ],
   declarations: [
     MainsComponent,
@@ -71,7 +77,9 @@ import { ConfigComponent } from './components/config/config.component';
     PedidosComponent,
     ViewProductosComponent,
     HeaderComponent,
-    ConfigComponent
+    ConfigComponent,
+    TestimonioComponent,
+    FormTestimonioComponent
   ],
   imports: [
     CommonModule,
@@ -86,7 +94,9 @@ import { ConfigComponent } from './components/config/config.component';
     NgxDropzoneModule,
     AngularEditorModule,
     NgxImageZoomModule,
-    NgImageSliderModule
+    NgImageSliderModule,
+    NgxCurrencyModule,
+    ImageCropperModule
   ],
   exports: [
     FormcategoriasComponent,

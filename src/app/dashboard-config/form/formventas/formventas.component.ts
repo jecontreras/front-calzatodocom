@@ -44,6 +44,7 @@ export class FormventasComponent implements OnInit {
   disableBtnFile:boolean = false;
   urlImagen:any;
   aumentarPrecio:number = 0;
+  ShopConfig:any = {};
 
   constructor(
     public dialog: MatDialog,
@@ -62,6 +63,7 @@ export class FormventasComponent implements OnInit {
     this._store.subscribe((store: any) => {
       store = store.name;
       this.dataUser = store.user || {};
+      this.ShopConfig = store.configuracion || {};
       if (this.dataUser.usu_perfil.prf_descripcion == 'administrador' || this.dataUser.usu_perfil.prf_descripcion == 'subAdministrador') this.superSub = true;
       else this.superSub = false;
 
@@ -170,6 +172,7 @@ export class FormventasComponent implements OnInit {
     this.disabled = true;
     this.suma();
     this.disabledButton = true;
+    this.data.empresa = this.ShopConfig.id;
     if (this.id) {
       if (!this.superSub) if (this.clone.ven_estado == 1) { this._tools.presentToast("Error no puedes ya editar la venta ya esta aprobada"); return false; }
       this.updates();

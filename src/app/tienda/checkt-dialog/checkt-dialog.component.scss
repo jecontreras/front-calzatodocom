@@ -1,3 +1,26 @@
 .altosIcons {
 	height: 19px;
 }
+
+.form-control-sm{
+  font-size: 1.875rem !important;
+}
+
+.has-error .form-control {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}

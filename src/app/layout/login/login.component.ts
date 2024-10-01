@@ -25,7 +25,7 @@ export class LoginsComponent implements OnInit {
     private _store: Store<STORAGES>,
     private _authSrvice: AuthService
   ) { }
-  
+
   ngOnInit() {
     if (this._authSrvice.isLoggedIn()) this._router.navigate(['/pedidos']);
   }
@@ -44,12 +44,13 @@ export class LoginsComponent implements OnInit {
         location.reload();
       }else{
         this._tools.presentToast("Error de sesión")
+        this.disableSubmit = true;
       }
     },(error)=>{ console.error(error);this.disableSubmit = true; this._tools.presentToast("Error de servidor")});
   }
 
   registre(){
-    
+
   }
 
 }

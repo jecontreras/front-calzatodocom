@@ -57,15 +57,15 @@ export class PedidosComponent implements OnInit {
     private _user: UsuariosService,
     private _categorias: CategoriasService,
     private spinner: NgxSpinnerService
-  ) { 
+  ) {
 
-    this.cargarProductos();
     this._store.subscribe((store: any) => {
       store = store.name;
       if(!store) return false;
       this.userId = store.usercabeza;
       this.tiendaInfo = store.configuracion || {};
     });
+    this.cargarProductos();
 
   }
 
@@ -73,7 +73,7 @@ export class PedidosComponent implements OnInit {
     if((this.activate.snapshot.paramMap.get('id'))) { this.userId = (this.activate.snapshot.paramMap.get('id')); this.getUser(); }
     this.getCategorias();
   }
-  
+
   getUser(){
     this._user.get( { where: { id: this.userId } } ).subscribe((res:any)=>{ this.userId = res.data[0]; this.GuardarStoreUser() }, (error)=>{ console.error(error); this.userId = '';});
   }
@@ -82,7 +82,7 @@ export class PedidosComponent implements OnInit {
     this._store.dispatch(accion);
   }
   getCategorias(){
-    this._categorias.get( { where:{ cat_activo: 0 }, limit: 100 } ).subscribe((res:any)=>{ 
+    this._categorias.get( { where:{ cat_activo: 0 }, limit: 100 } ).subscribe((res:any)=>{
     for(let row of res.data){
       this.imageObject.push({
         image: row.cat_imagen || './assets/categoria.jpeg',
@@ -104,17 +104,18 @@ export class PedidosComponent implements OnInit {
   }
   cargarProductos(){
     this.spinner.show();
+    if( this.tiendaInfo.id ) this.query.where.empresa = this.tiendaInfo.id;
     this._productos.get(this.query).subscribe((res:any)=>{
         console.log("res", res);
         this.loader = false;
         this.spinner.hide();
         this.listProductos = _.unionBy(this.listProductos || [], res.data, 'id');
-        
+
         if (res.data.length === 0 ) {
           this.notEmptyPost =  false;
         }
         this.notscrolly = true;
-        
+
     });
   }
   buscar() {
@@ -122,7 +123,7 @@ export class PedidosComponent implements OnInit {
     this.loader = true;
     this.seartxt = this.seartxt.trim();
     this.listProductos = [];
-    this.notscrolly = true; 
+    this.notscrolly = true;
     this.notEmptyPost = true;
     if (this.seartxt === '') {
       this.query = {where:{pro_activo: 0},limit: 15, page: 0};
@@ -162,20 +163,20 @@ export class PedidosComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
-    }); 
+    });
   }
   masInfo(obj:any){
     if(this.userId) this.urlwhat = `https://wa.me/${ this.userId.usu_indicativo || 57 }${ this.userId.usu_telefono || '3208429429'}?text=Hola Servicio al cliente, como esta, saludo cordial, estoy interesad@ en mas informacion ${obj.pro_nombre} codigo ${obj.pro_codigo}`;
     else this.urlwhat = `https://wa.me/57${ this.tiendaInfo.numeroCelular }?text=Hola Servicio al cliente, como esta, saludo cordial, estoy interesad@ en mas informacion ${obj.pro_nombre} codigo ${obj.pro_codigo}`;
     window.open(this.urlwhat);
   }
-  
+
   maxCantidad(obj:any){
     if(!obj.cantidadAdquirir) obj.cantidadAdquirir = 1;
     obj.cantidadAdquirir++;
     obj.pro_uni_ventaEdit = ( obj.cantidadAdquirir * obj.pro_uni_venta );
   }
-  
+
   manualCantidad(obj:any){
     if(!obj.cantidadAdquirir) obj.cantidadAdquirir = 1;
     obj.pro_uni_ventaEdit = ( obj.cantidadAdquirir * obj.pro_uni_venta );
@@ -203,7 +204,7 @@ export class PedidosComponent implements OnInit {
     this._store.dispatch(accion);
     this._tools.presentToast("Agregado al Carro");
   }
-  
+
   imageOnClick(index:any, obj:any) {
       //console.log('index', index, this.imageObject[index]);
       for(let row of this.imageObject) row.check = false;
@@ -211,7 +212,7 @@ export class PedidosComponent implements OnInit {
       this.query = { where:{ pro_activo: 0 }, page: 0, limit: 10 };
       if( this.imageObject[index].id >0 ) this.query = { where:{ pro_activo: 0, pro_categoria: this.imageObject[index].id }, page: 0, limit: 10 };
       this.listProductos = [];
-      this.notscrolly = true; 
+      this.notscrolly = true;
       this.notEmptyPost = true;
       this.cargarProductos();
   }
@@ -239,7 +240,7 @@ export class PedidosComponent implements OnInit {
       this.cargarProductos();
     }
   }
-  
+
   codigo(){
     return (Date.now().toString(20).substr(2, 3) + Math.random().toString(20).substr(2, 3)).toUpperCase();
   }

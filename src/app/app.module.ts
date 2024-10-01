@@ -29,6 +29,7 @@ import { LoginsComponent } from './layout/login/login.component';
 import { RegistrosComponent } from './layout/registro/registro.component';
 import { TerminosComponent } from './layout/terminos/terminos.component';
 import  { FacebookLoginProvider, GoogleLoginProvider, SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 @NgModule({
   entryComponents:[
@@ -61,6 +62,7 @@ import  { FacebookLoginProvider, GoogleLoginProvider, SocialLoginModule, SocialA
     ConfigModule,
     NgxImageZoomModule,
     SocialLoginModule,
+    NgxCurrencyModule,
     StoreModule.forRoot({ name: appReducer }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

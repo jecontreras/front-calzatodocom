@@ -14,7 +14,7 @@ const URL = environment.url;
   styleUrls: ['./formcategorias.component.scss']
 })
 export class FormcategoriasComponent implements OnInit {
-  
+
   files: File[] = [];
   list_files: any = [];
   data:any = {};
@@ -45,18 +45,18 @@ export class FormcategoriasComponent implements OnInit {
     //console.log(event, this.files);
     this.files=[event.addedFiles[0]]
   }
-  
+
   onRemove(event) {
     //console.log(event);
     this.files.splice(this.files.indexOf(event), 1);
   }
-  
+
   getCategorias(){
     this._categoria.get({where:{cat_activo: 0}}).subscribe((res:any)=>{
       this.listCategorias = res.data;
     }, error=> this._tools.presentToast("error servidor"));
   }
-  
+
   subirFile(){
     let form:any = new FormData();
     form.append('file', this.files[0]);
@@ -89,6 +89,8 @@ export class FormcategoriasComponent implements OnInit {
   }
 
   updates(){
+    this.data = _.omit(this.data, [ 'cat_usu_actualiz' ])
+    this.data = _.omitBy(this.data, _.isNull);
     this._categoria.update(this.data).subscribe((res:any)=>{
       this._tools.presentToast("Actualizado");
     },(error)=>{console.error(error); this._tools.presentToast("Error de servidor")});
