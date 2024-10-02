@@ -1,11 +1,18 @@
 <section style="background: #696969;">
+
   <section id="aa-product-details">
     <div class="anchos">
       <div class="row">
         <div class="col-12">
-          <div class="d-flex justify-content-center">
-            <div>
-              <h1 class="aa-product-price precio" style="text-align: center;">{{ data.pro_nombre }}</h1>
+        </div>
+        <div class="col-12">
+          <div class="d-flex flex-row bd-highlight mb-3">
+            <div class="p-2 bd-highlight" style="width: 100%;">
+              <div class="d-flex justify-content-center" style="    background: #15d7ae;">
+                <div>
+                  <h1 class="aa-product-price precio" style="text-align: center;">{{ data.pro_nombre }}</h1>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -72,7 +79,7 @@
                     >
                       <a (click)="comprarArticulo(item.cantidad, true, item.precios)"
                         [ngClass]="{ 'jump-animation': isClicked  }"
-                        style="color: #ffffff !important;"
+                        style="background: #00ed61  !important; color: #ffffff !important;"
                         class="aa-add-to-cart-btn pointer ov-btn-slide-close">
                         <span *ngIf="item.cantidad === 1">LLEVA {{ item.cantidad }} PAR POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
                         <span *ngIf="item.cantidad != 1">LLEVA {{ item.cantidad }} PARES POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
@@ -99,6 +106,11 @@
                       </p>
                     </div>-->
                   </div>
+                </div>
+                <div class="col-12">
+                  <img style="    width: 100%;
+                  height: 9pc;
+                  border-radius: 20px;" src="./assets/imagenes/1.jpg" alt="">
                 </div>
                 <div class="col-md-7 col-sm-7 col-xs-12">
                   <div class="aa-product-view-slider">
@@ -167,17 +179,21 @@
                         <div class="image-caption">Compra segura</div>
                       </div>
                       <div class="image-container">
-                        <img src="./assets/img/pagos.png" alt="Imagen 2" style="background: white;">
+                        <img src="./assets/img/envios.png" alt="Imagen 2" style="background: white;">
+                        <div class="image-caption">Compra segura</div>
+                      </div>
+                      <div class="image-container">
+                        <img src="./assets/img/paypal.jpg" alt="Imagen 2" style="background: white;">
                         <div class="image-caption">Compra segura</div>
                       </div>
                     </div>
-                    <!--<div class="col-12">
+                    <div class="col-12">
                       <div class="d-flex justify-content-center" style="width: 100%;">
                         <div>
                           <h5> 🚚 ENVIO A TODA COLOMBIA Y PAGAS CUANDO RECIBES EL PRODUCTO 🚚</h5>
                         </div>
                       </div>
-                    </div>-->
+                    </div>
                   </div>
                 </div>
                 <!--<div class="testimonial-section" style="width: 100%;">

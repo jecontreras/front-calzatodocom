@@ -27,7 +27,7 @@ export class ProductosComponent implements OnInit {
       //pro_categoria: { '!=' : [2,3,12] }
     },
     page: 0,
-    limit: 10
+    limit: 30
   };
 
   listCategorias:any = [];
@@ -124,7 +124,6 @@ export class ProductosComponent implements OnInit {
    handlePageNext(){
     this.notscrolly = false;
     this.query.page++;
-    this.query.limit = 30;
     this.getProductos();
   }
 
