@@ -245,6 +245,24 @@
                     class="fa fab fa-whatsapp"></span>CHATEA CON UN ASESOR</a>
                 </div>
               </div>
+              <div class="aa-product-review-area">
+                <div class="row">
+                  <a class="col-12 col-sm-6 pointer" *ngFor="let item of imageObject; let i = index" target="_blank" [routerLink]="[ '/tienda/productosView', item.id ]" >
+
+                    <img [src]="item.image" data-srcset="{{item.image}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto 1x"
+                        alt data-sizes=auto data-src="{{item.image}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto"
+                        class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
+                    <div class="d-flex justify-content-center">
+                      <div>
+                        <a class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
+                          <span class="aa-product-price precio">{{ item.title }}</span>
+                          <span>Comprar y pagar en casa</span>
+                        </a>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
             </div>
             <!--<div class="aa-product-related-item" *ngIf="listEvidencia.length">
               <div class="d-flex justify-content-center">
@@ -264,7 +282,7 @@
     </div>
   </section>
 
-  <!--<footer #nav style="position: fixed; top: 92%; left: auto;">
+  <footer #nav style="position: fixed; top: 92%; left: auto;">
     <div class="container">
       <div class="row">
         <div class="col-12">
@@ -277,6 +295,6 @@
         </div>
       </div>
     </div>
-  </footer>-->
+  </footer>
 
 </section>
