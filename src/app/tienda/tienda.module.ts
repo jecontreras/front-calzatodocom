@@ -25,10 +25,11 @@ import { AlertBannerComponent } from './alert-banner/alert-banner.component';
 import { SwiperModule } from 'swiper/angular';
 import { SliderComponent } from './slider/slider.component';
 import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
+import { ProductosTComponent } from './productos-t/productos-t.component';
 
 @NgModule({
   entryComponents: [ InfoProductoComponent,ChecktDialogComponent ],
-  declarations: [MainsComponent, TiendaComponent, ProductosComponent, FooterComponent, MenuComponent, InfoProductoComponent, ProductosViewComponent, ContactoComponent, ChecktComponent, CarritoComponent, CompletarComponent, ChecktDialogComponent, DetallePedidoComponent, CatalogoComponent, AlertBannerComponent, SliderComponent, MenuLateralComponent ],
+  declarations: [MainsComponent, TiendaComponent, ProductosComponent, FooterComponent, MenuComponent, InfoProductoComponent, ProductosViewComponent, ContactoComponent, ChecktComponent, CarritoComponent, CompletarComponent, ChecktDialogComponent, DetallePedidoComponent, CatalogoComponent, AlertBannerComponent, SliderComponent, MenuLateralComponent, ProductosTComponent ],
   imports: [
     TiendaRoutingModule,
     CommonModule,

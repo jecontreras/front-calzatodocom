@@ -13,6 +13,9 @@ export class CategoriasService {
   get(query:any){
     return this._model.querys('tblcategorias/querys',query, 'post');
   }
+  getProduct(query:any){
+    return this._model.querys('tblcategorias/querysProduct',query, 'post');
+  }
   create(query:any){
     return this._model.querys('tblcategorias',query, 'post');
   }

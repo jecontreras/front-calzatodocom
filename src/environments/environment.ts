@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  //url: "http://localhost:1338",
-  url: "https://ofertastoreapp-753157c3f00c.herokuapp.com",
+  url: "http://localhost:1337",
+  //url: "https://ofertastoreapp-753157c3f00c.herokuapp.com",
   urlFront: "http://localhost:4200",
   //URLFILE: "https://apilokomproaqui1-9219656b6da1.herokuapp.com",
   URLFILE: "http://localhost:1339"
