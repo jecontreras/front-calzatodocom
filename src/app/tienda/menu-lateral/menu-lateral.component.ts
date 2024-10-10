@@ -25,7 +25,11 @@ export class MenuLateralComponent implements OnInit {
       if(!store) return false;
       this.userId = store.usercabeza || {};
       this.dataUser = store.user || {};
-      this.whatsappContact = store.configuracion.numeroCelular;
+      try {
+        this.whatsappContact = store.configuracion.numeroCelular;
+      } catch (error) {
+        
+      }
       this.rellenoRedes();
     });
 
