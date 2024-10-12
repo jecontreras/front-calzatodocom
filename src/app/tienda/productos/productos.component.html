@@ -20,8 +20,8 @@
     <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50">
   </div>
   <span class="spacer"></span>
-  <mat-icon>shopping_cart</mat-icon>
   <mat-icon (click)="toggleSearch()">search</mat-icon>
+  <mat-icon>shopping_cart</mat-icon>
 </mat-toolbar>
 
 <!-- Sidenav para móvil -->
@@ -46,18 +46,22 @@
     
         <div class="content">
           <div class="row">
-            <div class="col-6 col-md-4" *ngFor="let product of item.articleData">
-              <mat-card class="product-card" [routerLink]="[ '/tienda/productosView', product.id ]" >
-                <img mat-card-image [src]="product.foto" alt="{{ product.pro_nombre }}">
-                <mat-card-title class="text-center">{{ product.pro_nombre }}</mat-card-title>
-                <mat-card-subtitle class="text-center">
-                  <span class=""><del>{{ _formato.monedaChange( 3, 2, product.pro_uni_venta*2 ) }}</del></span>
-                                <span class="">{{ _formato.monedaChange( 3, 2, product.pro_uni_venta ) }}</span>
+            <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let product of item.articleData">
+              <mat-card style="padding: 0 !important" class="product-card" [routerLink]="[ '/tienda/productosView', product.id ]">
+                <div class="image-container">
+                  <img [src]="product.foto" alt="{{ product.pro_nombre }}">
+                </div>
+                <mat-card-title class="title">{{ product.pro_nombre }}</mat-card-title>
+                <mat-card-subtitle class="price">
+                  <span><del>{{ _formato.monedaChange(3, 2, product.pro_uni_venta * 2) }}</del></span>
+                  <span>{{ _formato.monedaChange(3, 2, product.pro_uni_venta) }}</span>
                 </mat-card-subtitle>
               </mat-card>
             </div>
           </div>
         </div>
+        
+        
       </div>
     </div>
 
