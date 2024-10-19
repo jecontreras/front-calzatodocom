@@ -86,7 +86,7 @@ export class ProductosComponent implements OnInit {
   }
 
   getCategorias(){
-    this._categorias.getProduct( { where:{ cat_activo: 0 }, limit: 100, empresa: this.tiendaInfo.id } ).subscribe((res:any)=>{
+    this._categorias.getProduct( { where:{ cat_activo: 0 }, limit: 100, empresa: this.tiendaInfo.id || 4 } ).subscribe((res:any)=>{
       this.listCategorias = res.data;
       //this.listCategorias.unshift( { cat_nombre: "Todos", id: 0 } );
     });
