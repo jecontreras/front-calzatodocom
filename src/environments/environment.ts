@@ -4,11 +4,11 @@
 
 export const environment = {
   production: false,
-  //url: "http://localhost:1337",
+  //url: "https://1337-jecontreras-backofertas-l1b6vvtvt7y.ws-us116.gitpod.io",
   url: "https://ofertastoreapp-753157c3f00c.herokuapp.com",
   urlFront: "http://localhost:4200",
-  //URLFILE: "https://apilokomproaqui1-9219656b6da1.herokuapp.com",
-  URLFILE: "http://localhost:1339"
+  URLFILE: "https://apilokomproaqui1-9219656b6da1.herokuapp.com",
+  //URLFILE: "http://localhost:1339"
 };
 
 /*

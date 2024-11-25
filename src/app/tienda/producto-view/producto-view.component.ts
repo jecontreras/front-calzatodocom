@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CART } from 'src/app/interfaces/sotarage';
 import { ToolsService } from 'src/app/services/tools.service';
 import { Store } from '@ngrx/store';
@@ -115,6 +115,36 @@ export class ProductosViewComponent implements OnInit {
     milesegundo: 15
   };
 
+  showNotification = false;
+  lastPurchase = { user: 'Julio de Valledupar', name: 'Articulo', price: '$150.000', image: 'assets/imagenes/perfil.png' };
+  dataList:any = [
+    {
+      txt: "Compro Andres Ciudad Armenia"
+    },{
+      txt: "Compro Albaro Ciudad Caqueta"
+    },{
+      txt: "Compro Diego Ciudad Bogota"
+    },{
+      txt: "Compro Juan Ciudad Medellin"
+    },{
+      txt: "Compro Huberth Ciudad Bogota"
+    },{
+      txt: "Compro Cesar Ciudad Bucaramanga"
+    },{
+      txt: "Compro Alberto Ciudad Cartagena"
+    },{
+      txt: "Compro Andrea Ciudad Medellin"
+    },{
+      txt: "Compro Roberto Ciudad Santa martha"
+    },{
+      txt: "Compro Eduardo Ciudad Huila"
+    },{
+      txt: "Compro Alvaro Ciudad Bogota"
+    },
+  ];
+
+  @ViewChild('nextStep', { static: false }) nextStep: ElementRef;
+
   constructor(
     private _store: Store<CART>,
     private _tools: ToolsService,
@@ -142,10 +172,29 @@ export class ProductosViewComponent implements OnInit {
         this.query.where.idPrice = store.usercabeza.id;
        }
     });
-    setInterval(()=>{
+    /*setInterval(()=>{
       this.openSnackBar();
-    }, 50000 );
-    this.configTime();
+    }, 50000 );*/
+    let terv = 0;
+    setInterval(()=>{
+      //this.openSnackBar();
+      terv++;
+      if( terv >= 5 && terv <=5 ){
+        this.rango++;
+        this.showNotification = true;
+        function getRandomInt(max) {
+          return Math.floor(Math.random() * max);
+        }
+        this.lastPurchase.user = this.dataList[getRandomInt(10)].txt;
+        this.lastPurchase.image = this.viewsImagen;
+      }
+      if( terv >= 10 ){
+        this.showNotification = false;
+        terv = 0;
+      }
+      
+    }, 1000 );
+    //this.configTime();
   }
 
   async ngOnInit() {
@@ -165,12 +214,59 @@ export class ProductosViewComponent implements OnInit {
 
   }
 
+  scrollToNextStep() {
+    //console.log("*****", this.nextStep )
+    if (this.nextStep) {
+      this.alertTallaColor();
+      this.nextStep.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }
+
+  alertTallaColor(){
+    if( this.data.tallaR !== 'Unica' ) if( !this.pedido.talla ) { this._tools.error( { mensaje: "Por Favor Seleccionar una Talla" } ); return false; }
+    if( !this.data.colorSelect ) { this._tools.error( { mensaje: "Por Favor Seleccionar un Color" } ); return false; }
+    console.log("***11", this.pedido)
+    return true;
+  }
+
   prev() {
     $('#productCarousel').carousel('prev');
   }
 
   next() {
     $('#productCarousel').carousel('next');
+  }
+  
+  isFullscreen = false;
+  currentImage: string = '';
+  currentIndex: number = 0;
+
+  openFullscreen(image: string, index: number) {
+    this.isFullscreen = true;
+    this.currentImage = image;
+    this.currentIndex = index;
+  }
+
+  closeFullscreen() {
+    this.isFullscreen = false;
+  }
+
+  prevImage() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    } else {
+      this.currentIndex = this.imageObject2.length - 1; // Volver al último si estás en el primero
+    }
+    this.currentImage = this.imageObject2[this.currentIndex].image;
+  }
+
+  nextImage() {
+    if (this.currentIndex < this.imageObject2.length - 1) {
+      this.currentIndex++;
+    } else {
+      this.currentIndex = 0; // Volver al primero si estás en el último
+    }
+    this.currentImage = this.imageObject2[this.currentIndex].image;
   }
 
   configTime(){
@@ -235,6 +331,10 @@ export class ProductosViewComponent implements OnInit {
         this.listTallas.push( ... ( _.filter( row.tallaSelect, off=> off.check == true ) ) );
         this.listTallas = _.unionBy( this.listTallas || [], this.listTallas, 'id');
       }
+      for( let row of this.data.listaTallas ) {
+        this.pedido.talla = row.tal_descripcion;
+        this.data.tallaR = row.tal_descripcion;
+      }
       for( let row of this.data.listColor ) {
         let filtro = this.listGaleria.find( item => item.pri_imagen == row.foto );
         if( !filtro ) this.listGaleria.push( { id: this._tools.codigo(), pri_imagen: row.foto } );
@@ -261,6 +361,7 @@ export class ProductosViewComponent implements OnInit {
         }
       )
       this.bucleImg();
+      console.log("****357", this.data)
     }, error=> { console.error(error); this._tools.presentToast('Error de servidor'); });
   }
 
@@ -384,21 +485,29 @@ export class ProductosViewComponent implements OnInit {
     }, 200)
   }
 
-  AgregarCart2( item:any ){
+  async AgregarCart2( item:any ){
+    let validate= this.alertTallaColor();
+    if( !validate ) return false;
     let data:any = {
       articulo: item.id,
       codigo: item.pro_codigo,
       titulo: item.pro_nombre,
-      foto: item.foto,
-      talla: item.talla,
+      foto: this.viewsImagen || item.foto,
+      talla: this.pedido.talla,
       cantidad: item.cantidadAdquirir || 1,
       costo: item.pro_uni_venta,
       costoTotal: ( item.pro_uni_venta*( item.cantidadAdquirir || 1 ) ),
-      id: this.codigo()
+      id: this.codigo(),
+      color: this.data.colorSelect
     };
     let accion = new CartAction(data, 'post');
     this._store.dispatch(accion);
     this._tools.presentToast("Agregado al Carro");
+    let resultA = await this._tools.carritoCompra();
+    //console.log("****482", resultA)
+    if( resultA.value ) {
+      this.Router.navigate(['/tienda/carrito'])
+    }
   }
 
   handlePhoto(obj:any) {

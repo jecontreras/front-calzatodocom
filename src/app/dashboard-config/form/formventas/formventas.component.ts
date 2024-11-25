@@ -13,6 +13,7 @@ import { STORAGES } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
 import { NotificacionesService } from 'src/app/servicesComponents/notificaciones.service';
 import { TipoTallasService } from 'src/app/servicesComponents/tipo-tallas.service';
+import { VentasProductosService } from 'src/app/servicesComponents/ventas-productos.service';
 
 const URL = environment.url;
 
@@ -45,6 +46,7 @@ export class FormventasComponent implements OnInit {
   urlImagen:any;
   aumentarPrecio:number = 0;
   ShopConfig:any = {};
+  urlHref:string;
 
   constructor(
     public dialog: MatDialog,
@@ -57,7 +59,8 @@ export class FormventasComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public datas: any,
     private _archivos: ArchivosService,
     private _store: Store<STORAGES>,
-    private _tallas: TipoTallasService
+    private _tallas: TipoTallasService,
+    private _ventasServices: VentasProductosService
   ) {
 
     this._store.subscribe((store: any) => {
@@ -73,6 +76,7 @@ export class FormventasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.urlHref = window.location.origin;
     if (Object.keys(this.datas.datos).length > 0) {
       this.clone = _.clone(this.datas.datos);
       this.data = _.clone(this.datas.datos);
@@ -80,23 +84,25 @@ export class FormventasComponent implements OnInit {
       this.titulo = "Actualizar";
       if (this.data.cat_activo === 0) this.data.cat_activo = true;
       if (this.data.pro_clave_int) this.data.pro_clave_int = this.data.pro_clave_int.id;
-      if ( this.data.ven_tipo == "WHATSAPP" ) { if( !this.data.ven_imagen_producto ) this.data.ven_imagen_producto = "./assets/noimagen.jpg"; this.data.ven_tipo = "whatsapp"; }
-      if ( this.data.ven_tipo == "CARRITO" ) { this.data.ven_tipo = "carrito"; }
+      this.getArticulos();
     } else {
       this.id = "";
       this.data.usu_clave_int = this.dataUser.id;
       this.data.ven_usu_creacion = this.dataUser.usu_email;
       this.data.ven_fecha_venta = moment().format('YYYY-MM-DD');
     }
-    this.getArticulos();
     console.log(this.data)
   }
 
   getArticulos() {
-    this._productos.get({ where: { pro_activo: 0 }, limit: 10000 }).subscribe((res: any) => {
-      this.listProductos = res.data;
-      for(let row of this.listProductos) row.pro_uni_venta = Number(row.pro_uni_venta+this.aumentarPrecio);
-    }, (error) => { console.error(error); this._tools.presentToast("Error de servidor") });
+    return new Promise( resolve =>{
+      this.listProductos = [];
+      this._ventasServices.get({ where: { ventas: this.id }, limit: 10000 }).subscribe((res: any) => {
+        this.listProductos = res.data;
+        //this.suma();
+        resolve( true );
+      }, (error) => { console.error(error); this._tools.presentToast("Error de servidor"); this.listProductos = [];  resolve( false ); });
+    });
   }
 
   onSelect(event: any) {

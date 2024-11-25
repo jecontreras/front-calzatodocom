@@ -1,150 +1,118 @@
-<!-- Start header section -->
-<mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav position="end" #sidenav mode="side" [(opened)]="opened" [mode]="'over'" (opened)="events.push('open!')"
-        (closed)="events.push('close!')" class="sidenav anchos">
-        <mat-toolbar>
-            <mat-toolbar-row>
-                <div class="row">
-                    <div class="">
-                        <a class="pointer" (click)="sidenav.toggle()">
-                            <i class="material-icons" aria-hidden="true">close</i>
-                        </a>
-                    </div>
-                    <div class="col">
-                        Productos Seleccionados
-                    </div>
-                </div>
-            </mat-toolbar-row>
-        </mat-toolbar>
-        <div class="content row">
-            <div class="col-12">
-                <ng-container>
-                    <mat-list>
-                        <mat-list-item *ngFor="let item of listCart;let idx=index">
-                            <img class="imgFoto pointer" [src]="item.foto || './assets/img/producto.jpg'" mat-list-icon>
-                            <h4 mat-line>{{ item.titulo }}</h4>
-                            <p mat-line>{{ 'Cantidad: '+item.cantidad }} </p>
-                            <p mat-line>Precio:$ {{ ( item.costoTotal || 0).toLocaleString(1) }} COP</p>
-                            <p mat-line><span (click)="deleteCart(idx, item)"
-                                    class="p-1 pointer d-flex justify-content-end"><i
-                                        class="material-icons">delete</i></span> </p>
-                        </mat-list-item>
-                    </mat-list>
-                </ng-container>
+<!-- Para escritorio -->
+<mat-toolbar class="toolbar-desktop">
+    <div class="logo">
+      <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50">
+    </div>
+    <!--<span class="spacer"></span>-->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-center">
+                <a href="" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: black;">
+                    {{ itemCategory.cat_nombre }}
+                </a>
             </div>
         </div>
-        <div class="cart-bg-overlay"></div>
+    </div>
+    <!--<span class="spacer"></span>-->
+  
+    <!--<span class="spacer"></span>-->
+    <mat-icon (click)="menu2.toggle()">shopping_cart</mat-icon>
+  </mat-toolbar>
+  
+  <!-- Para móvil -->
+  <mat-toolbar class="toolbar-mobile">
+    <button mat-icon-button (click)="menu.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="logo">
+      <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50">
+    </div>
+    <span class="spacer"></span>
+    <!--<mat-icon (click)="toggleSearch()">search</mat-icon>-->
+    <mat-icon (click)="menu2.toggle()">shopping_cart</mat-icon>
+</mat-toolbar>
 
-        <div class="right-side-cart-area">
-
-            <div class="cart-content d-flex p-2">
-                <div class="cart-amount-summary">
-                    <h2>Resumen</h2>
-                    <ul class="summary-table text-light">
-                        <li><span>total: </span> <span>$ {{ ( data.total || 0 ) | currency:'COP':true}}</span></li>
-                    </ul>
-                    <div class="d-flex justify-content-end">
-                        <a class="list-group-item list-group-item-action active" target="_blank" [routerLink]="['./carrito']" routerLinkActive="router-link-active" >Hacer
-                            Pedido</a>
-                        <!-- <a class="list-group-item list-group-item-action active" target="_blank" [href]="urlwhat">Hacer
-                            Pedido</a> -->
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Sidenav para móvil -->
+<mat-sidenav-container class="mobile-container">
+    <mat-sidenav #menu mode="over" class="mobile-sidenav">
+      <mat-nav-list>
+        <a mat-list-item>Relojes hombre</a>
+        <a mat-list-item>Ropa hombre</a>
+        <a mat-list-item>Relojes mujer</a>
+        <a mat-list-item>Accesorios varios</a>
+      </mat-nav-list>
     </mat-sidenav>
-    <!-- <router-outlet></router-outlet> -->
-    <mat-sidenav-content class="mat-drawer-content">
-        <div>
-            <header id="aa-header">
-                <!-- / header top  -->
 
-                <!-- start header bottom  -->
-                <div class="aa-header-bottom">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="aa-header-bottom-area">
-                                    <!-- logo  -->
-                                    <div class="aa-logo">
-                                        <!-- Text based logo -->
-                                        <a href="#" [routerLink]="['/tienda/inicio']">
-                                            <span class="fa fa-shopping-cart"></span>
-                                            <p class="text-dark">{{ tiendaInfo.nombreTienda }}<span>TIENDA VIRTUAL</span></p>
-                                        </a>
-                                        <!-- img based logo -->
-                                         <!--<a href="index.html"><img src="./assets/img/logo.jpg" alt="logo img"></a>-->
-                                    </div>
-                                    <!-- / logo  -->
-                                    <!-- cart box -->
-                                    <div class="aa-cartbox">
-                                        <a class="aa-cart-link pointer" (click)="sidenav.toggle();">
-                                            <span class="fa fa-shopping-basket"></span>
-                                            <span class="aa-cart-title">CARRO DE COMPRAS</span>
-                                            <span class="aa-cart-notify">{{ listCart.length }}</span>
-                                        </a>
-                                    </div>
-                                    <!-- / cart box -->
-                                    <!-- search box -->
-                                    <div class="aa-search-box">
-                                        <div action="">
-                                            <input type="text" [(ngModel)]="buscador" (change)="buscarArticulo()" placeholder="Buscar Articulos">
-                                            <button type="submit" (click)="buscarArticulo()" ><span class="fa fa-search"></span></button>
-                                        </div>
-                                    </div>
-                                    <!-- / search box -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- / header bottom  -->
-            </header>
-            <!-- / header section -->
-            <!-- menu -->
-            <!-- <section id="menu">
-                <div class="container">
-                    <div class="menu-area">
-                        <div class="navbar navbar-default" role="navigation">
-                            <div class="navbar-header">
-                                <button type="button" class="navbar-toggle" data-toggle="collapse"
-                                    data-target=".navbar-collapse">
-                                    <span class="sr-only">Menu de Navegacion</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
-                            </div>
-                            <div class="navbar-collapse collapse colorMenu block anchosMenu">
-                                <ul class="nav navbar-nav list">
-                                    <li><a href="#" [routerLink]="['/tienda/inicio']">Inicio</a></li>
-                                    <li><a href="#" [routerLink]="[ '/tienda/productos' ]">Productos</a></li>
-                                    <li><a href="#" *ngIf="!dataUser.id" [routerLink]="[ '/login' ]">Inicar Seccion</a></li>
-                                    <li><a href="#" *ngIf="dataUser.id" [routerLink]="[ '/config/pedidos' ]">Admin</a></li>
-                                    <li><a href="#" *ngIf="!dataUser.id" [routerLink]="[ '/registro' ]">Registrarse</a></li>
-                                    <li><a href="#" [routerLink]="[ '/tienda/contacto' ]">Contactos</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section> -->
-            <div class="row">
-                <div class="col colorFondo">
-                    <ul style="background-color: #080808;">
-                        <li><a href="#" [routerLink]="['/tienda/inicio']" class="colorFondo">Inicio</a></li>
-                        <li><a href="#" [routerLink]="[ '/tienda/productos' ]">Catálogo</a></li>
-                        <!-- <li><a href="#" [routerLink]="[ '/tienda/detallepedido' ]" *ngIf="dataUser.id">Mis Pedidos</a></li> -->
-                        <!-- <li><a (click)="loginWithFacebook()" class="pointer" >Login Facebook</a></li> -->
-                        <!--<li><a href="#" *ngIf="!dataUser.id" [routerLink]="[ '/login' ]">Inicar Seccion</a></li>-->
-                        <!--<li><a href="#" *ngIf="dataUser.id" [routerLink]="[ '/config/pedidos' ]">Admin</a></li>-->
-                        <!--<li><a href="#" *ngIf="!dataUser.id" [routerLink]="[ '/registro' ]">Registrarse</a></li>-->
-                        <!-- <li><a href="#" [routerLink]="[ '/tienda/contacto' ]">Contactos</a></li> -->
-                    </ul>
-                </div>
+    <mat-sidenav #menu2 mode="over" class="mobile-sidenav" position="end">
+
+        <div class="cart-widget-side">
+            <div class="wd-heading">
+              <span class="title">Carro de la compra</span>
+              <div class="close-side-widget" (click)="menu2.toggle()">
+                <a class="pointer" rel="nofollow">Cerrar</a>
+              </div>
             </div>
-        </div>
+          
+            <div class="widget">
+              <div class="shopping-cart-widget-body">
+                <div class="wd-scroll">
+                  <ul class="cart_list">
+                    <li
+                      class="cart_item"
+                      *ngFor="let item of listCart"
+                      [attr.data-key]="item.codigo"
+                    >
+                      <a [routerLink]="urlLocation+'/tienda/productosView'+item.articulo" class="cart-item-image">
+                        <img
+                          [src]="item.foto"
+                          [alt]="item.id"
+                          class="product-thumbnail"
+                        />
+                      </a>
+          
+                      <div class="cart-info">
+                        <span class="product-title">{{ item.titulo | slice: 0:20 }}</span>
+                        <span class="quantity">
+                            <mat-form-field class="example-full-width">
+                                <mat-label>Cantidad</mat-label>
+                                <input type="number" matInput #postalCode  placeholder="1, 2, 3" [(ngModel)]="item.cantidad">
+                            </mat-form-field>×
+                          <span class="price">{{ ( item.costoTotal * item.cantidad ) | currency:'COP' }}</span>
+                        </span>
+                      </div>
+                      <button
+                        class="remove"
+                        (click)="removeItem( item )"
+                        aria-label="Eliminar"
+                        >
+                        ×
+                        </button>
+                    </li>
+                  </ul>
+                </div>
+          
+                <div class="shopping-cart-widget-footer">
+                  <p class="total">
+                    <strong>Subtotal:</strong>
+                    <span>{{ calculateSubtotal() | currency:'COP' }}</span>
+                  </p>
+                  <div class="buttons">
+                    <button class="btn-cart" routerLink="/carrito">Ver carrito</button>
+                    <button class="btn-checkout" routerLink="/finalizar-compra">
+                      Finalizar compra
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+    </mat-sidenav>
+  
+    <mat-sidenav-content>
+  
         <ng-content></ng-content>
+      
     </mat-sidenav-content>
-    <!-- / menu -->
-</mat-sidenav-container>
+  </mat-sidenav-container>

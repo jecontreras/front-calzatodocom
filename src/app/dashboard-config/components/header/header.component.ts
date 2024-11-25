@@ -90,7 +90,7 @@ export class HeaderComponent implements OnInit {
     }
     else this.rolUser = 'visitante';
     this.listMenus();
-    if(this.rolUser === 'administrador') this.getCarrito();
+    //if(this.rolUser === 'administrador') this.getCarrito();
   }
 
   getVentas(){
@@ -203,14 +203,7 @@ export class HeaderComponent implements OnInit {
         icons: 'home',
         nombre: 'Inicio',
         disable: true,
-        url: '.',
-        submenus:[]
-      },
-      {
-        icons: 'storefront',
-        nombre: 'Tienda',
-        disable: true,
-        url: '/tienda',
+        url: '/config/ventas',
         submenus:[]
       },
       // {
@@ -243,7 +236,7 @@ export class HeaderComponent implements OnInit {
       {
         icons: 'local_grocery_store',
         nombre: 'Mis Ventas',
-        disable: this.rolUser !== 'visitante',
+        disable: true,
         url: '/config/ventas',
         submenus:[]
       },
@@ -313,20 +306,6 @@ export class HeaderComponent implements OnInit {
     this.menus = _.filter(this.menus, row=>row.disable);
     
     this.menus2 = [
-      {
-        icons: 'account_circle',
-        nombre: 'Iniciar Sección',
-        disable: this.rolUser === 'visitante',
-        url: 'login()',
-        submenus:[]
-      },
-      {
-        icons: 'supervisor_account',
-        nombre: 'Vende para nosotros',
-        disable: this.rolUser === 'visitante',
-        url: 'registrar()',
-        submenus:[]
-      },
       {
         icons: 'exit_to_app',
         nombre: 'Salir',

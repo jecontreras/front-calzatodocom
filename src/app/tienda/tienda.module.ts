@@ -10,7 +10,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { InfoProductoComponent } from './info-producto/info-producto.component';
 import { MyOwnCustomMaterialModule } from '../app.material.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductosViewComponent } from './producto-view/producto-view.component';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
 import { ContactoComponent } from './contacto/contacto.component';
@@ -26,6 +26,7 @@ import { SwiperModule } from 'swiper/angular';
 import { SliderComponent } from './slider/slider.component';
 import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
 import { ProductosTComponent } from './productos-t/productos-t.component';
+import { MatTableModule } from '@angular/material';
 
 @NgModule({
   entryComponents: [ InfoProductoComponent,ChecktDialogComponent ],
@@ -39,7 +40,9 @@ import { ProductosTComponent } from './productos-t/productos-t.component';
     FormsModule,
     NgxImageZoomModule,
     NgImageSliderModule,
-    SwiperModule
+    SwiperModule,
+    ReactiveFormsModule,
+    MatTableModule
   ],
   exports: [ InfoProductoComponent, SliderComponent ]
 })

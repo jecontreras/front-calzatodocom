@@ -25,7 +25,7 @@ export class AppComponent {
     });
     this.dominio = window.location.host;
     console.log("******HOST", this.dominio)
-    if( this.dominio === 'localhost:4200' ) this.dominio = "calzatodocom.web.app";
+    if( this.dominio === 'localhost:4300' ) this.dominio = "calzatodocom.web.app";
     this.getEmpresa();
   }
 

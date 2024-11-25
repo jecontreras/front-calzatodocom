@@ -1,13 +1,10 @@
 <h2 mat-dialog-title>{{ titulo }} Ventas</h2>
 <mat-dialog-content class="mat-typography">
     <div class="form row">
-        <!-- <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6">
+        <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6">
             <label for="exampleFormControlSelect1">Tipo de Venta</label>
-            <select class="form-control form-control-sm" [(ngModel)]="data.ven_tipo">
-                <option value="carrito">Carrito</option>
-                <option value="whatsapp">Whatsapp</option>
-            </select>
-        </div> -->
+            <input type="text" [(ngModel)]="data.ven_tipo" class="form-control form-control-sm">
+        </div>
         <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6" *ngIf="data.id && superSub">
             <label for="exampleFormControlSelect1">Estado de la Venta</label>
             <select class="form-control form-control-sm" [(ngModel)]="data.ven_estado">
@@ -28,7 +25,7 @@
                 </a>
             </div>
         </div>
-        <div class="form-group col-12" *ngIf="( data.ven_tipo == 'whatsapp' || data.ven_tipo == 'WHATSAPP' ) && superSub">
+        <div class="form-group col-12" *ngIf="superSub">
             <div class="row">
                 <label class="col">Subir Imagen</label>
                 <button class="btn btn-primary btn-just-icon btn-round" [disabled]="disableBtnFile"
@@ -75,15 +72,6 @@
                 <input type="date" class="form-control" [(ngModel)]="data.ven_fecha_venta">
             </div>
         </div>
-        <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6"
-            *ngIf="( data.ven_tipo == 'carrito' || data.ven_tipo == 'CARRITO' )">
-            <label for="exampleFormControlSelect1">Productos</label>
-            <select class="form-control form-control-sm" [(ngModel)]="data.pro_clave_int"
-                (change)="PrecioPush(); suma();">
-                <option [value]="item.id" *ngFor="let item of listProductos"> {{ item.pro_codigo }} ||
-                    {{ item.pro_nombre }} </option>
-            </select>
-        </div>
         <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6">
             <label for="exampleFormControlInput1">Cantidad</label>
             <input type="number" [(ngModel)]="data.ven_cantidad" class="form-control form-control-sm" (change)="suma()">
@@ -97,13 +85,11 @@
                 </option>
             </select>
         </div>
-        <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6"
-            *ngIf="( data.ven_tipo == 'whatsapp' || data.ven_tipo == 'WHATSAPP' ) && superSub">
+        <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6">
             <label for="exampleFormControlInput1">Vr.Unidad:</label>
             <input type="number" [(ngModel)]="data.ven_precio" class="form-control form-control-sm" (change)="suma()">
         </div>
-        <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6"
-            *ngIf="( data.ven_tipo == 'carrito' || data.ven_tipo == 'CARRITO' )">
+        <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6">
             <label for="exampleFormControlInput1">Vr.Unidad: </label>
             <span>$ {{ ( data.ven_precio || 0 ).toLocaleString(1) }} COP</span>
         </div>
@@ -112,7 +98,7 @@
             <span>$ {{ ( data.ven_total || 0 ).toLocaleString(1) }} COP</span>
         </div>
         <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6">
-            <label for="exampleFormControlInput1">Recompensa 7%: </label>
+            <label for="exampleFormControlInput1">Valores extras: </label>
             <span>$ {{ ( data.ven_ganancias || 0 ).toLocaleString(1) }} COP</span>
         </div>
         <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6" *ngIf="data.id && superSub && data.ven_imagen_guia">
@@ -139,6 +125,22 @@
             </ngx-dropzone>
         </div>
         <div class="form-group col-12">
+            <mat-list>
+                <div mat-subheader>Productos</div>
+                <mat-list-item *ngFor="let product of listProductos">
+                  <mat-icon mat-list-icon>product</mat-icon>
+                  <img style="width: 150px; border-radius: 10px;" [src]="product.fotoproducto" >
+                  <div mat-line>{{product.titulo}}</div>
+                  <div mat-line> Talla: {{product.tallaSelect }} </div>
+                  <div mat-line> Color: {{product.colorSelect }} </div>
+                  <div mat-line> Cantidad: {{product.cantidad }} </div>
+                  <div mat-line> Lo vendio: {{product.loVendio }} </div>
+                  <div mat-line> Precio Vendedor: {{product.precioVendedor }} </div>
+                  <div mat-line> link Producto: <a [href]="urlHref + '/tienda/productosView/' + product.producto.id "></a> </div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div class="form-group col-12">
             <label for="exampleFormControlInput1">Observación</label>
             <textarea class="form-control" [(ngModel)]="data.ven_observacion" id="exampleFormControlTextarea1"
                 rows="10"></textarea>
@@ -155,7 +157,7 @@
         Primero debes subir una imagen
     </span>-->
     <button mat-button cdkFocusInitial (click)="submit()"
-        *ngIf="( data.ven_tipo == 'whatsapp' ) || data.ven_tipo == 'carrito' || data.id"
+        *ngIf="( data.ven_tipo == 'whatsapp' ) || ( data.ven_tipo == 'carrito' ) || data.id && superSub"
         [disabled]="disabledButton">
         <span *ngIf="!id">Guardar Ventas</span>
         <span *ngIf="id">Actulizar Cambios</span>

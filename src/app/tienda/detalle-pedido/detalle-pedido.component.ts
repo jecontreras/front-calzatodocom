@@ -31,12 +31,14 @@ export class DetallePedidoComponent implements OnInit {
     },
     page: 0
   };
-  Header:any = [ 'Acciones','Tipo Venta','Vendedor','Nombre Cliente','Teléfono Cliente','Fecha Venta','Productos','Cantidad','Precio','Imagen Producto','Estado', 'Motivo Rechazo', 'Tallas' ];
+  Header:any = [ 'Acciones','Tipo Venta','Nombre Cliente','Teléfono Cliente','Fecha Venta','Cantidad','Precio','Estado', 'Motivo Rechazo' ];
   $:any;
 
   notscrolly:boolean=true;
   notEmptyPost:boolean = true;
   dataUser:any = {};
+  urlHref: string="";
+  ShopConfig:any = {};
 
   constructor(
     private _ventas: VentasService,
@@ -48,10 +50,12 @@ export class DetallePedidoComponent implements OnInit {
       store = store.name;
       if( !store ) return false;
       this.dataUser = store.user || {};
+      this.ShopConfig = store.configuracion || {};
     });
   }
 
   ngOnInit(): void {
+    this.urlHref = window.location.origin + "/login";
     this.dataTable = {
       headerRow: this.Header,
       footerRow: this.Header,
@@ -99,6 +103,12 @@ export class DetallePedidoComponent implements OnInit {
       error => {
         console.log('Error', error);
       });
+  }
+
+  handleWhatsapp( row:any ){
+    let mensaje: string = `https://wa.me/${ this.ShopConfig.numeroCelular }?text=Hola Servicio al Cliente esta es mi orden, por favor, me pueden colaborar *Numero orden*: ${ row.id }`;
+    // console.log( mensaje , res);
+    window.open(mensaje);
   }
 
 }

@@ -1,90 +1,177 @@
-<p>&nbsp;</p>
-<main class="main-content js-focus-hidden" id="MainContent" role="main"
-    style='background-color: white; box-sizing: border-box; font-family: Helvetica, "Helvetica Neue", Arial, "Lucida Grande", sans-serif; font-size: 15px; opacity: 1; outline: 0px; padding-top: 55px;'
-    tabindex="-1">
-    <div class="shopify-section" id="shopify-section-cart-template" style="box-sizing: border-box; display: inherit;">
-        <div class="page-width" data-ajax-enabled="true" data-section-id="cart-template"
-            data-section-type="cart-template"
-            style="box-sizing: border-box; margin: 0px auto; max-width: 1200px; padding-left: 55px; padding-right: 55px;">
-            <div data-cart-wrapper="" style="box-sizing: border-box;">
-                <div class="cart-header" style="box-sizing: border-box; margin-bottom: 1.7rem; text-align: center;">
-                    <h1 class="cart-header__title"
-                        style="box-sizing: border-box; font-family: var(--font-stack-header); font-size: calc(((var(--font-h1-desktop))/ (var(--font-size-base))) * 1em); font-style: var(--font-style-header); font-weight: var(--font-weight-header); letter-spacing: 0px; line-height: 1.2; margin: 0px 0px 1rem; overflow-wrap: break-word;">
-                        Carrito
-                    </h1>
-                    <a class="text-link text-link--accent" [routerLink]="['./productos']"
-                        routerLinkActive="router-link-active"
-                        style="background: 0px 0px; border-bottom-color: currentcolor; border-image: initial; border-left-color: initial; border-right-color: initial; border-style: none none solid; border-top-color: initial; border-width: 0px 0px 1px; box-sizing: border-box; display: inline; margin: 0px; padding: 0px 0px 1px; text-decoration-line: none; touch-action: manipulation;">Seguir
-                        comprando</a>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="width: 10%;">Foto</th>
-                                    <th scope="col" style="width: 50%;">Productos</th>
-                                    <th scope="col" style="width: 30%;">Descripcion</th>
-                                    <th scope="col">Precio</th>
-                                    <th scope="col">Cantidad</th>
-                                    <th scope="col">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of listCarrito; let idx=index;">
-                                    <th scope="row">
-                                        <img alt="" class="cart__image" data-cart-item-image="" [src]="item.foto"
-                                            style="border: 0px; box-sizing: border-box; cursor: pointer; display: block; margin: 0px auto; max-height: 95px; max-width: 100%;" />
-                                    </th>
-                                    <td>
-                                        <span class="cart__product-title" data-cart-item-title=""
-                                            data-role="product-title"
-                                            style="background-color: transparent; border-bottom: none; box-sizing: border-box; text-decoration-line: none; touch-action: manipulation;">
-                                            {{ item.titulo }}
-                                        </span>
-                                        <br>
-                                        <button type="button" (click)="borrar( idx, item )"
-                                            class="btn btn-danger">Borrar</button>
-                                    </td>
-                                    <td>
-                                        <textarea class="form-control" [(ngModel)]="item.descripcion" (change)="updateCart( item )" (blur)="updateCart( item )" rows="3"></textarea>
-                                    </td>
-                                    <td>{{ _tools.monedaChange( 3, 2, item.costo || 0 ) }}</td>
-                                    <td>{{ item.cantidad }}</td>
-                                    <td>{{ _tools.monedaChange( 3, 2, item.costoTotal || 0 ) }}</td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-12">
-                        <div class="d-flex flex-row-reverse bd-highlight">
-                            <div class="p-2 bd-highlight">
-                                <div class="grid__item text-right small--text-center"
-                                    style="box-sizing: border-box; float: left; padding-left: 30px; text-align: right !important; width: 1120px;">
-                                    <div class="cart-subtotal" style="box-sizing: border-box;">
-                                        <span class="cart-subtotal__title"
-                                            style="box-sizing: border-box; font-size: calc(((var(--font-size-base) + 2) / (var(--font-size-base))) * 1em);">Subtotal</span>&nbsp;<span
-                                            class="cart-subtotal__price" data-cart-subtotal=""
-                                            style="box-sizing: border-box; display: inline-block; min-width: 150px; padding-left: 55px;">{{ _tools.monedaChange( 3, 2, totalSuma || 0 ) }}</span>
-                                    </div>
-                                    <div class="cart__shipping rte"
-                                        style="box-sizing: border-box; color: var(--color-body-text); font-size: calc(((var(--font-size-base) - 2) / (var(--font-size-base))) * 1em); margin-bottom: 25px; padding: 10px 0px 20px;">
-                                        Pago Contra Entrega Envio Gratis
-                                    </div>
-                                    <div class="cart__buttons-container"
-                                        style="box-sizing: border-box; flex-direction: column; margin: 0px auto; max-width: none;">
-                                        <div class="cart__submit-controls"
-                                            style="align-items: flex-start; box-sizing: border-box; display: flex; flex-flow: row wrap; justify-content: flex-end; width: 1090px;">
-                                            <button type="button" class="btn btn-success" [routerLink]="['/tienda/checkouts']" routerLinkActive="router-link-active" >Finalizar Pedido</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div style="padding: 2% 5%;">
+  <div class="row">
+    <div class="col-12 col-sm-6">
+        <!--<>div class="coupon-section">
+          <p>¿Tienes un cupón? <a href="#" class="toggle-coupon">Haz clic aquí para introducir tu código</a></p>
+          <form class="checkout-coupon-form" method="post" style="display: none;">
+            <p>Si tienes un código de cupón, por favor, aplícalo abajo:</p>
+            <div class="form-group">
+              <label for="coupon_code" class="screen-reader-text">Cupón:</label>
+              <input type="text" id="coupon_code" name="coupon_code" class="input-text" placeholder="Código de cupón">
+              <button type="submit" class="btn-apply-coupon" name="apply_coupon">Aplicar cupón</button>
             </div>
-        </div>
-    </div>
-</main>
+          </form>
+        </div>-->
+          <form name="checkout" method="post" class="checkout-form" #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)" novalidate>
+              <h3>Detalles de facturación</h3>
+                <!-- Nombre y Apellido -->
+              <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'nombre')}">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Nombre y Apellido</mat-label>
+                  <mat-icon matPrefix>account_circle</mat-icon>
+                  <input matInput type="text" [(ngModel)]="data.nombre" name="nombre" placeholder="Nombre y Apellido" required #nombre="ngModel" (change)="validadorInput()">
+                  <mat-error *ngIf="nombre.invalid && nombre.touched">Este campo es obligatorio.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Número de Teléfono -->
+              <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'telefono')}">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Número de Teléfono</mat-label>
+                  <mat-icon matPrefix>phone</mat-icon>
+                  <input matInput type="number" [(ngModel)]="data.telefono" name="telefono" placeholder="Número de Teléfono" required #telefono="ngModel" (change)="validadorInput()">
+                  <mat-error *ngIf="telefono.invalid && telefono.touched">Este campo es obligatorio.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Dirección de Entrega -->
+              <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'direccion')}">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Dirección de Entrega</mat-label>
+                  <mat-icon matPrefix>home</mat-icon>
+                  <input matInput type="text" [(ngModel)]="data.direccion" name="direccion" placeholder="Dirección de Entrega" required #direccion="ngModel" (change)="validadorInput()">
+                  <mat-error *ngIf="direccion.invalid && direccion.touched">Este campo es obligatorio.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Ciudad o Municipio -->
+              <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'ciudad')}">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Ciudad o Municipio</mat-label>
+                  <mat-icon matPrefix>location_city</mat-icon>
+                  <input matInput type="text" [(ngModel)]="data.ciudad" name="ciudad" placeholder="Ciudad o Municipio" required #ciudad="ngModel" (change)="validadorInput()">
+                  <mat-error *ngIf="ciudad.invalid && ciudad.touched">Este campo es obligatorio.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Barrio o Localidad -->
+              <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'barrio')}">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Barrio o Localidad</mat-label>
+                  <mat-icon matPrefix>map</mat-icon>
+                  <input matInput type="text" [(ngModel)]="data.barrio" name="barrio" placeholder="Barrio o Localidad" required #barrio="ngModel" (change)="validadorInput()">
+                  <mat-error *ngIf="barrio.invalid && barrio.touched">Este campo es obligatorio.</mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Barrio o Localidad -->
+              <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'ven_observacion')}">
+                
+                <mat-form-field class="example-full-width">
+                  <mat-label>Información adicional</mat-label>
+                  <textarea matInput [(ngModel)]="data.ven_observacion" name="ven_observacion" #ven_observacion="ngModel"  placeholder="Talla color medidas direccion detalles..."></textarea>
+                </mat-form-field>
+
+              </div>
+          </form>
+      </div>
+      <div class="col-12 col-sm-6">
+          <div>
+              <h3 id="order_review_heading">Tu pedido</h3>
+
+              <div id="order_review" class="woocommerce-checkout-review-order">
+              <div class="wd-table-wrapper">
+                  <table mat-table [dataSource]="listCarrito" class="mat-elevation-z8">
+                  <!-- Nombre del producto -->
+                  <ng-container matColumnDef="product">
+                      <th mat-header-cell *matHeaderCellDef> Producto </th>
+                      <td mat-cell *matCellDef="let item">
+                        <span>
+                          <a class="pointer text-danger" (click)="borrar( item )"> <mat-icon>close</mat-icon> </a>
+                        </span>
+                      {{ item.titulo | slice: 0:20 }} - {{ item.talla }} &nbsp;
+                      <strong class="product-quantity"> cantidad: {{ item.cantidad }} </strong>
+                      </td>
+                  </ng-container>
+
+                  <!-- Subtotal -->
+                  <ng-container matColumnDef="subtotal">
+                      <th mat-header-cell *matHeaderCellDef> Subtotal </th>
+                      <td mat-cell *matCellDef="let item">
+                      ${{ item.costoTotal | number }}
+                      </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+              </div>
+
+              <table class="summary-table">
+                  <tr>
+                  <th>Subtotal</th>
+                  <td>$ {{ orderSummary.subtotal | number }}</td>
+                  </tr>
+                  <tr>
+                  <th>Cargo adicional contra entrega</th>
+                  <td>$ {{ orderSummary.extraCharge | number }}</td>
+                  </tr>
+                  <tr class="order-total">
+                  <th>Total</th>
+                  <td><strong>$ {{ orderSummary.total | number }}</strong></td>
+                  </tr>
+              </table>
+              </div>
+
+          </div>
+          <div id="payment" class="woocommerce-checkout-payment">
+              <form [formGroup]="paymentForm" (ngSubmit)="onSubmit2()">
+                <mat-card>
+                  <mat-card-header>
+                    <mat-card-title>Opciones de pago</mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <mat-radio-group formControlName="paymentMethod" (change)="onPaymentMethodChange($event)">
+                      <!-- Transferencia bancaria -->
+                      <mat-radio-button value="bacs" style="width: 100%;">Transferencia bancaria directa</mat-radio-button>
+                      <div *ngIf="paymentForm.get('paymentMethod').value === 'bacs'" class="payment-box">
+                        <p>Realiza tu pago directamente en nuestra cuenta bancaria. Por favor, usa el número del pedido como referencia de pago.</p>
+                        <p>NOTA: tu pedido no se procesará hasta que se haya recibido el comprobante de pago en nuestro único WhatsApp: <strong>{{ ShopConfig.numeroCelular }}</strong>.</p>
+                      </div>
+            
+                      <!-- Pago contra entrega -->
+                      <mat-radio-button value="cod" style="width: 100%;">Contra entrega</mat-radio-button>
+                      <div *ngIf="paymentForm.get('paymentMethod').value === 'cod'" class="payment-box">
+                        <p>💡 Ofrecemos el servicio de pago contra entrega para mayor comodidad de nuestros clientes. Pagarás tu pedido en el momento de la entrega.</p>
+                        <p>Se requiere un pago previo de $20.000 que será descontado del total del pago o compra.</p>
+                        <p>Asegúrate de estar disponible en la dirección proporcionada o designar a alguien para recibir y pagar el pedido.</p>
+                      </div>
+            
+                      <!-- Pago con Addi -->
+                      <!--<mat-radio-button value="addi" style="width: 100%;">Paga con Addi</mat-radio-button>
+                      <div *ngIf="paymentForm.get('paymentMethod').value === 'addi'" class="payment-box">
+                        <p>Con Addi tienes más formas de pagar:</p>
+                        <div class="addi-options">
+                          <mat-card>
+                            <mat-card-title>Crédito</mat-card-title>
+                            <mat-card-content>Sólo necesitas tu cédula y WhatsApp para pagar en cuotas.</mat-card-content>
+                          </mat-card>
+                          <mat-card>
+                            <mat-card-title>Débito con PSE</mat-card-title>
+                            <mat-card-content>Utiliza tu cuenta bancaria, Nequi o Daviplata para realizar el pago.</mat-card-content>
+                          </mat-card>
+                        </div>
+                      </div>-->
+                    </mat-radio-group>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <button style="background: #28a745 !important;" mat-raised-button type="submit" (click)="finalizando()">Realizar pedido</button>
+                  </mat-card-actions>
+                </mat-card>
+              </form>
+            </div>
+            
+      </div>
+  </div>
+</div>
+  

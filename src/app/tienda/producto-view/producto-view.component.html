@@ -26,6 +26,9 @@
                     <div class="carousel-inner">
                       <div class="carousel-item" *ngFor="let image of imageObject2; let i = index" [class.active]="i === 0">
                         <img [src]="image.image" class="d-block w-100" alt="Product Image" style="border-radius: 10px;">
+                        <button mat-icon-button class="fullscreen-btn" (click)="openFullscreen(image.image, i)">
+                          <mat-icon>fullscreen</mat-icon>
+                        </button>
                       </div>
                     </div>
                     <button class="carousel-control-prev" type="button" (click)="prev()">
@@ -36,6 +39,22 @@
                       <span class="carousel-control-next-icon" aria-hidden="true"></span>
                       <span class="sr-only">Next</span>
                     </button>
+                  </div>
+
+                  <!-- Contenedor de pantalla completa -->
+                  <div class="fullscreen-image" *ngIf="isFullscreen">
+                    <div class="fullscreen-overlay">
+                      <button mat-icon-button class="close-btn" (click)="closeFullscreen()">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                      <img [src]="currentImage" alt="Product Image" class="fullscreen-img" />
+                      <button mat-icon-button class="carousel-btn prev" (click)="prevImage()" style="background: #8d8d8d;">
+                        <mat-icon>chevron_left</mat-icon>
+                      </button>
+                      <button mat-icon-button class="carousel-btn next" (click)="nextImage()" style="background: #8d8d8d;">
+                        <mat-icon>chevron_right</mat-icon>
+                      </button>
+                    </div>
                   </div>
 
                 </div>
@@ -57,9 +76,9 @@
                         </div>
                       <p class="aa-product-avilability">Disponibilidad: <span>En stock</span></p>
                     </div>
-                    <section *ngIf="data['listTallas']?.length > 0 ">
+                    <section *ngIf="data['listTallas']?.length > 0 && data.tallaR !== 'Unica'">
                       <h4>Talla</h4>
-                      <div class="aa-prod-view-size">
+                      <div class="aa-prod-view-size" style="text-align: center;">
                         <a class="pointer" *ngFor="let item of data.listTallas" [ngClass]="{selecciono: item.check1}"
                           (click)="checkTalla( item );">{{
                           item.tal_descripcion }}</a>
@@ -67,14 +86,24 @@
                     </section>
                     <section *ngIf="data['listColor']?.length > 0 ">
                       <h4>Color</h4>
-                      <div class="aa-prod-view-size">
+                      <div class="aa-prod-view-size" style="text-align: center;">
                         <a class="pointer" *ngFor="let item of data.listColor" [ngClass]="{selecciono: item.check1}"
                           (click)="handleSelect( item );">{{
                             item.talla }}</a>
                       </div>
                     </section>
-                    <a (click)="comprarArticulo( 1, false )" class="aa-add-to-cart-btn pointer ov-btn-slide-close">Comprar y pagar en casa</a>
-                    <div
+                    <section #nextStep>
+                      <button
+                        style="width: 100%; background: #00e534; font-size: 18px; font-weight: bold; color: white;"
+                        mat-raised-button
+                        class="animated-button"
+                        (click)="AgregarCart2(this.data)"
+                      >
+                        Agregar al Carrito 🛒
+                      </button>
+                    </section>
+                    <!--<a (click)="comprarArticulo( 1, false )" class="aa-add-to-cart-btn pointer ov-btn-slide-close">Comprar y pagar en casa</a>-->
+                    <!--<div
                       *ngFor="let item of data.listPrecios; let i = index"
                     >
                       <a (click)="comprarArticulo(item.cantidad, true, item.precios)"
@@ -84,9 +113,9 @@
                         <span *ngIf="item.cantidad === 1">LLEVA {{ item.cantidad }} PAR POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
                         <span *ngIf="item.cantidad != 1">LLEVA {{ item.cantidad }} PARES POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
                       </a>
-                    </div>
+                    </div>-->
                     <h2 class="text-success" *ngIf="data['pro_categoria']?.id == 16">
-                      <a (click)="comprarArticulo( 2, true )" class="aa-add-to-cart-btn pointer"
+                      <a (click)="scrollToNextStep( )" class="aa-add-to-cart-btn pointer"
                       style="font-size: 130%; background: #fbff00; color: #212529; border-radius: 11px;"><span
                         class="fa fab fa-whatsapp"></span>
                         LLEVA 2 PARES POR {{ _formato.monedaChange( 3, 2, ( ( data.pro_uni_venta * 2 ) - 20000 ) || 0 ) }}
@@ -112,27 +141,6 @@
                   height: 9pc;
                   border-radius: 20px;" src="./assets/imagenes/1.jpg" alt="">
                 </div>
-                <div class="col-md-7 col-sm-7 col-xs-12">
-                  <div class="aa-product-view-slider">
-                    <div id="demo-1" class="simpleLens-gallery-container">
-                      <div class="simpleLens-container">
-                        <div class="image-resize img">
-                          <img [src]="viewsImagen2" data-srcset="{{viewsImagen2}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto 1x"
-                            alt data-sizes=auto data-src="{{viewsImagen2}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto"
-                            class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
-                        </div>
-                        <div class="d-flex justify-content-center">
-                          <div>
-                            <a (click)="verImagen(viewsImagen2);handleSelect( { foto: viewsImagen2} ); comprarArticulo( 1, false )" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
-                              <span class="aa-product-price precio">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0) }}</span>
-                              <span>Comprar y pagar en casa</span>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
             <div class="aa-product-details-bottom">
@@ -150,6 +158,9 @@
                 </div>-->
                 <div class="aa-product-review-area">
                   <div class="row">
+                    <div class="col-12">
+                      <h1>Galeria</h1>
+                    </div>
                     <div class="col-12 col-sm-6 pointer" *ngFor="let item of listGaleria1; let i = index" (click)="verImagen(item)">
 
                       <img [src]="item.foto" data-srcset="{{item.foto}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto 1x"
@@ -157,7 +168,7 @@
                           class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
                       <div class="d-flex justify-content-center">
                         <div>
-                          <a (click)="verImagen(item);handleSelect( item ); comprarArticulo( 1, false )" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
+                          <a style="text-align: center !important;" (click)="verImagen(item);handleSelect( item ); scrollToNextStep()" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
                             <span class="aa-product-price precio">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0) }}</span>
                             <span>Comprar y pagar en casa</span>
                           </a>
@@ -167,7 +178,7 @@
                   </div>
                 </div>
                 <div class="aa-product-review-area">
-                  <h4>Detalles</h4>
+                  <h1>Detalles</h1>
                   <div class="row">
                     <div class="col-12">
                       <div class="image-container">
@@ -210,6 +221,9 @@
               </div>
               <div class="aa-product-review-area">
                 <div class="row">
+                  <div class="col-12">
+                    <h1>Mas Productos</h1>
+                  </div>
                   <a class="col-12 col-sm-6 pointer" *ngFor="let item of imageObject; let i = index" target="_blank" [routerLink]="[ '/tienda/productosView', item.id ]" >
 
                     <img [src]="item.image" data-srcset="{{item.image}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto 1x"
@@ -217,7 +231,7 @@
                         class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
                     <div class="d-flex justify-content-center">
                       <div>
-                        <a class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
+                        <a style="text-align: center;" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
                           <span class="aa-product-price precio">{{ item.title }}</span>
                           <span>Comprar y pagar en casa</span>
                         </a>
@@ -245,7 +259,14 @@
     </div>
   </section>
 
-  <footer #nav style="position: fixed; top: 92%; left: auto;">
+  <div class="purchase-notification" *ngIf="showNotification">
+    <img src="{{ lastPurchase.image }}" alt="{{ lastPurchase.name }}" width="50">
+    <span>{{ lastPurchase.user }} compró: {{ lastPurchase.name }} por {{ lastPurchase.price }}</span>
+  </div>
+  
+  
+
+  <!--<footer #nav style="position: fixed; top: 92%; left: auto;">
     <div class="container">
       <div class="row">
         <div class="col-12">
@@ -258,6 +279,6 @@
         </div>
       </div>
     </div>
-  </footer>
+  </footer>-->
 
 </section>

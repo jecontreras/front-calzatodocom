@@ -30,7 +30,7 @@ export class ProductosComponent implements OnInit {
   showNotification = false;
   lastPurchase = { user: 'Julio de Valledupar', name: 'Rolex Submariner RX31', price: '$89.900,00', image: 'assets/rolex_submariner_rx31.jpg' };
 
-  searchVisible = false;
+  
   tiendaInfo:any = {};
   seartxt:string = '';
 
@@ -92,13 +92,7 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-  toggleMenu() {
-    // Lógica para abrir/cerrar el menú lateral en móvil
-  }
-
-  toggleSearch() {
-    this.searchVisible = !this.searchVisible;
-  }
+  
   buscar() {
     //console.log(this.seartxt);
     this.loader = true;

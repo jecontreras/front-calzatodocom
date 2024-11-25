@@ -51,19 +51,7 @@ export class MenuLateralComponent implements OnInit {
     // }, 100 )
   }
   rellenoRedes(){
-    if(this.dataUser.id || !this.userId.id) {
-      this.urlFacebook = `http://bit.ly/NUESTROGRUPOENFACEBOOK`;
-      this.urlInstagram = `http://bit.ly/INSTAGRAMLOKOMPROAQUI`;
-      this.urlWhatsapp = "https://wa.me/573213692393?text=Hola Servicio al cliente";
-      this.urlYoutube = `http://bit.ly/YOUTUBEZAFIRO`;
-    }else{
-      this.urlFacebook = this.userId.url_facebook || "";
-      this.urlInstagram = this.userId.url_instagram || "";
-      let validateNum = String( this.userId.usu_telefono );
-      if( validateNum.length <= 10 ) validateNum = "+57"+validateNum;
-      this.urlWhatsapp = `https://wa.me/${ validateNum }?text=Hola Servicio al cliente` || "";
-      this.urlYoutube = this.userId.url_youtube || "";
-    }
+    this.urlWhatsapp = `https://api.whatsapp.com/send?phone=57${ this.whatsappContact }&text=${ encodeURIComponent( ` Hola Servicio al cliente, como esta, saludo cordial Estoy interado en este producto ${ window.location.href }` ) }`;
   }
 
 }

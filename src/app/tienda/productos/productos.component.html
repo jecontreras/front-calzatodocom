@@ -1,73 +1,29 @@
-<!-- Para escritorio -->
-<mat-toolbar class="toolbar-desktop">
-  <div class="logo">
-    <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50">
-  </div>
-  <span class="spacer"></span>
-
-  <span class="spacer"></span>
-
-  <span class="spacer"></span>
-  <mat-icon>shopping_cart</mat-icon>
-</mat-toolbar>
-
-<!-- Para móvil -->
-<mat-toolbar class="toolbar-mobile">
-  <button mat-icon-button (click)="toggleMenu()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <div class="logo">
-    <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50">
-  </div>
-  <span class="spacer"></span>
-  <mat-icon (click)="toggleSearch()">search</mat-icon>
-  <mat-icon>shopping_cart</mat-icon>
-</mat-toolbar>
-
-<!-- Sidenav para móvil -->
-<mat-sidenav-container class="mobile-container">
-  <mat-sidenav #menu mode="over" class="mobile-sidenav">
-    <mat-nav-list>
-      <a mat-list-item>Relojes hombre</a>
-      <a mat-list-item>Ropa hombre</a>
-      <a mat-list-item>Relojes mujer</a>
-      <a mat-list-item>Accesorios varios</a>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-
-
-    <div class="row">
-      <div class="col-12" *ngFor="let item of listCategorias">
-        <div class="text-center my-4">
-          <h1> <strong>  {{ item.category.cat_nombre }} </strong> </h1>
-        </div>
-    
-        <div class="content">
-          <div class="row">
-            <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let product of item.articleData">
-              <mat-card style="padding: 0 !important" class="product-card" [routerLink]="[ '/tienda/productosView', product.id ]">
-                <div class="image-container">
-                  <img [src]="product.foto" alt="{{ product.pro_nombre }}">
-                </div>
-                <mat-card-title class="title">{{ product.pro_nombre }}</mat-card-title>
-                <mat-card-subtitle class="price">
-                  <span><del>{{ _formato.monedaChange(3, 2, product.pro_uni_venta * 2) }}</del></span>
-                  <span>{{ _formato.monedaChange(3, 2, product.pro_uni_venta) }}</span>
-                </mat-card-subtitle>
-              </mat-card>
-            </div>
-          </div>
-        </div>
-        
-        
-      </div>
+<div class="row">
+  <div class="col-12" *ngFor="let item of listCategorias">
+    <div class="text-center my-4">
+      <h1> <strong>  {{ item.category.cat_nombre }} </strong> </h1>
     </div>
 
-  </mat-sidenav-content>
-</mat-sidenav-container>
-
+    <div class="content">
+      <div class="row">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let product of item.articleData">
+          <mat-card style="padding: 0 !important" class="product-card" [routerLink]="[ '/tienda/productosView', product.id ]">
+            <div class="image-container">
+              <img [src]="product.foto" alt="{{ product.pro_nombre }}">
+            </div>
+            <mat-card-title class="title">{{ product.pro_nombre }}</mat-card-title>
+            <mat-card-subtitle class="price">
+              <span><del>{{ _formato.monedaChange(3, 2, product.pro_uni_venta * 2) }}</del></span>
+              <span>{{ _formato.monedaChange(3, 2, product.pro_uni_venta) }}</span>
+            </mat-card-subtitle>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    
+    
+  </div>
+</div>
 <!-- Notificación de compra -->
 <div class="purchase-notification" *ngIf="showNotification">
   <img src="{{ lastPurchase.image }}" alt="{{ lastPurchase.name }}" width="50">

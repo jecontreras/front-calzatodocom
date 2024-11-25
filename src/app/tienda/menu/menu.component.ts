@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { ToolsService } from 'src/app/services/tools.service';
 import  { SocialAuthService, FacebookLoginProvider, SocialUser }  from 'angularx-social-login';
 import { UsuariosService } from 'src/app/servicesComponents/usuarios.service';
+import { CategoriasService } from 'src/app/servicesComponents/categorias.service';
 
 declare var ePayco: any;
 
@@ -39,6 +40,9 @@ export class MenuComponent implements OnInit {
   
   socialUser: SocialUser;
   isLoggedin: boolean = null;
+  searchVisible = false;
+  lisCategory:any = [];
+  urlLocation:string;
 
   constructor(
     public media: MediaMatcher,
@@ -47,7 +51,8 @@ export class MenuComponent implements OnInit {
     private Router: Router,
     private _tools: ToolsService,
     private socialAuthService: SocialAuthService,
-    private _user: UsuariosService
+    private _user: UsuariosService,
+    private _categoryService: CategoriasService
   ) { 
     this._store.subscribe((store: any) => {
       //console.log(store);
@@ -58,10 +63,12 @@ export class MenuComponent implements OnInit {
       this.dataUser = store.user || {};
       this.tiendaInfo = store.configuracion || {};
       this.submitChat();
+      this.calculateSubtotal();
     });
   }
 
   ngOnInit() {
+    this.urlLocation = window.location.origin;
     this.mobileQuery = this.media.matchMedia('(max-width: 290px)');
     this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -74,6 +81,35 @@ export class MenuComponent implements OnInit {
       this.isLoggedin = (user != null);
       }
     );
+    this.getCategory();
+  }
+
+  getCategory(){
+    this._categoryService.get( {  where: { cat_activo: 0 }, limit: 5 } ).subscribe( res => {
+      this.lisCategory = res.data;
+    });
+  }
+
+  toggleMenu() {
+    // Lógica para abrir/cerrar el menú lateral en móvil
+  }
+
+  closeCart() {
+    console.log('Cerrar carrito');
+  }
+
+  removeItem( key: any ) {
+    this.listCart = this.listCart.filter(item => item.codigo !== key.codigo );
+    this.calculateSubtotal();
+    this.deleteCart( key )
+  }
+
+  calculateSubtotal() {
+    return this.listCart.reduce((total, item) => total + item.costo * item.cantidad, 0);
+  }
+
+  toggleSearch() {
+    this.searchVisible = !this.searchVisible;
   }
 
   loginWithFacebook(): void {
@@ -85,8 +121,7 @@ export class MenuComponent implements OnInit {
     this.socialAuthService.signOut();
   }
 
-  deleteCart(idx:any, item:any){
-    this.listCart.splice(idx, 1);
+  deleteCart( item:any ){
     let accion = new CartAction(item, 'delete');
     this._store.dispatch(accion);
   }

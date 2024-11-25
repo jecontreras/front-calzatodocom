@@ -27,7 +27,7 @@ export class LoginsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if (this._authSrvice.isLoggedIn()) this._router.navigate(['/pedidos']);
+    if (this._authSrvice.isLoggedIn()) this._router.navigate(['/config/ventas']);
   }
 
   submit(){
@@ -40,7 +40,7 @@ export class LoginsComponent implements OnInit {
         localStorage.setItem('user', JSON.stringify(res.data));
         let accion = new UserAction( res.data, 'post');
         this._store.dispatch(accion);
-        this._router.navigate(['/pedidos']);
+        this._router.navigate(['/config/ventas']);
         location.reload();
       }else{
         this._tools.presentToast("Error de sesión")

@@ -57,7 +57,7 @@ export class ToolsService {
       icon: 'error',
       title: 'Oops...',
       text: text.mensaje,
-      footer: text.footer || '<a href>Why do I have this issue?</a>'
+      footer: text.footer || ''
     });
   }
   tooast(text: any) {
@@ -77,7 +77,29 @@ export class ToolsService {
       showCancelButton: true,
       confirmButtonColor: text.confirColor || '#3085d6',
       cancelButtonColor: text.cancelColor || '#d33',
-      confirmButtonText: text.confir || 'Aceptar!'
+      confirmButtonText: text.confir || 'Aceptar!',
+      
+    });
+  }
+
+  carritoCompra(){
+    return Swal.fire({
+      title: "<strong>Pregunta Importante</strong>",
+      icon: "info",
+      html: `
+        Precionar algun Boton
+      `,
+      showCloseButton: true,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: `
+        DESEAS FINALIZAR CARRITO
+      `,
+      confirmButtonAriaLabel: "Thumbs up, great!",
+      cancelButtonText: `
+        DESEAS CONTINUAR COMPRANDO
+      `,
+      cancelButtonAriaLabel: "ONE"
     });
   }
 
