@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CART } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
@@ -43,6 +43,8 @@ export class MenuComponent implements OnInit {
   searchVisible = false;
   lisCategory:any = [];
   urlLocation:string;
+  countCart = 0;
+  @ViewChild('menu2') menu2;
 
   constructor(
     public media: MediaMatcher,
@@ -55,10 +57,13 @@ export class MenuComponent implements OnInit {
     private _categoryService: CategoriasService
   ) { 
     this._store.subscribe((store: any) => {
-      //console.log(store);
+      console.log(store);
       store = store.name;
       if(!store) return false;
       this.listCart = store.cart || [];
+      console.log("****64", this.listCart.length, this.countCart)
+      if( this.countCart !== this.listCart.length ) this.openDialog();
+      this.countCart = this.listCart.length;
       this.userId = store.usercabeza || {};
       this.dataUser = store.user || {};
       this.tiendaInfo = store.configuracion || {};
@@ -84,6 +89,10 @@ export class MenuComponent implements OnInit {
     this.getCategory();
   }
 
+  openDialog(){
+    setTimeout(()=> this.menu2.toggle(), 200 )
+  }
+
   getCategory(){
     this._categoryService.get( {  where: { cat_activo: 0 }, limit: 5 } ).subscribe( res => {
       this.lisCategory = res.data;
@@ -99,7 +108,7 @@ export class MenuComponent implements OnInit {
   }
 
   removeItem( key: any ) {
-    this.listCart = this.listCart.filter(item => item.codigo !== key.codigo );
+    this.listCart = this.listCart.filter(item => item.id !== key.id );
     this.calculateSubtotal();
     this.deleteCart( key )
   }
@@ -203,6 +212,11 @@ export class MenuComponent implements OnInit {
   }
   codigo() {
     return (Date.now().toString(36).substr(2, 3) + Math.random().toString(36).substr(2, 2)).toUpperCase();
+  }
+
+  handleOpenCategory( item:any){
+    this.Router.navigate(['/tienda/productos', item.id ]);
+    setTimeout( ()=> location.reload(), 100 )
   }
 
 }

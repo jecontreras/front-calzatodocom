@@ -8,7 +8,7 @@
         <div class="col-12">
           <div class="d-flex flex-row bd-highlight mb-3">
             <div class="p-2 bd-highlight" style="width: 100%;">
-              <div class="d-flex justify-content-center" style="    background: #15d7ae;">
+              <div class="d-flex justify-content-center" style="    background: #15d7ae; border-radius: 10px;">
                 <div>
                   <h1 class="aa-product-price precio" style="text-align: center;">{{ data.pro_nombre }}</h1>
                 </div>
@@ -76,8 +76,15 @@
                         </div>
                       <p class="aa-product-avilability">Disponibilidad: <span>En stock</span></p>
                     </div>
+                    <p class="viewing-info">
+                      <span class="view-count">{{ rango }}</span> Viendo este artículo.
+                    </p>
+                    
+                    <p class="delivery-info">
+                      <i class="fas fa-truck"></i> Los productos normalmente te llegaran de 2 a 5 días hábiles.
+                    </p>
                     <section *ngIf="data['listTallas']?.length > 0 && data.tallaR !== 'Unica'">
-                      <h4>Talla</h4>
+                      <h4 class="tallaR">TALLA</h4>
                       <div class="aa-prod-view-size" style="text-align: center;">
                         <a class="pointer" *ngFor="let item of data.listTallas" [ngClass]="{selecciono: item.check1}"
                           (click)="checkTalla( item );">{{
@@ -85,13 +92,17 @@
                       </div>
                     </section>
                     <section *ngIf="data['listColor']?.length > 0 ">
-                      <h4>Color</h4>
+                      <h4 class="tallaR">COLOR</h4>
                       <div class="aa-prod-view-size" style="text-align: center;">
                         <a class="pointer" *ngFor="let item of data.listColor" [ngClass]="{selecciono: item.check1}"
                           (click)="handleSelect( item );">{{
                             item.talla }}</a>
                       </div>
                     </section>
+                    <div class="stock-info">
+                      <span class="stock-count">40 Disponible</span>
+                      <span class="stock-indicator"></span>
+                    </div>
                     <section #nextStep>
                       <button
                         style="width: 100%; background: #00e534; font-size: 18px; font-weight: bold; color: white;"
@@ -159,7 +170,11 @@
                 <div class="aa-product-review-area">
                   <div class="row">
                     <div class="col-12">
-                      <h1>Galeria</h1>
+                      <h1 style="    background: #00dab3;
+                      text-align: center;
+                      border-radius: 10px;
+                      color: white;
+                      font-size: 40px;">Galeria</h1>
                     </div>
                     <div class="col-12 col-sm-6 pointer" *ngFor="let item of listGaleria1; let i = index" (click)="verImagen(item)">
 
@@ -178,7 +193,11 @@
                   </div>
                 </div>
                 <div class="aa-product-review-area">
-                  <h1>Detalles</h1>
+                  <h1 style="    background: #00dab3;
+                  text-align: center;
+                  border-radius: 10px;
+                  color: white;
+                  font-size: 40px;">Detalles</h1>
                   <div class="row">
                     <div class="col-12">
                       <div class="image-container">
@@ -222,7 +241,11 @@
               <div class="aa-product-review-area">
                 <div class="row">
                   <div class="col-12">
-                    <h1>Mas Productos</h1>
+                    <h1 style="    background: #00dab3;
+                    text-align: center;
+                    border-radius: 10px;
+                    color: white;
+                    font-size: 40px;">Mas Productos</h1>
                   </div>
                   <a class="col-12 col-sm-6 pointer" *ngFor="let item of imageObject; let i = index" target="_blank" [routerLink]="[ '/tienda/productosView', item.id ]" >
 

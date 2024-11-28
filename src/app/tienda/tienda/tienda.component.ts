@@ -1,16 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductoService } from 'src/app/servicesComponents/producto.service';
 import { CategoriasService } from 'src/app/servicesComponents/categorias.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { CART } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
-import { ToolsService } from 'src/app/services/tools.service';
-import { MatDialog } from '@angular/material';
-import { CartAction, ProductoHistorialAction } from 'src/app/redux/app.actions';
-import { InfoProductoComponent } from '../info-producto/info-producto.component';
+import { CART } from 'src/app/interfaces/sotarage';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { BuscadorAction } from 'src/app/redux/app.actions';
 import * as _ from 'lodash';
-import { NgImageSliderComponent } from 'ng-image-slider';
+import { ToolsService } from 'src/app/services/tools.service';
 import { FormatosService } from 'src/app/services/formatos.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-tienda',
@@ -19,64 +19,32 @@ import { FormatosService } from 'src/app/services/formatos.service';
 })
 export class TiendaComponent implements OnInit {
 
-  listProductos:any = [];
-  listProductos2:any = [];
+  products = [];
+
+  showNotification = false;
+  lastPurchase = { user: 'Julio de Valledupar', name: 'Rolex Submariner RX31', price: '$89.900,00', image: 'assets/rolex_submariner_rx31.jpg' };
+
+  
+  tiendaInfo:any = {};
+  seartxt:string = '';
+
+  loader:boolean = true;
+  notscrolly:boolean=true;
+  notEmptyPost:boolean = true;
+  busqueda:any = {};
   query:any = {
     where:{
-      pro_activo: 0
+      pro_activo: 0,
+      //pro_categoria: { '!=' : [2,3,12] }
     },
     page: 0,
-    limit: 15
+    limit: 30
   };
-  query2:any = {
-    where:{
-      pro_activo: 0
-    },
-    sort: "pro_uni_venta DESC",
-    page: 0,
-    limit: 15
-  };
+
+  listProductos:any = [];
+  dataSeleccionda:string;
   listCategorias:any = [];
-  listProductosHistorial:any = [];
-
-  imageObject:any = [
-    {
-      image: "./assets/imagenes/1920x700.png",
-      thumbImage: "./assets/imagenes/1920x700.png",
-      alt: '',
-      check: true,
-      id: 1,
-      title: ""
-    }
-  ];
-  imageObject2:any = [
-    {
-      image: "./assets/imagenes/1920x700.png",
-      thumbImage: "./assets/imagenes/1920x700.png",
-      alt: '',
-      check: true,
-      id: 1,
-      title: ""
-    }
-  ];
-  @ViewChild('nav', {static: true}) ds: NgImageSliderComponent;
-  sliderWidth: Number = 1505;
-  sliderImageWidth: Number = 1510;
-  sliderImageHeight: Number = 627;
-  sliderArrowShow: Boolean = true;
-  sliderInfinite: Boolean = true;
-  sliderImagePopup: Boolean = false;
-  sliderAutoSlide: Number = 1;
-  sliderSlideImage: Number = 1;
-  sliderAnimationSpeed: any = 5;
-
-  sliderWidth2: Number = 1505;
-  sliderImageWidth2: Number = 247;
-  sliderImageHeight2: Number = 200;
-
-  boletin:any = {};
-
-  tiendaInfo:any = {};
+  idCategory:string;
 
   constructor(
     private _productos: ProductoService,
@@ -85,147 +53,123 @@ export class TiendaComponent implements OnInit {
     private _store: Store<CART>,
     public dialog: MatDialog,
     private _tools: ToolsService,
-    public _formato: FormatosService
-  ) { 
+    public _formato: FormatosService,
+    private _snackBar: MatSnackBar,
+    private activate: ActivatedRoute,
+  ) {
     this._store.subscribe((store: any) => {
-      console.log(store);
       store = store.name;
       if(!store) return false;
-      this.listProductosHistorial = _.orderBy(store.productoHistorial, ['createdAt'], ['DESC']);
       this.tiendaInfo = store.configuracion || {};
-      if(store.configuracion) if(store.configuracion.id) this.armandoSlider();
+      if( store.buscador ) if( Object.keys(store.buscador).length > 0 ) {  if( store.buscador.search ) { this.seartxt = store.buscador.search; this.buscar(); this.borrarBusqueda(); this.dataSeleccionda = store.buscador.search } }
     });
   }
 
-  ngOnInit(): void {
-    this.getProductos();
+  ngOnInit() {
+    //this.getProductos();
+    this.idCategory = this.activate.snapshot.paramMap.get('id');
+
     this.getCategorias();
-    this.getProductosMax();
-  }
-
-  armandoSlider(){
-    try {
-      if(this.tiendaInfo.foto1.length > 0 ) this.imageObject = [];
-      for( let row of this.tiendaInfo.foto1 ){
-        this.imageObject.unshift(
-          {
-            image: row.foto,
-            thumbImage: row.foto,
-            alt: '',
-            check: true,
-            id: this.codigo(),
-            title: row.titulo
-          }
-        );
+    let interV = 0;
+    setInterval(() => {
+      //console.log("******78", this.showNotification, interV)
+      interV++;
+      this.showNotification = true;
+      if( interV === 5 ) {
+        this.showNotification = false;
+        interV = 0;
       }
-      if(this.tiendaInfo.foto2.length > 0 ) this.imageObject2 = [];
-      for( let row of this.tiendaInfo.foto2 ){
-        this.imageObject2.unshift(
-          {
-            image: row.foto,
-            thumbImage: row.foto,
-            alt: '',
-            check: true,
-            id: this.codigo(),
-            title: row.titulo
-          }
-        );
-      } 
-    } catch (error) {
-      
-    }
+    }, 3000); // Simular la compra después de 3 segundos
   }
-
 
   getCategorias(){
-    this._categorias.get( { where:{ cat_activo: 0 }, limit: 6 } ).subscribe((res:any)=>{  this.listCategorias = res.data; });
+    this._categorias.getProduct( { where:{ cat_activo: 0 }, limit: 100, empresa: this.tiendaInfo.id || 4 } ).subscribe((res:any)=>{
+      this.listCategorias = res.data;
+      //this.listCategorias.unshift( { cat_nombre: "Todos", id: 0 } );
+    });
   }
 
-  SeleccionCategoria( obj:any ){
-    this.query = { where:{ pro_activo: 0 }, page: 0, limit: 10 };
-    if( obj.id ) this.query.where.pro_categoria = obj.id;
+  handleCategory(){
+    this.query = { where:{ pro_activo: 0,  } ,limit: 30, page: 0 };
     this.listProductos = [];
+    this.loader = true;
+    this.getProductos();
+  }
+  
+  buscar() {
+    //console.log(this.seartxt);
+    this.loader = true;
+    this.seartxt = this.seartxt.trim();
+    this.listProductos = [];
+    this.notscrolly = true;
+    this.notEmptyPost = true;
+    this.query = { where:{ pro_activo: 0 } ,limit: 15, page: 0 };
+    if (this.seartxt) {
+      this.query.where.or = [
+        {
+          pro_nombre: {
+            contains: this.seartxt|| ''
+          }
+        },
+        {
+          pro_descripcion: {
+            contains: this.seartxt|| ''
+          }
+        },
+        {
+          pro_codigo: {
+            contains: this.seartxt|| ''
+          }
+        }
+      ];
+    }
+    this.getProductos();
+  }
+
+  buscarFiltro( opt:string ){
+    this.query = { where:{ pro_activo: 0 } ,limit: 30, page: 0 };
+    if(opt == 'ordenar'){
+      if(this.busqueda.ordenar == 1){
+        this.dataSeleccionda = "";
+        delete this.query.sort
+      }
+      if(this.busqueda.ordenar == 2){
+        this.dataSeleccionda = "Ordenar nombre";
+        this.query.sort = 'pro_nombre DESC';
+      }
+      if(this.busqueda.ordenar == 3){
+        this.dataSeleccionda = "Ordenar Precio";
+        this.query.sort = 'pro_uni_venta DESC';
+      }
+      if(this.busqueda.ordenar == 3){
+        this.dataSeleccionda = "Ordenar Fecha";
+        this.query.sort = 'createdAt DESC';
+      }
+    }
+    this.listProductos = [];
+    this.loader = true;
     this.getProductos();
   }
 
   getProductos(){
     this.spinner.show();
-    this._productos.get(this.query).subscribe((res:any)=>{ console.log(res); this.listProductos = res.data; this.spinner.hide(); }, ( error )=> { console.error(error); this.spinner.hide(); });
+    if( this.tiendaInfo.id ) this.query.where.empresa = this.tiendaInfo.id;
+    else this.query.where.empresa = 4;
+    this._productos.get(this.query).subscribe((res:any)=>{
+      this.listProductos = _.unionBy(this.listProductos || [], res.data, 'id');
+      //console.log("******",res)
+      this.spinner.hide();
+      this.loader = false;
+      if (res.data.length === 0 ) {
+        this.notEmptyPost =  false;
+      }
+      this.notscrolly = true;
+    }, ( error )=> { console.error(error); this.spinner.hide(); this.loader = false;});
   }
 
-  eventoSeleccion( texto:string ){
-    if( texto == 'popular') this.query = { where:{ pro_activo: 0 }, sort: "pro_uni_venta DESC", page: 0, limit: 15 };
-    if( texto == 'destacado') this.query = { where:{ pro_activo: 0 }, sort: "pro_categoria DESC", page: 0, limit: 15 };
-    if( texto == 'createdAt') this.query = { where:{ pro_activo: 0 }, sort: "pro_categoria DESC", page: 0, limit: 15 };
-    this.listProductos2 = [];
-    this.getProductosMax();
-  }
-
-  getProductosMax(){
-    this.spinner.show();
-    this._productos.get(this.query2).subscribe((res:any)=>{ console.log(res); this.listProductos2 = res.data; this.spinner.hide(); }, ( error )=> { console.error(error); this.spinner.hide(); });
-  }
-
-  AgregarCart(item:any){
-    let data:any = {
-      articulo: item.id,
-      codigo: item.pro_codigo,
-      titulo: item.pro_nombre,
-      foto: item.foto,
-      talla: item.talla,
-      cantidad: item.cantidadAdquirir || 1,
-      costo: item.pro_uni_venta,
-      costoTotal: ( item.pro_uni_venta*( item.cantidadAdquirir || 1 ) ),
-      id: this.codigo()
-    };
-    let accion = new CartAction(data, 'post');
-    this._store.dispatch(accion);
-    this._tools.presentToast("Agregado al Carro");
-  }
-
-  viewProducto( obj:any ){
-    const dialogRef = this.dialog.open(InfoProductoComponent,{
-      width: '855px',
-      maxHeight: "665px",
-      data: { datos: obj }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
-    let filtro = this.listProductosHistorial.filter( ( row:any ) => row.id == obj.id );
-    if(filtro) return false;
-    let accion = new ProductoHistorialAction( obj , 'post');
+  borrarBusqueda(){
+    let accion = new BuscadorAction({}, 'drop');
     this._store.dispatch( accion );
-  }
-
-  codigo(){
-    return (Date.now().toString(20).substr(2, 3) + Math.random().toString(20).substr(2, 3)).toUpperCase();
-  }
-
-  imageOnClick(obj:any) {
-    console.log( obj )
-  }
-
-  arrowOnClick(event) {
-      //console.log('arrow click event', event);
-  }
-
-  lightboxArrowClick(event) {
-      //console.log('popup arrow click', event);
-  }
-
-  prevImageClick() {
-      this.ds.prev();
-  }
-
-  nextImageClick() {
-      this.ds.next();
-  }
-
-  enviarBoletin(){
-    let url:string = `https://wa.me/573148487506?text=Hola Servicio al cliente, como esta, saludo cordial, Email ${ this.boletin.email } Me Gustaria Tener Mas Informacion Detallada`;
-    window.open( url );
   }
 
 }

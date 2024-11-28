@@ -9,6 +9,7 @@ import { UsuariosService } from 'src/app/servicesComponents/usuarios.service';
 import { VentasService } from 'src/app/servicesComponents/ventas.service';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
+declare var ePayco: any;
 
 @Component({
   selector: 'app-carrito',
@@ -204,6 +205,7 @@ export class CarritoComponent implements OnInit {
     let accion: any = new CartAction({}, 'drop');
     this._store.dispatch(accion);
     this._router.navigate(['/tienda/detallepedido']);
+    //this.handleCheckTransFer();
     //this.dialogRef.close('creo');
 
   }
@@ -283,6 +285,51 @@ export class CarritoComponent implements OnInit {
         resolve( res.data );
       });
     });
+  }
+
+  handleCheckTransFer(){
+    let obj={
+      //Parametros compra (obligatorio)
+      name: "Vestido Mujer Primavera",
+      description: "Vestido Mujer Primavera",
+      invoice: "FAC-1234",
+      currency: "cop",
+      amount: "5000",
+      tax_base: "4000",
+      tax: "500",
+      tax_ico: "500",
+      country: "co",
+      lang: "en",
+
+      //Onpage="false" - Standard="true"
+      external: "true",
+
+
+      //Atributos opcionales
+      extra1: "extra1",
+      extra2: "extra2",
+      extra3: "extra3",
+      confirmation: "http://secure2.payco.co/prueba_curl.php",
+      response: "http://secure2.payco.co/prueba_curl.php",
+
+      //Atributos cliente
+      name_billing: "Jhon Doe",
+      address_billing: "Carrera 19 numero 14 91",
+      type_doc_billing: "cc",
+      mobilephone_billing: "3050000000",
+      number_doc_billing: "100000000",
+      email_billing: "jhondoe@epayco.com",
+
+     //atributo deshabilitación método de pago
+      methodsDisable: ["TDC", "PSE","SP","CASH","DP"]
+
+    };
+    const handler: any = ePayco.checkout.configure({
+      key: "45b960805ced5c27ce34b1600b4b9f54",
+      test: true
+    })
+      ;
+    handler.open(obj);
   }
 
 }

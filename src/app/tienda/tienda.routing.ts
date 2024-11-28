@@ -18,7 +18,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: ProductosComponent
+            component: TiendaComponent
           },
           {
             path: 'inicio',
@@ -26,6 +26,10 @@ const routes: Routes = [
           },
           {
             path: 'productos',
+            component: ProductosComponent
+          },
+          {
+            path: 'productos/:category',
             component: ProductosComponent
           },
           {

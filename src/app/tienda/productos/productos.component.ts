@@ -5,13 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Store } from '@ngrx/store';
 import { CART } from 'src/app/interfaces/sotarage';
 import { MatDialog, MatSnackBar } from '@angular/material';
-import { InfoProductoComponent } from '../info-producto/info-producto.component';
-import { ProductoHistorialAction, CartAction, BuscadorAction } from 'src/app/redux/app.actions';
+import { BuscadorAction } from 'src/app/redux/app.actions';
 import * as _ from 'lodash';
 import { ToolsService } from 'src/app/services/tools.service';
 import { FormatosService } from 'src/app/services/formatos.service';
-import { ChecktDialogComponent } from '../checkt-dialog/checkt-dialog.component';
-import { PizzaPartyComponent } from '../catalogo/catalogo.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-productos',
@@ -20,12 +18,7 @@ import { PizzaPartyComponent } from '../catalogo/catalogo.component';
 })
 export class ProductosComponent implements OnInit {
 
-  products = [
-    { name: 'Invicta K51', price: '$149.900,00', image: 'assets/invicta_k51.jpg' },
-    { name: 'Tissot T902', price: '$89.900,00', image: 'assets/tissot_t902.jpg' },
-    { name: 'Casio 558-1', price: '$89.900,00', image: 'assets/casio_558.jpg' },
-    // Añadir más productos según sea necesario
-  ];
+  products = [];
 
   showNotification = false;
   lastPurchase = { user: 'Julio de Valledupar', name: 'Rolex Submariner RX31', price: '$89.900,00', image: 'assets/rolex_submariner_rx31.jpg' };
@@ -50,7 +43,7 @@ export class ProductosComponent implements OnInit {
   listProductos:any = [];
   dataSeleccionda:string;
   listCategorias:any = [];
-
+  idCategory:string;
 
   constructor(
     private _productos: ProductoService,
@@ -61,6 +54,7 @@ export class ProductosComponent implements OnInit {
     private _tools: ToolsService,
     public _formato: FormatosService,
     private _snackBar: MatSnackBar,
+    private activate: ActivatedRoute,
   ) {
     this._store.subscribe((store: any) => {
       store = store.name;
@@ -71,7 +65,9 @@ export class ProductosComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.getProductos();
+    this.getProductos();
+    this.idCategory = this.activate.snapshot.paramMap.get('category');
+
     this.getCategorias();
     let interV = 0;
     setInterval(() => {
@@ -85,13 +81,22 @@ export class ProductosComponent implements OnInit {
     }, 3000); // Simular la compra después de 3 segundos
   }
 
-  getCategorias(){
-    this._categorias.getProduct( { where:{ cat_activo: 0 }, limit: 100, empresa: this.tiendaInfo.id || 4 } ).subscribe((res:any)=>{
+  async getCategorias(){
+    this._categorias.get( { where:{ cat_activo: 0, id: this.idCategory }, limit: 100 } ).subscribe( async (res:any)=>{
       this.listCategorias = res.data;
-      //this.listCategorias.unshift( { cat_nombre: "Todos", id: 0 } );
+      for( let item of this.listCategorias ) {
+        this.query.where.pro_categoria = this.idCategory;
+        item.articleData = await this.getProductos( );
+      }
     });
   }
 
+  handleCategory(){
+    this.query = { where:{ pro_activo: 0,  } ,limit: 30, page: 0 };
+    this.listProductos = [];
+    this.loader = true;
+    this.getProductos();
+  }
   
   buscar() {
     //console.log(this.seartxt);
@@ -124,7 +129,7 @@ export class ProductosComponent implements OnInit {
   }
 
   buscarFiltro( opt:string ){
-    this.query = { where:{ pro_activo: 0 } ,limit: 15, page: 0 };
+    this.query = { where:{ pro_activo: 0 } ,limit: 30, page: 0 };
     if(opt == 'ordenar'){
       if(this.busqueda.ordenar == 1){
         this.dataSeleccionda = "";
@@ -149,19 +154,14 @@ export class ProductosComponent implements OnInit {
   }
 
   getProductos(){
-    this.spinner.show();
-    if( this.tiendaInfo.id ) this.query.where.empresa = this.tiendaInfo.id;
-    else this.query.where.empresa = 4;
-    this._productos.get(this.query).subscribe((res:any)=>{
-      this.listProductos = _.unionBy(this.listProductos || [], res.data, 'id');
-      //console.log("******",res)
-      this.spinner.hide();
-      this.loader = false;
-      if (res.data.length === 0 ) {
-        this.notEmptyPost =  false;
-      }
-      this.notscrolly = true;
-    }, ( error )=> { console.error(error); this.spinner.hide(); this.loader = false;});
+    return new Promise( async ( resolve ) =>{
+      if( this.tiendaInfo.id ) this.query.where.empresa = this.tiendaInfo.id;
+      else this.query.where.empresa = 4;
+      this._productos.get( this.query ).subscribe( ( res:any )=>{
+        //this.listProductos = _.unionBy(this.listProductos || [], res.data, 'id');
+        resolve( res.data );
+      }, ( error )=> { console.error(error); resolve( [] ); });
+    });
   }
 
   borrarBusqueda(){

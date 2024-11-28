@@ -1,13 +1,13 @@
 <!-- Para escritorio -->
-<mat-toolbar class="toolbar-desktop">
-    <div class="logo">
-      <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50">
+<mat-toolbar class="toolbar-desktop" style="background: #bababa;">
+    <div class="logo pointer">
+      <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50" routerLink="/tienda">
     </div>
     <!--<span class="spacer"></span>-->
     <div class="row">
         <div class="col-12">
             <div class="d-flex justify-content-center">
-                <a href="" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: black;">
+                <a class="pointer" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: black;" (click)="handleOpenCategory( itemCategory )">
                     {{ itemCategory.cat_nombre }}
                 </a>
             </div>
@@ -16,20 +16,20 @@
     <!--<span class="spacer"></span>-->
   
     <!--<span class="spacer"></span>-->
-    <mat-icon (click)="menu2.toggle()">shopping_cart</mat-icon>
-  </mat-toolbar>
+    <mat-icon class="pointer" (click)="menu2.toggle()">shopping_cart</mat-icon>
+</mat-toolbar>
   
   <!-- Para móvil -->
-  <mat-toolbar class="toolbar-mobile">
-    <button mat-icon-button (click)="menu.toggle()">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <div class="logo">
-      <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50">
-    </div>
-    <span class="spacer"></span>
-    <!--<mat-icon (click)="toggleSearch()">search</mat-icon>-->
-    <mat-icon (click)="menu2.toggle()">shopping_cart</mat-icon>
+<mat-toolbar class="toolbar-mobile" style="background: #bababa;">
+  <button mat-icon-button (click)="menu.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <div class="logo">
+    <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50" routerLink="/tienda">
+  </div>
+  <span class="spacer"></span>
+  <!--<mat-icon (click)="toggleSearch()">search</mat-icon>-->
+  <mat-icon class="pointer" (click)="menu2.toggle()">shopping_cart</mat-icon>
 </mat-toolbar>
 
 <!-- Sidenav para móvil -->
@@ -48,8 +48,8 @@
         <div class="cart-widget-side">
             <div class="wd-heading">
               <span class="title">Carro de la compra</span>
-              <div class="close-side-widget" (click)="menu2.toggle()">
-                <a class="pointer" rel="nofollow">Cerrar</a>
+              <div class="close-side-widget pointer" (click)="menu2.toggle()">
+                <mat-icon>close</mat-icon>
               </div>
             </div>
           
@@ -67,25 +67,29 @@
                           [src]="item.foto"
                           [alt]="item.id"
                           class="product-thumbnail"
+                          style="border-radius: 10px;"
                         />
                       </a>
           
                       <div class="cart-info">
                         <span class="product-title">{{ item.titulo | slice: 0:20 }}</span>
+                        <span class="quantity" *ngIf="item.talla">
+                          TALLA: {{ item.talla }}
+                        </span>
                         <span class="quantity">
                             <mat-form-field class="example-full-width">
                                 <mat-label>Cantidad</mat-label>
                                 <input type="number" matInput #postalCode  placeholder="1, 2, 3" [(ngModel)]="item.cantidad">
-                            </mat-form-field>×
+                            </mat-form-field>
                           <span class="price">{{ ( item.costoTotal * item.cantidad ) | currency:'COP' }}</span>
                         </span>
                       </div>
                       <button
-                        class="remove"
+                        class="remove btn btn-danger"
                         (click)="removeItem( item )"
                         aria-label="Eliminar"
                         >
-                        ×
+                          <mat-icon>close</mat-icon>
                         </button>
                     </li>
                   </ul>
@@ -97,8 +101,8 @@
                     <span>{{ calculateSubtotal() | currency:'COP' }}</span>
                   </p>
                   <div class="buttons">
-                    <button class="btn-cart" routerLink="/carrito">Ver carrito</button>
-                    <button class="btn-checkout" routerLink="/finalizar-compra">
+                    <button class="btn btn-dark" style="font-size: 15px;" (click)="menu2.toggle()">cerrar</button>
+                    <button class="btn btn-success" routerLink="/tienda/carrito" style="font-size: 15px;" (click)="menu2.toggle()">
                       Finalizar compra
                     </button>
                   </div>

@@ -33,7 +33,7 @@ export class ProductosViewComponent implements OnInit {
   };
   pedido:any = { cantidad:1 };
   view:string = "descripcion";
-  rango:number = 250;
+  rango:number = 6;
   listProductos:any = [];
   query:any = {
     where:{
@@ -225,7 +225,7 @@ export class ProductosViewComponent implements OnInit {
   alertTallaColor(){
     if( this.data.tallaR !== 'Unica' ) if( !this.pedido.talla ) { this._tools.error( { mensaje: "Por Favor Seleccionar una Talla" } ); return false; }
     if( !this.data.colorSelect ) { this._tools.error( { mensaje: "Por Favor Seleccionar un Color" } ); return false; }
-    console.log("***11", this.pedido)
+    console.log("***11", this.data)
     return true;
   }
 
@@ -332,7 +332,7 @@ export class ProductosViewComponent implements OnInit {
         this.listTallas = _.unionBy( this.listTallas || [], this.listTallas, 'id');
       }
       for( let row of this.data.listaTallas ) {
-        this.pedido.talla = row.tal_descripcion;
+        //this.pedido.talla = row.tal_descripcion;
         this.data.tallaR = row.tal_descripcion;
       }
       for( let row of this.data.listColor ) {
@@ -361,7 +361,8 @@ export class ProductosViewComponent implements OnInit {
         }
       )
       this.bucleImg();
-      console.log("****357", this.data)
+      //console.log("****357", window.document.scrollingElement)
+      setTimeout(()=> window.document.scrollingElement.scrollTop=0, 200 );
     }, error=> { console.error(error); this._tools.presentToast('Error de servidor'); });
   }
 
@@ -411,6 +412,7 @@ export class ProductosViewComponent implements OnInit {
   getArticulos(){
     return new Promise (resolve =>{
       this.query.where.idPrice = this.userId.id;
+      this.query.where.id = { '!=' : [ this.id ] }
       //console.log("***210", this.query)
       this._producto.get( this.query ).subscribe((res:any)=>{
         resolve( res.data )
@@ -625,6 +627,7 @@ export class ProductosViewComponent implements OnInit {
   handleSelect( item ){
     //console.log("***364", item)
     this.viewsImagen = item.foto;
+    this._tools.openFotoAlert( this.viewsImagen );
     this.data.colorSelect = item.talla;
     for( let row of this.data.listColor) row.check1 = false;
     item.check1 = true;
