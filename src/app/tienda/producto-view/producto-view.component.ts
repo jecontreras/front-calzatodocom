@@ -222,10 +222,23 @@ export class ProductosViewComponent implements OnInit {
     }
   }
 
-  alertTallaColor(){
-    if( this.data.tallaR !== 'Unica' ) if( !this.pedido.talla ) { this._tools.error( { mensaje: "Por Favor Seleccionar una Talla" } ); return false; }
-    if( !this.data.colorSelect ) { this._tools.error( { mensaje: "Por Favor Seleccionar un Color" } ); return false; }
-    console.log("***11", this.data)
+  isValidationActive: boolean = false;
+
+  alertTallaColor() {
+    this.isValidationActive = true; // Activa la validación visual
+
+    if (this.data.tallaR !== 'Unica' && !this.pedido.talla) {
+      this._tools.error({ mensaje: "Por Favor Seleccionar una Talla" });
+      return false;
+    }
+
+    if (!this.data.colorSelect) {
+      this._tools.error({ mensaje: "Por Favor Seleccionar un Color" });
+      return false;
+    }
+
+    // Si pasa la validación, desactiva la validación visual
+    this.isValidationActive = false;
     return true;
   }
 
@@ -488,6 +501,7 @@ export class ProductosViewComponent implements OnInit {
   }
 
   async AgregarCart2( item:any ){
+    this.scrollToNextStep();
     let validate= this.alertTallaColor();
     if( !validate ) return false;
     let data:any = {

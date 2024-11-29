@@ -51,7 +51,7 @@ export class MenuComponent implements OnInit {
     public changeDetectorRef: ChangeDetectorRef,
     private _store: Store<CART>,
     private Router: Router,
-    private _tools: ToolsService,
+    public _tools: ToolsService,
     private socialAuthService: SocialAuthService,
     private _user: UsuariosService,
     private _categoryService: CategoriasService

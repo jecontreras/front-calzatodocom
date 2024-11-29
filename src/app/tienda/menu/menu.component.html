@@ -36,10 +36,9 @@
 <mat-sidenav-container class="mobile-container">
     <mat-sidenav #menu mode="over" class="mobile-sidenav">
       <mat-nav-list>
-        <a mat-list-item>Relojes hombre</a>
-        <a mat-list-item>Ropa hombre</a>
-        <a mat-list-item>Relojes mujer</a>
-        <a mat-list-item>Accesorios varios</a>
+        <a mat-list-item class="pointer" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: black;" (click)="handleOpenCategory( itemCategory )">
+          {{ itemCategory.cat_nombre }}
+        </a>
       </mat-nav-list>
     </mat-sidenav>
 
@@ -81,7 +80,7 @@
                                 <mat-label>Cantidad</mat-label>
                                 <input type="number" matInput #postalCode  placeholder="1, 2, 3" [(ngModel)]="item.cantidad">
                             </mat-form-field>
-                          <span class="price">{{ ( item.costoTotal * item.cantidad ) | currency:'COP' }}</span>
+                          <span class="price">{{ _tools.monedaChange2( 3, 2, ( item.costoTotal * item.cantidad ) ) }}</span>
                         </span>
                       </div>
                       <button
@@ -98,11 +97,11 @@
                 <div class="shopping-cart-widget-footer">
                   <p class="total">
                     <strong>Subtotal:</strong>
-                    <span>{{ calculateSubtotal() | currency:'COP' }}</span>
+                    <span>{{ _tools.monedaChange2( 3, 2, ( calculateSubtotal() ) )  }}</span>
                   </p>
                   <div class="buttons">
                     <button class="btn btn-dark" style="font-size: 15px;" (click)="menu2.toggle()">cerrar</button>
-                    <button class="btn btn-success" routerLink="/tienda/carrito" style="font-size: 15px;" (click)="menu2.toggle()">
+                    <button class="btn btn-success" routerLink="/tienda/carrito" style="font-size: 15px;" (click)="menu2.toggle()" [disabled]="countCart ===0">
                       Finalizar compra
                     </button>
                   </div>
@@ -114,7 +113,7 @@
           
     </mat-sidenav>
   
-    <mat-sidenav-content>
+    <mat-sidenav-content style="    height: auto;">
   
         <ng-content></ng-content>
       

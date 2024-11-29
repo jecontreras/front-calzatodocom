@@ -83,22 +83,40 @@
                     <p class="delivery-info">
                       <i class="fas fa-truck"></i> Los productos normalmente te llegaran de 2 a 5 días hábiles.
                     </p>
-                    <section *ngIf="data['listTallas']?.length > 0 && data.tallaR !== 'Unica'">
+                    <section 
+                      *ngIf="data['listTallas']?.length > 0 && data.tallaR !== 'Unica'" 
+                      [ngClass]="{'error-border': !pedido.talla && isValidationActive}"
+                    >
                       <h4 class="tallaR">TALLA</h4>
                       <div class="aa-prod-view-size" style="text-align: center;">
-                        <a class="pointer" *ngFor="let item of data.listTallas" [ngClass]="{selecciono: item.check1}"
-                          (click)="checkTalla( item );">{{
-                          item.tal_descripcion }}</a>
+                        <a 
+                          class="pointer" 
+                          *ngFor="let item of data.listTallas" 
+                          [ngClass]="{selecciono: item.check1}"
+                          (click)="checkTalla(item)"
+                        >
+                          {{ item.tal_descripcion }}
+                        </a>
                       </div>
                     </section>
-                    <section *ngIf="data['listColor']?.length > 0 ">
+
+                    <section 
+                      *ngIf="data['listColor']?.length > 0" 
+                      [ngClass]="{'error-border': !data.colorSelect && isValidationActive}"
+                    >
                       <h4 class="tallaR">COLOR</h4>
                       <div class="aa-prod-view-size" style="text-align: center;">
-                        <a class="pointer" *ngFor="let item of data.listColor" [ngClass]="{selecciono: item.check1}"
-                          (click)="handleSelect( item );">{{
-                            item.talla }}</a>
+                        <a 
+                          class="pointer" 
+                          *ngFor="let item of data.listColor" 
+                          [ngClass]="{selecciono: item.check1}"
+                          (click)="handleSelect(item)"
+                        >
+                          {{ item.talla }}
+                        </a>
                       </div>
                     </section>
+
                     <div class="stock-info">
                       <span class="stock-count">40 Disponible</span>
                       <span class="stock-indicator"></span>
@@ -146,6 +164,15 @@
                       </p>
                     </div>-->
                   </div>
+                  <section #nextStep>
+                    <button
+                      mat-raised-button
+                      class="animated-button fixed-footer-button"
+                      (click)="AgregarCart2(this.data)"
+                    >
+                      Agregar al Carrito 🛒
+                    </button>
+                  </section>
                 </div>
                 <div class="col-12">
                   <img style="    width: 100%;

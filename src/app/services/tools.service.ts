@@ -280,7 +280,7 @@ export class ToolsService {
     inputNum = inputNum.split('.')
     // evaluamos si existen decimales
     if (!inputNum[1]) {
-      inputNum[1] = '00'
+      inputNum[1] = ''
     }
 
     let separados
@@ -304,7 +304,7 @@ export class ToolsService {
       separados = [inputNum[0]]
     }
     separados = separados.filter((row: any) => row != "");
-    return separados.join("."); //+ ',' + inputNum[1];
+    return "$"+separados.join("."); //+ ',' + inputNum[1];
   }
 
   seguridadIfrane( url:string ){

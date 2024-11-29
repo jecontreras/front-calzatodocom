@@ -455,6 +455,39 @@ left: 50%;
   padding: 10px;
 }
 
+.fixed-footer-button {
+  position: fixed; /* El botón se queda fijo en la pantalla */
+  bottom: 0; /* Lo ubica en la parte inferior de la ventana */
+  left: 0;
+  width: 100%; /* Ocupa todo el ancho del viewport */
+  background: #00e534; /* Fondo del botón */
+  color: white; /* Texto blanco */
+  font-size: 18px; /* Tamaño de fuente */
+  font-weight: bold; /* Negrita */
+  text-align: center; /* Centrado del texto */
+  padding: 15px 0; /* Espaciado interno */
+  border: none; /* Sin bordes */
+  z-index: 1000; /* Se asegura de que esté encima de otros elementos */
+}
+
+.fixed-footer-button:hover {
+  background: #00c82b; /* Cambia de color al pasar el mouse */
+  cursor: pointer; /* Aparece la mano */
+}
+
+.error-border {
+  border: 2px solid red;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.error-border h4 {
+  color: red;
+  font-weight: bold;
+}
+
+
 @keyframes shake {
   0% { transform: translate(0, 0); }
   10% { transform: translate(-10px, 0); }
