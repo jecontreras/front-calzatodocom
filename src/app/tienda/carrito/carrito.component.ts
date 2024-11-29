@@ -9,6 +9,7 @@ import { UsuariosService } from 'src/app/servicesComponents/usuarios.service';
 import { VentasService } from 'src/app/servicesComponents/ventas.service';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
+import { EpaycoService } from 'src/app/services/epayco.service';
 declare var ePayco: any;
 
 @Component({
@@ -60,7 +61,8 @@ export class CarritoComponent implements OnInit {
     private fb: FormBuilder,
     private _user: UsuariosService,
     private _ventas: VentasService,
-    private _router: Router
+    private _router: Router,
+    private epaycoService: EpaycoService
   ) { 
     this.paymentForm = this.fb.group({
       paymentMethod: ['bacs', Validators.required] // Valor predeterminado: "Contra entrega"
@@ -194,7 +196,7 @@ export class CarritoComponent implements OnInit {
       }))
     };
     let idUser:any = await this.crearUser();
-    console.log("****196", idUser)
+    //console.log("****196", idUser)
     data.usu_clave_int = idUser.id;
     let resul = await this.nexCompra( data );
     if( !resul ) return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
@@ -288,48 +290,28 @@ export class CarritoComponent implements OnInit {
   }
 
   handleCheckTransFer(){
-    let obj={
-      //Parametros compra (obligatorio)
-      name: "Vestido Mujer Primavera",
-      description: "Vestido Mujer Primavera",
-      invoice: "FAC-1234",
-      currency: "cop",
-      amount: "5000",
-      tax_base: "4000",
-      tax: "500",
-      tax_ico: "500",
-      country: "co",
-      lang: "en",
-
-      //Onpage="false" - Standard="true"
-      external: "true",
-
-
-      //Atributos opcionales
-      extra1: "extra1",
-      extra2: "extra2",
-      extra3: "extra3",
-      confirmation: "http://secure2.payco.co/prueba_curl.php",
-      response: "http://secure2.payco.co/prueba_curl.php",
-
-      //Atributos cliente
-      name_billing: "Jhon Doe",
-      address_billing: "Carrera 19 numero 14 91",
-      type_doc_billing: "cc",
-      mobilephone_billing: "3050000000",
-      number_doc_billing: "100000000",
-      email_billing: "jhondoe@epayco.com",
-
-     //atributo deshabilitación método de pago
-      methodsDisable: ["TDC", "PSE","SP","CASH","DP"]
-
+    const datosPago = {
+      name: 'Producto de Prueba',
+      description: 'Descripción del producto',
+      invoice: '123456',
+      currency: 'cop',
+      amount: '50000', // Valor del producto
+      tax_base: '0', // Base del impuesto (si aplica)
+      tax: '0', // Valor del impuesto
+      country: 'CO',
+      lang: 'es',
+      external: 'false',
+      response: 'https://midominio.com/respuesta', // URL de respuesta
+      methods: ['CARD', 'PSE', 'CASH'], // Métodos de pago habilitados
+      email_billing: 'cliente@correo.com',
+      name_billing: 'Nombre del cliente',
+      address_billing: 'Calle 123',
+      type_doc_billing: 'CC',
+      mobilephone_billing: '3001234567',
+      number_doc_billing: '123456789'
     };
-    const handler: any = ePayco.checkout.configure({
-      key: "45b960805ced5c27ce34b1600b4b9f54",
-      test: true
-    })
-      ;
-    handler.open(obj);
+
+    this.epaycoService.pagar(datosPago);
   }
 
 }

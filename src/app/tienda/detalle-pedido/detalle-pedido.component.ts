@@ -6,6 +6,8 @@ import { VentasService } from 'src/app/servicesComponents/ventas.service';
 import * as _ from 'lodash';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
+import { ToolsService } from 'src/app/services/tools.service';
+import { VentasProductosService } from 'src/app/servicesComponents/ventas-productos.service';
   
 declare interface DataTable {
   headerRow: string[];
@@ -39,12 +41,15 @@ export class DetallePedidoComponent implements OnInit {
   dataUser:any = {};
   urlHref: string="";
   ShopConfig:any = {};
+  dataUltV:any = { };
 
   constructor(
     private _ventas: VentasService,
     public dialog: MatDialog,
     private spinner: NgxSpinnerService,
     private _store: Store<STORAGES>,
+    public _tools: ToolsService,
+    private _ventasPro: VentasProductosService
   ) { 
     this._store.subscribe((store: any) => {
       store = store.name;
@@ -92,11 +97,14 @@ export class DetallePedidoComponent implements OnInit {
         this.dataTable.footerRow = this.dataTable.footerRow;
         this.dataTable.dataRows.push(... response.data)
         this.dataTable.dataRows = _.unionBy(this.dataTable.dataRows || [], this.dataTable.dataRows, 'id');
+        if( this.dataTable.dataRows[0] ) this.handleOpenAlertP( this.dataTable.dataRows[0] );
+        this.dataUltV = this.dataTable.dataRows[0];
+        this.getVentarArt();
         this.loader = false;
           this.spinner.hide();
           
           if (response.data.length === 0 ) {
-            this.notEmptyPost =  false;
+            this.notEmptyPost =  false; 
           }
           this.notscrolly = true;
       },
@@ -105,10 +113,29 @@ export class DetallePedidoComponent implements OnInit {
       });
   }
 
+  getVentarArt(){
+    this._ventasPro.get( { where: { ventas: this.dataUltV.id } } ).subscribe( res => {
+      this.dataUltV.listArticulo = res.data;
+    });
+  }
+  handleOpenAlertP( item:any ){
+    if( item.ven_estado === 0 ) this._tools.openAlertSubmir( { title: "Importante", text: `Nuestras Lines de Pago Unicas Disponibles Nequi # ${ this.ShopConfig.numNequi }
+      Nuestras Lines de Pago Unicas Disponibles Bancolombia # ${ this.ShopConfig.numBancolombia }` } );
+  }
+
   handleWhatsapp( row:any ){
     let mensaje: string = `https://wa.me/${ this.ShopConfig.numeroCelular }?text=Hola Servicio al Cliente esta es mi orden, por favor, me pueden colaborar *Numero orden*: ${ row.id }`;
     // console.log( mensaje , res);
     window.open(mensaje);
+  }
+  handleCopy( text:string ){
+    this._tools.copiarLinkRegistro( text );
+  }
+
+  handleOpenArt( item ){
+    let url:string = window.origin;
+    url+="/tienda/productosView/"+item.id;
+    window.open( url )
   }
 
 }

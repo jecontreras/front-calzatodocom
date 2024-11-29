@@ -16,7 +16,7 @@
     <!--<span class="spacer"></span>-->
   
     <!--<span class="spacer"></span>-->
-    <mat-icon class="pointer" (click)="menu2.toggle()">shopping_cart</mat-icon>
+    <mat-icon class="pointer" (click)="menu2.toggle()" [matBadge]="countCart" matBadgePosition="before" matBadgeColor="accent">shopping_cart</mat-icon>
 </mat-toolbar>
   
   <!-- Para móvil -->
@@ -29,7 +29,7 @@
   </div>
   <span class="spacer"></span>
   <!--<mat-icon (click)="toggleSearch()">search</mat-icon>-->
-  <mat-icon class="pointer" (click)="menu2.toggle()">shopping_cart</mat-icon>
+  <mat-icon class="pointer" (click)="menu2.toggle()" [matBadge]="countCart" matBadgePosition="before" matBadgeColor="accent">shopping_cart</mat-icon>
 </mat-toolbar>
 
 <!-- Sidenav para móvil -->

@@ -52,6 +52,14 @@ export class ToolsService {
       text.icon || 'question'
     );
   }
+
+  openAlertSubmir( data ){
+    Swal.fire({
+      title: data.title || "",
+      text: data.text || "",
+      icon: "question"
+    });
+  }
   error(text: any) {
     Swal.fire({
       icon: 'error',
@@ -417,6 +425,21 @@ export class ToolsService {
         imageHeight: 200,
         imageAlt: '',
       })
+    }
+
+    copiarLinkRegistro( text: string ){
+      const selBox = document.createElement('textarea');
+      selBox.style.position = 'fixed';
+      selBox.style.left = '0';
+      selBox.style.top = '0';
+      selBox.style.opacity = '0';
+      selBox.value = text;
+      document.body.appendChild(selBox);
+      selBox.focus();
+      selBox.select();
+      document.execCommand('copy');
+      document.body.removeChild(selBox);
+      this.openSnack('Copiado:' + ' ' + text, 'completado', false);
     }
 
 

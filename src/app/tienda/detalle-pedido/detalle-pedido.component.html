@@ -7,6 +7,10 @@
                     Tu pedido esta en proceso en estos momentos lo recibirás entre 4 o 8 dias si se precenta algun inconveniente se notificara por via whatsap. 
                     ¡Recuerda el valor del envio es gratis!
                 </h2>
+                <h2 style="text-align: center; color: black;">
+                  Nuestras Lines de Pago Unicas Disponibles Nequi # <button mat-button color="primary" (click)="handleCopy( ShopConfig.numNequi )"> {{ ShopConfig.numNequi }} </button> <br>
+                  Nuestras Lines de Pago Unicas Disponibles Bancolombia # <button mat-button color="primary" (click)="handleCopy( ShopConfig.numBancolombia )"> {{ ShopConfig.numBancolombia }} </button>
+              </h2>
             </div>
         </div>
         <div class="col-12">
@@ -14,15 +18,93 @@
             background: #bababa;
             border-radius: 10px;
             padding: 2%;">Para Iniciar seccione 
-                User: {{ dataUser.usu_usuario }}
-                password: {{ dataUser.usu_usuario }}
+                Usuario: {{ dataUser.usu_usuario }}
+                clave: {{ dataUser.usu_usuario }}
             </h1>
             <h1 style="text-align: center;     text-align: center;
-              background: #000000;
+              background: #00b429;
               border-radius: 10px;
               padding: 2%;">
               <a [href]="urlHref" style="color: white;" target="_blank">INICIAR SECCION</a>
             </h1>
+        </div>
+        <div class="col-12">
+          <div class="woocommerce-order">
+            <div class="thankyoucustom_wrapper">
+              <h2 class="thankyoutitle">Gracias por tu compra, {{ dataUltV.ven_nombre_cliente }}!</h2>
+              <p class="subtitle">
+                Para una respuesta más rápida, envíe los detalles de su pedido haciendo
+                clic en el botón de abajo.
+              </p>
+              <a
+                id="sendbtn"
+                (click)="handleWhatsapp(dataUltV)"
+                class="pointer"
+              >
+                Enviar detalles del pedido por Whatsapp
+              </a>
+            </div>
+          
+            <ul class="woocommerce-order-overview order_details">
+              <li class="order">Número del pedido: <strong>{{ dataUltV.codigo }}</strong></li>
+              <li class="date">Fecha: <strong>{{ dataUltV.ven_fecha_venta }} </strong></li>
+              <li class="total">Total: <strong>{{ _tools.monedaChange2( 3,2, ( this.dataUltV.ven_total ) ) }}</strong></li>
+              <li class="method">Método de pago: <strong>{{ dataUltV.ven_tipo }}</strong></li>
+            </ul>
+          
+            <span *ngIf="dataUltV.ven_tipo !== 'PAGO ADELANTADO' ">
+              <p>💡 Ofrecemos el servicio de pago contra entrega para mayor comodidad de nuestros clientes.</p>
+              <p>Para asegurar el pedido, se requiere un pago previo de $20.000 que será descontado del total.</p>
+              <p>Recuerda estar disponible en la dirección proporcionada.</p>
+            </span>
+          
+            <section class="woocommerce-order-details">
+              <h2>Detalles del pedido</h2>
+              <div class="responsive-table">
+                <table class="woocommerce-table order_details">
+                  <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of dataUltV.listArticulo">
+                      <td>
+                        <a (click)="handleOpenArt( item )">{{ item.titulo }} - {{ item.tallaSelect || 'Unica' }}</a>
+                        <strong>× {{ item.cantidad }}</strong>
+                      </td>
+                      <td>{{ this._tools.monedaChange2( 3,2, ( item.loVendio *  item.cantidad ) ) }}</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th>Subtotal:</th>
+                      <td>{{ _tools.monedaChange2( 3,2, ( this.dataUltV.ven_precio ) ) }}</td>
+                    </tr>
+                    <tr>
+                      <th>Cargo adicional:</th>
+                      <td>{{ _tools.monedaChange2( 3,2, ( this.dataUltV.ven_ganancias ) ) }}</td>
+                    </tr>
+                    <tr>
+                      <th>Total:</th>
+                      <td>{{ _tools.monedaChange2( 3,2, ( this.dataUltV.ven_total ) ) }}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </section>
+          
+            <section class="woocommerce-customer-details">
+              <h2>Dirección de facturación</h2>
+              <address>
+                {{ dataUltV.ven_nombre_cliente }}<br />
+                {{ dataUltV.ven_direccion_cliente }} - {{ dataUltV.ven_barrio }}<br />
+                {{ dataUltV.ven_ciudad }}<br />
+                <p>{{ dataUltV.ven_telefono_cliente }}</p>
+              </address>
+            </section>
+          </div>          
         </div>
         <div class="col-12">
             <div class="search-results col-12 row" infiniteScroll [infiniteScrollDistance]="3"

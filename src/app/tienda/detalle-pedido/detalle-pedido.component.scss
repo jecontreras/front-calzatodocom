@@ -1,0 +1,78 @@
+.woocommerce-order {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .thankyoucustom_wrapper {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .thankyoutitle {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .subtitle {
+    font-size: 16px;
+    color: #666;
+  }
+  
+  #sendbtn {
+    background-color: #25d366;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  #sendbtn:hover {
+    background-color: #20b558;
+  }
+  
+  .woocommerce-order-overview {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .woocommerce-order-overview li {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+  .responsive-table {
+    margin-top: 20px;
+    overflow-x: auto;
+  }
+  
+  .woocommerce-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .woocommerce-table th,
+  .woocommerce-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .woocommerce-table th {
+    background-color: #f9f9f9;
+  }
+  
+  .woocommerce-column__title {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  address {
+    font-style: normal;
+    line-height: 1.5;
+  }
+  
+  .woocommerce-customer-details--phone,
+  .woocommerce-customer-details--email {
+    margin: 5px 0;
+  }
+  
