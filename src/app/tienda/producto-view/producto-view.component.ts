@@ -212,7 +212,7 @@ export class ProductosViewComponent implements OnInit {
     if( this.number ) this.dataUser = await this.getUser();
     setTimeout(()=>{
       window.document.scrollingElement.scrollTop=0;
-    });
+    },1000 );
 
   }
 

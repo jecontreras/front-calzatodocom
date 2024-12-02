@@ -124,7 +124,7 @@ export class DetallePedidoComponent implements OnInit {
   }
 
   handleWhatsapp( row:any ){
-    let mensaje: string = `https://wa.me/${ this.ShopConfig.numeroCelular }?text=Hola Servicio al Cliente esta es mi orden, por favor, me pueden colaborar *Numero orden*: ${ row.id }`;
+    let mensaje: string = `https://wa.me/57${ this.ShopConfig.numeroCelular }?text=Hola Servicio al Cliente esta es mi orden, por favor, me pueden colaborar *Numero orden*: ${ row.id }`;
     // console.log( mensaje , res);
     window.open(mensaje);
   }

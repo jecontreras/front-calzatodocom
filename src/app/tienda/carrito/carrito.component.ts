@@ -81,6 +81,9 @@ export class CarritoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    setTimeout(()=>{
+      window.document.scrollingElement.scrollTop=0;
+    },1000);
   }
 
   validadorInput(){
