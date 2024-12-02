@@ -33,7 +33,7 @@ export class ProductosViewComponent implements OnInit {
   };
   pedido:any = { cantidad:1 };
   view:string = "descripcion";
-  rango:number = 6;
+  rango:number = 20;
   listProductos:any = [];
   query:any = {
     where:{
@@ -144,6 +144,7 @@ export class ProductosViewComponent implements OnInit {
   ];
 
   @ViewChild('nextStep', { static: false }) nextStep: ElementRef;
+  listComentario:any =[];
 
   constructor(
     private _store: Store<CART>,
@@ -203,6 +204,7 @@ export class ProductosViewComponent implements OnInit {
       this.id = this.activate.snapshot.paramMap.get('id');
       this.getProducto();
       this.getProductos();
+      this.listComentario = this.handleComent();
     }
     this.urlwhat = `https://api.whatsapp.com/send?phone=57${ this.tiendaInfo.numeroCelular }&amp;text=Hola%2C%20estoy%20interesado%20en%20los%20tenis%20NIKE%2C%20gracias...`
 
@@ -659,6 +661,37 @@ export class ProductosViewComponent implements OnInit {
     else number='57'+number;
     let url = `https://wa.me/${ number }?text=${encodeURIComponent(`👉Hola buenas! 🎉 Me gustaria mas informacion gracias 👈`)}`;
     window.open( url, "Mas Informacion", "width=640, height=480");
+  }
+
+  handleComent(){
+    return [
+      {
+        "name": "Bonifacio Campos",
+        "rating": 5,
+        "comment": "Excelente producto ✌️"
+      },
+      {
+        "name": "Casimiro Herrera",
+        "rating": 5,
+        "comment": "El pedido fue entregado según lo acordado, no hay nada que objetar.. me gustó."
+      },
+      {
+        "name": "Claudio Vargas",
+        "rating": 5,
+        "comment": "¡Quedé muy satisfecho y espero realizar nuevas compras... producto muy bueno!"
+      },
+      {
+        "name": "Elías Méndez",
+        "rating": 5,
+        "comment": "Me encantó, el producto buenísimo... sobre todo me llamó mucha atención el envío gratis y la rapidez en la entrega."
+      },
+      {
+        "name": "Gabriel Vargas",
+        "rating": 5,
+        "comment": "Absolutamente nada a reclamar. ¡Recomiendo a todos! Buen producto, mejores promociones y excelente relación con el cliente."
+      }
+    ]
+    
   }
 
 }

@@ -197,6 +197,17 @@
                 <div class="aa-product-review-area">
                   <div class="row">
                     <div class="col-12">
+                      <div class="col-12">
+                        <div class="reviews-container">
+                          <div *ngFor="let comment of listComentario" class="review-card">
+                            <h3>{{ comment.name }}</h3>
+                            <p>{{ '★'.repeat(comment.rating) }}</p>
+                            <p>{{ comment.comment }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
                       <h1 style="    background: #00dab3;
                       text-align: center;
                       border-radius: 10px;

@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
   //url: "https://1337-jecontreras-backofertas-l1b6vvtvt7y.ws-us116.gitpod.io",
-  url: "https://ofertastoreapp-753157c3f00c.herokuapp.com",
+  url: "https://ofertastoreapp1-f497aec95828.herokuapp.com",
   urlFront: "http://localhost:4200",
-  URLFILE: "https://apilokomproaqui1-9219656b6da1.herokuapp.com",
+  URLFILE: "https://apilokomproaqui3-8479ed1ed46c.herokuapp.com",
   //URLFILE: "http://localhost:1339"
 };
 

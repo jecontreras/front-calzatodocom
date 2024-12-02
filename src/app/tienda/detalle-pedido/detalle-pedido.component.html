@@ -14,24 +14,24 @@
             </div>
         </div>
         <div class="col-12">
-            <h1 style="    text-align: center;
+            <h3 style="    text-align: center;
             background: #bababa;
             border-radius: 10px;
             padding: 2%;">Para Iniciar seccione 
                 Usuario: {{ dataUser.usu_usuario }}
                 clave: {{ dataUser.usu_usuario }}
-            </h1>
-            <h1 style="text-align: center;     text-align: center;
+            </h3>
+            <h3 style="text-align: center;     text-align: center;
               background: #00b429;
               border-radius: 10px;
               padding: 2%;">
               <a [href]="urlHref" style="color: white;" target="_blank">INICIAR SECCION</a>
-            </h1>
+            </h3>
         </div>
         <div class="col-12">
           <div class="woocommerce-order">
             <div class="thankyoucustom_wrapper">
-              <h2 class="thankyoutitle">Gracias por tu compra, {{ dataUltV.ven_nombre_cliente }}!</h2>
+              <h3 class="thankyoutitle">Gracias por tu compra, {{ dataUltV.ven_nombre_cliente }}!</h3>
               <p class="subtitle">
                 Para una respuesta más rápida, envíe los detalles de su pedido haciendo
                 clic en el botón de abajo.
@@ -106,7 +106,7 @@
             </section>
           </div>          
         </div>
-        <div class="col-12">
+        <!--<div class="col-12">
             <div class="search-results col-12 row" infiniteScroll [infiniteScrollDistance]="3"
             [infiniteScrollThrottle]="50" (scrolled)="onScroll()">
             <div class="col-12 material-datatables" *ngIf="!loader">
@@ -156,6 +156,6 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>-->
     </div>
 </div>

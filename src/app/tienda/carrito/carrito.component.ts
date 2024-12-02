@@ -54,6 +54,7 @@ export class CarritoComponent implements OnInit {
 
   dataUser:any = {};
   ShopConfig:any = {};
+  disabledSpineer: boolean = false;
 
   constructor(
     private _store: Store<CART>,
@@ -195,12 +196,14 @@ export class CarritoComponent implements OnInit {
         return row;
       }))
     };
+    this.disabledSpineer = true;
     let idUser:any = await this.crearUser();
     //console.log("****196", idUser)
     data.usu_clave_int = idUser.id;
     let resul = await this.nexCompra( data );
-    if( !resul ) return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
     this.disabled = false;
+    this.disabledSpineer = false;
+    if( !resul ) return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
     this._tools.presentToast("Exitoso Tu pedido esta en proceso. un accesor se pondra en contacto contigo!");
     setTimeout(()=>this._tools.tooast( { title: "Tu pedido esta siendo procesado "}) ,3000);
     //this.mensajeWhat();

@@ -62,7 +62,7 @@ export class MenuComponent implements OnInit {
       if(!store) return false;
       this.listCart = store.cart || [];
       console.log("****64", this.listCart.length, this.countCart)
-      if( ( this.countCart !== this.listCart.length ) && ( this.listCart.length !== 0 ) ) this.openDialog();
+      if( ( ( this.countCart !== this.listCart.length ) && ( this.listCart.length > this.countCart ) ) && ( this.listCart.length !== 0 ) ) this.openDialog();
       this.countCart = this.listCart.length;
       this.userId = store.usercabeza || {};
       this.dataUser = store.user || {};

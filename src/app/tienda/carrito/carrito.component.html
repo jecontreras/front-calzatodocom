@@ -166,7 +166,8 @@
                     </mat-radio-group>
                   </mat-card-content>
                   <mat-card-actions>
-                    <button style="background: #28a745 !important;" mat-raised-button type="submit" (click)="finalizando()">Realizar pedido</button>
+                    <button *ngIf="!disabledSpineer" style="background: #28a745 !important;" mat-raised-button type="submit" (click)="finalizando()" [disabled]="disabled">Realizar pedido</button>
+                    <mat-progress-bar mode="buffer" *ngIf="disabledSpineer"></mat-progress-bar>
                   </mat-card-actions>
                 </mat-card>
               </form>
