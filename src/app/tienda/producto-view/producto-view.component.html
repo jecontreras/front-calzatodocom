@@ -216,9 +216,7 @@
                     </div>
                     <div class="col-12 col-sm-6 pointer" *ngFor="let item of listGaleria1; let i = index" (click)="verImagen(item)">
 
-                      <img [src]="item.foto" data-srcset="{{item.foto}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto 1x"
-                          alt data-sizes=auto data-src="{{item.foto}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto"
-                          class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
+                      <img [src]="item.foto" alt data-sizes=auto class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
                       <div class="d-flex justify-content-center">
                         <div>
                           <a style="text-align: center !important;" (click)="verImagen(item);handleSelect( item ); scrollToNextStep()" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
