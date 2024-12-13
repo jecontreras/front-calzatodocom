@@ -285,8 +285,8 @@
                   </div>
                   <a class="col-12 col-sm-6 pointer" *ngFor="let item of imageObject; let i = index" target="_blank" [routerLink]="[ '/tienda/productosView', item.id ]" >
 
-                    <img [src]="item.image" data-srcset="{{item.image}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto 1x"
-                        alt data-sizes=auto data-src="{{item.image}}?auto=compress,format&optimize=medium&fit=clip&w=100%&h=auto"
+                    <img [src]="item.image"
+                        alt data-sizes=auto 
                         class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
                     <div class="d-flex justify-content-center">
                       <div>
