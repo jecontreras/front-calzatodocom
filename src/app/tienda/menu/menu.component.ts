@@ -107,10 +107,21 @@ export class MenuComponent implements OnInit {
     console.log('Cerrar carrito');
   }
 
-  removeItem( key: any ) {
-    this.listCart = this.listCart.filter(item => item.id !== key.id );
+  async removeItem( key: any ) {
+    if( !key.relacion ) {
+      this.listCart = this.listCart.filter(item => item.id !== key.id );
+      this.deleteCart( key );
+    }
+    else {
+      let opt = await this._tools.confirm({title:"Eliminar", detalle:"Si Eliminas el articulo del carrito se borra la oferta seleccionada", confir:"Si Eliminar"});
+      if( opt.value ) {
+        for( let itemR of this.listCart.filter( row => row.articulo === key.articulo ) ){
+          this.deleteCart( itemR );
+        }
+        this.listCart = this.listCart.filter(item => item.articulo !== key.articulo );
+      }
+    }
     this.calculateSubtotal();
-    this.deleteCart( key )
   }
 
   calculateSubtotal() {

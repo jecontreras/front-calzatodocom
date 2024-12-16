@@ -130,6 +130,17 @@
                       >
                         Agregar al Carrito 🛒
                       </button>
+                      <br><br>
+                      <button
+                        style="width: 100%; background: #e5c000; font-size: 18px; font-weight: bold; color: white;"
+                        mat-raised-button
+                        class="animated-button"
+                        *ngFor="let item of data.listPrecios; let i = index"
+                        (click)="comprarArticulo(item.cantidad, true, item.precios)"
+                      >
+                        <span *ngIf="item.cantidad === 1">LLEVA {{ item.cantidad }} PAR POR {{ _formato.monedaChange(3, 2, item.precios || 0) }} 🛒</span>
+                        <span *ngIf="item.cantidad != 1">LLEVA {{ item.cantidad }} PARES POR {{ _formato.monedaChange(3, 2, item.precios || 0) }} 🛒</span>
+                      </button>
                     </section>
                     <!--<a (click)="comprarArticulo( 1, false )" class="aa-add-to-cart-btn pointer ov-btn-slide-close">Comprar y pagar en casa</a>-->
                     <!--<div

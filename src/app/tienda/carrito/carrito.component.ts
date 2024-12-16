@@ -104,7 +104,7 @@ export class CarritoComponent implements OnInit {
       this.orderSummary.sumCantidad+=row.cantidad;
     }
     this.orderSummary.subtotal = this.totalSuma;
-    if( this.paymentForm.value.paymentMethod !== "bacs" ) this.orderSummary.extraCharge = 20000;
+    if( this.paymentForm.value.paymentMethod !== "bacs" ) this.orderSummary.extraCharge = 10000;
     else this.orderSummary.extraCharge = 0;
     this.orderSummary.total = this.orderSummary.subtotal + this.orderSummary.extraCharge;
   }
@@ -114,11 +114,24 @@ export class CarritoComponent implements OnInit {
     this._store.dispatch( accion );
   }
 
-  borrar( item:any ){
-    this.listCarrito = this.listCarrito.filter( row => row.id !== item.id )
+  async borrar( item:any ){
+    if( item.relacion === false ){
+      this.listCarrito = this.listCarrito.filter( row => row.id !== item.id );
+      this.deleteCart( item );
+    }else{
+      let opt = await this._tools.confirm({title:"Eliminar", detalle:"Si Eliminas el articulo del carrito se borra la oferta seleccionada", confir:"Si Eliminar"});
+      if( opt.value ) {
+        for( let itemR of this.listCarrito.filter( row => row.articulo === item.articulo ) ){
+          this.deleteCart( itemR );
+        }
+      }
+    }
+    this.suma();
+  }
+
+  deleteCart( item:any ){
     let accion = new CartAction(item, 'delete');
     this._store.dispatch(accion);
-    this.suma();
   }
 
   onPaymentMethodChange(event: any): void {

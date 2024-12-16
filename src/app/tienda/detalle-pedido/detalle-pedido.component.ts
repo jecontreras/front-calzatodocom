@@ -59,14 +59,21 @@ export class DetallePedidoComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.urlHref = window.location.origin + "/login";
     this.dataTable = {
       headerRow: this.Header,
       footerRow: this.Header,
       dataRows: []
     };
-    if( this.dataUser.id ) this.cargarTodos();
+    if( this.dataUser.id ) {
+      await this.cargarTodos();
+      try {
+        setTimeout(()=> this.handleWhatsapp( this.dataUltV ), 5000 );
+      } catch (error) { 
+        console.log("**74", error )
+      }
+    }
   }
 
   crear(obj:any){
@@ -88,29 +95,33 @@ export class DetallePedidoComponent implements OnInit {
   }
 
   cargarTodos() {
-    this.spinner.show();
-    this.query.where.usu_clave_int = this.dataUser.id
-    this._ventas.get( this.query )
-    .subscribe(
-      (response: any) => {
-        this.dataTable.headerRow = this.dataTable.headerRow;
-        this.dataTable.footerRow = this.dataTable.footerRow;
-        this.dataTable.dataRows.push(... response.data)
-        this.dataTable.dataRows = _.unionBy(this.dataTable.dataRows || [], this.dataTable.dataRows, 'id');
-        if( this.dataTable.dataRows[0] ) this.handleOpenAlertP( this.dataTable.dataRows[0] );
-        this.dataUltV = this.dataTable.dataRows[0];
-        this.getVentarArt();
-        this.loader = false;
-          this.spinner.hide();
-          
-          if (response.data.length === 0 ) {
-            this.notEmptyPost =  false; 
-          }
-          this.notscrolly = true;
-      },
-      error => {
-        console.log('Error', error);
-      });
+    return new Promise( resolve =>{
+      this.spinner.show();
+      this.query.where.usu_clave_int = this.dataUser.id
+      this._ventas.get( this.query )
+      .subscribe(
+        (response: any) => {
+          this.dataTable.headerRow = this.dataTable.headerRow;
+          this.dataTable.footerRow = this.dataTable.footerRow;
+          this.dataTable.dataRows.push(... response.data)
+          this.dataTable.dataRows = _.unionBy(this.dataTable.dataRows || [], this.dataTable.dataRows, 'id');
+          if( this.dataTable.dataRows[0] ) this.handleOpenAlertP( this.dataTable.dataRows[0] );
+          this.dataUltV = this.dataTable.dataRows[0];
+          this.getVentarArt();
+          this.loader = false;
+            this.spinner.hide();
+            
+            if (response.data.length === 0 ) {
+              this.notEmptyPost =  false; 
+            }
+            this.notscrolly = true;
+            resolve( true );
+        },
+        error => {
+          console.log('Error', error);
+          resolve( false );
+        });
+    });
   }
 
   getVentarArt(){

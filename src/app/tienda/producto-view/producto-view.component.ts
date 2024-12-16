@@ -626,9 +626,36 @@ export class ProductosViewComponent implements OnInit {
       //maxHeight: "665px",
       data: { datos: datar }
     });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+    dialogRef.afterClosed().subscribe( async (result) => {
+      //console.log(`Dialog result: ${result}`, result);
+      if( result ) {
+        for( let item of result.item ) this.handleNextCarrito( item, result.precioUnd );
+        this._tools.presentToast("Agregado al Carro");
+        let resultA = await this._tools.carritoCompra();
+        //console.log("****482", resultA)
+        if( resultA.value ) {
+          this.Router.navigate(['/tienda/carrito'])
+        }
+      }
     });
+  }
+
+   handleNextCarrito( item:any, precioUnd:number ){
+    let data:any = {
+      relacion: true,
+      articulo: this.data.id,
+      codigo: this.data.pro_codigo,
+      titulo: this.data.pro_nombre,
+      foto: item.foto,
+      talla: item.talla,
+      cantidad: item.cantidadAd,
+      costo: precioUnd,
+      costoTotal: ( precioUnd*( item.cantidadAd || 1 ) ),
+      id: this.codigo(),
+      color: item.color
+    };
+    let accion = new CartAction(data, 'post');
+    this._store.dispatch(accion);
   }
 
   resetAnimation() {

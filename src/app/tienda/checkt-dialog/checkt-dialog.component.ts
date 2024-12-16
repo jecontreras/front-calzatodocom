@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -11,6 +11,7 @@ import { VentasService } from 'src/app/servicesComponents/ventas.service';
 import  { SocialAuthService, FacebookLoginProvider, SocialUser }  from 'angularx-social-login';
 import { FormatosService } from 'src/app/services/formatos.service';
 import { ConfiguracionService } from 'src/app/servicesComponents/configuracion.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-checkt-dialog',
@@ -24,6 +25,7 @@ export class ChecktDialogComponent implements OnInit {
   dataUser:any = {};
   ShopConfig:any = {};
   dataEndV:any = {};
+  listCantidad = [];
 
   constructor(
     public dialogRef: MatDialogRef<ChecktDialogComponent>,
@@ -35,7 +37,8 @@ export class ChecktDialogComponent implements OnInit {
     private _store: Store<STORAGES>,
     private socialAuthService: SocialAuthService,
     public _formato: FormatosService,
-    private _empresa: ConfiguracionService
+    private _empresa: ConfiguracionService,
+    private cdr: ChangeDetectorRef
   ) {
     this._store.subscribe((store: any) => {
       store = store.name;
@@ -46,17 +49,18 @@ export class ChecktDialogComponent implements OnInit {
   }
 
   async ngOnInit() {
-    //console.log( this.datas );
+    console.log( this.datas );
     this.datas = this.datas.datos || {};
     this.data.talla = this.datas.talla;
-    this.data.cantidadAd = this.datas.cantidadAd || 1;
+    this.data.cantidadAd = this.datas.cantidadAd || 0;
     this.data.priceSelect = this.datas.priceSelect || this.data.costo;
     this.data.costo = this.datas.costo || 105000;
     this.data.opt = this.datas.opt;
     this.data.color = this.datas.colorSelect;
     this.data.pro_vendedor = this.datas.pro_vendedor;
     this.data.envioT = "priorida";
-    this.suma();
+    //this.suma();
+    this.handleCantidad( false );
     this.socialAuthService.authState.subscribe( async (user) => {
       let result = await this._user.initProcess( user );
       //console.log("**********", user, result )
@@ -75,6 +79,54 @@ export class ChecktDialogComponent implements OnInit {
         }
       }
     }
+    //console.log("**80", this.data )
+    this.cdr.detectChanges(); // Forzar la detección de cambios
+  }
+
+  handleCantidad( opt:boolean ){
+    //this.listCantidad = [];
+    //console.log("****88", opt);
+    if( opt ) { 
+      this.data.cantidadAd++;
+      this.ProcessListErt();
+    }else{
+      console.log("**NO ENTRAR93")
+      if( this.listCantidad.length-1 === this.data.cantidadAd ) return false;
+      for (let index = 0; index < this.data.cantidadAd; index++) {
+        this.ProcessListErt();
+      }
+    }
+
+  }
+
+  ProcessListErt(){
+    let data = { 
+      id: this._tools.codigo(),
+      ListTalla: [],
+      foto: this.datas.foto,
+      cantidadAd: 1,
+      listColor: this.datas.listColor,
+      color: this.datas.listColor[0].talla
+    };
+    //console.log("****113", data)
+    this.listCantidad.push( data );
+    this.handlePhoto( this.listCantidad[ this.listCantidad.length - 1 ] );
+    this.suma();
+  }
+
+  handlePhoto( item:any ){
+    let filterPhot = this.datas.listColor.find( row => row.talla === item.color );
+    //console.log("***89", item, filterPhot)
+    if( filterPhot ) {
+      item.foto = filterPhot.foto;
+      item.ListTalla = ( filterPhot.tallaSelect.filter( row => row.check === true && row.cantidad ) ) || [];
+      item.talla = item.ListTalla[0].tal_descripcion;
+    }
+  }
+
+  handleDrop( item:any ){
+    this.listCantidad = this.listCantidad.filter( row => row.id !== item.id );
+    this.suma();
   }
 
   getEmpresa2(){
@@ -126,50 +178,23 @@ export class ChecktDialogComponent implements OnInit {
     if( !this.data.direccion ) return this.disabled = true;
     if( !this.data.barrio ) return this.disabled = true;
     if( !this.data.ciudad  ) return this.disabled = true;
-    if( !this.data.talla ) return this.disabled = true;
-    if( !this.data.color ) return this.disabled = true;
+    //if( !this.data.talla ) return this.disabled = true;
+    //if( !this.data.color ) return this.disabled = true;
     this.disabled = false;
   }
 
   async finalizando(){
-    if( this.disabled ) return false;
-    this.disabled = true;
-    let validador = await this.validador();
-    if( !validador ) { this.disabled = false; return false;}
-    let data:any = {
-      "ven_tipo": "whatsapp",
-      "usu_clave_int": this.dataUser.id,
-      "ven_usu_creacion": "arleytienda@gmail.com",
-      "ven_fecha_venta": moment().format("DD/MM/YYYY"),
-      "cob_num_cedula_cliente": this.data.cedula,
-      "ven_nombre_cliente": this.data.nombre,
-      "ven_telefono_cliente": this.data.telefono,
-      "ven_ciudad": this.data.ciudad,
-      "ven_barrio": this.data.barrio,
-      "ven_direccion_cliente": this.data.direccion,
-      "ven_cantidad": this.datas.cantidadAd || 1,
-      "ven_tallas": this.data.talla,
-      "ven_precio": this.datas.pro_uni_venta,
-      "ven_total": ( this.data.costo + ( this.data.pro_vendedor || 0 ) ) || 0,
-      "ven_ganancias": 0,
-      "ven_observacion": "ok la talla es " + this.data.talla + " el color "+ this.data.color,
-      "ven_estado": 0,
-      "create": moment().format("DD/MM/YYYY"),
-      "apartamento": this.data.apartamento || '',
-      "departamento": this.data.departamento || '',
-      "ven_imagen_producto": this.datas.foto,
-      "empresa": this.ShopConfig.id
-    };
-    await this.crearUser();
-    data.usu_clave_int = this.dataUser.id;
-    await this.nexCompra( data );
-    this.disabled = false;
-    this._tools.presentToast("Exitoso Tu pedido esta en proceso. un accesor se pondra en contacto contigo!");
-    setTimeout(()=>this._tools.tooast( { title: "Tu pedido esta siendo procesado "}) ,3000);
-    this.mensajeWhat();
-    //this._router.navigate(['/tienda/detallepedido']);
-    //this.dialogRef.close('creo');
+    let precioUnd = this.data.costo1 / ( this.data.cantidadAd1 || 1 );
+    this.dialogRef.close( { precioUnd: precioUnd, item: this.listCantidad } );
 
+  }
+
+  formatCantidad(){
+    let txtEnd = "";
+    for( let item of this.listCantidad ){
+      txtEnd+= `{"Foto": "${ item.foto }", "Color":"${ item.color }", "Talla": "${ item.talla }", "Cantidad": "${ item.cantidadAd }"},`;
+    }
+    return txtEnd;
   }
 
   async crearUser(){
@@ -219,8 +244,18 @@ export class ChecktDialogComponent implements OnInit {
   }
 
   suma(){
-    this.data.costo = ( this.data.opt === true ? ( this.datas.priceSelect )  : ( this.datas.pro_uni_venta * this.data.cantidadAd ) )
-    if( this.data.envioT === 'priorida' ) this.data.costo+=7000;
+    this.data.cantidadAd1 = 0;
+    let priceReal = 0;
+    for( let item of this.listCantidad ) this.data.cantidadAd1+= item.cantidadAd;
+    let filterPrice = this.datas.listPrecios.find( row => this.data.cantidadAd1 >= row.cantidad );
+    //console.log("***249", filterPrice )
+    if( filterPrice ) priceReal = filterPrice.precios / filterPrice.cantidad ;
+    //console.log("****269", filterPrice)
+    let sumaR = ( ( priceReal ) || this.datas.pro_uni_venta ) * this.data.cantidadAd1;
+    this.data.costo = sumaR;
+    this.data.costo1 = sumaR;
+    //console.log("***rr272", this.data.costo, this.data.cantidadAd1  )
+    //if( this.data.envioT === 'priorida' ) this.data.costo+=5000;
     //console.log( this.data )
   }
 
@@ -231,13 +266,12 @@ export class ChecktDialogComponent implements OnInit {
       para confirmar adquiere este producto
       Nombre de cliente: ${ this.data.nombre }
       *Celular:*${ this.data.telefono }
-      *Talla:* ${ this.data.talla }
       *Cantidad:* ${ this.data.cantidadAd || 1 }
-      *Color:* ${ this.data.color }
       *Ciudad:* ${ this.data.ciudad }
       *Barrio:*${ this.data.barrio }
       *Dirección:* ${ this.data.direccion }
       *Nombre Cliente:*${ this.datas.pro_nombre }
+      *Detalles:* ${ this.formatCantidad() }
 
       TOTAL FACTURA ${( this.data.costo + ( this.data.pro_vendedor || 0 ) )}
       🤝Gracias por su atención y quedo pendiente para recibir por este medio la imagen de la guía de despacho`)}`;
@@ -251,7 +285,7 @@ export class ChecktDialogComponent implements OnInit {
     if( !this.data.direccion ) { this._tools.tooast( { title: "Error falta la direccion ", icon: "error"}); return false; }
     if( !this.data.ciudad  ) { this._tools.tooast( { title: "Error falta la ciudad ", icon: "error"}); return false; }
     if( !this.data.barrio ) { this._tools.tooast( { title: "Error falta el barrio ", icon: "error"}); return false; }
-    if( !this.data.talla ) { this._tools.tooast( { title: "Error falta la talla ", icon: "error"}); return false; }
+    //if( !this.data.talla ) { this._tools.tooast( { title: "Error falta la talla ", icon: "error"}); return false; }
     return true;
   }
 

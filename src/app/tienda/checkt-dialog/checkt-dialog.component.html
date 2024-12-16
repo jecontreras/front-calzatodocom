@@ -1,10 +1,9 @@
-<span mat-dialog-title style="    background: #000000;
+<span mat-dialog-title style="
 border-radius: 10px;
-padding: 11px;
-color: white;">
+padding: 11px;">
   <div class="d-flex justify-content-center">
     <div>
-      <h1 >DATOS DE ENVIÓ</h1>
+      <h1 >DATOS DE SELECCIÓN</h1>
     </div>
   </div>
 </span>
@@ -12,94 +11,88 @@ color: white;">
 
 <mat-dialog-content class="mat-typography">
   <div class="form row" *ngIf="!data.id">
-    <form #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)" novalidate>
-      <div class="form row" *ngIf="!data.id">
+    <div class="col-12">
+      <mat-list style="    margin: 4px -20px;">
+        <div mat-subheader>
+          <div class="d-flex justify-content-between" style="width: 100%;">
+            <div>
+              <h3>Lista de Selección</h3>
+            </div>
+            <div></div>
+            <div>
+              <button mat-mini-fab color="primary" (click)="handleCantidad( true )">
+                <mat-icon>add_box</mat-icon>
+              </button>
+            </div>
 
-        <!-- Nombre y Apellido -->
-        <div class="form-group col-12 col-sm-4" [ngClass]="{'has-error': isInvalid(dataForm, 'nombre')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Nombre y Apellido</mat-label>
-            <mat-icon matPrefix>account_circle</mat-icon>
-            <input matInput type="text" [(ngModel)]="data.nombre" name="nombre" placeholder="Nombre y Apellido" required #nombre="ngModel" (change)="validadorInput()">
-            <mat-error *ngIf="nombre.invalid && nombre.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
+          </div>
         </div>
+        <mat-list-item *ngFor="let item of listCantidad" style="height: auto; padding: 10px; background: #e5e5e5; border-radius: 15px;"> 
+          <div class="row mat-elevation-z4">
+            <div class="form-group col-6 col-sm-3" *ngIf="item.foto" style="text-align: center;">
+              <img style="    width: 75px; border-radius: 40px;" [src]="item.foto" alt="">
+            </div>
+            <!-- Color -->
+            <div class="form-group col-6 col-sm-3" *ngIf="datas.listColor.length === 0">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Color</mat-label>
+                <mat-icon matPrefix>palette</mat-icon>
 
-        <!-- Número de Teléfono -->
-        <div class="form-group col-12 col-sm-4" [ngClass]="{'has-error': isInvalid(dataForm, 'telefono')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Número de Teléfono</mat-label>
-            <mat-icon matPrefix>phone</mat-icon>
-            <input matInput type="number" [(ngModel)]="data.telefono" name="telefono" placeholder="Número de Teléfono" required #telefono="ngModel" (change)="validadorInput()">
-            <mat-error *ngIf="telefono.invalid && telefono.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
-        </div>
+                <input matInput type="text" [(ngModel)]="item.color" name="item.color" placeholder="Color del Producto" required>
+              </mat-form-field>
+            </div>
 
-        <!-- Dirección de Entrega -->
-        <div class="form-group col-12 col-sm-4" [ngClass]="{'has-error': isInvalid(dataForm, 'direccion')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Dirección de Entrega</mat-label>
-            <mat-icon matPrefix>home</mat-icon>
-            <input matInput type="text" [(ngModel)]="data.direccion" name="direccion" placeholder="Dirección de Entrega" required #direccion="ngModel" (change)="validadorInput()">
-            <mat-error *ngIf="direccion.invalid && direccion.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
-        </div>
+            <div class="form-group col-6 col-sm-3" *ngIf="datas.listColor.length">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Color</mat-label>
+                <mat-icon matPrefix>straighten</mat-icon>
+                <mat-select [(ngModel)]="item.color" name="item.color" placeholder="Color del Producto" required (selectionChange)="handlePhoto( item );">
+                  <mat-option *ngFor="let keyOf of item.listColor" [value]="keyOf.talla">
+                    {{ keyOf.talla }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-        <!-- Ciudad o Municipio -->
-        <div class="form-group col-12 col-sm-4" [ngClass]="{'has-error': isInvalid(dataForm, 'ciudad')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Ciudad o Municipio</mat-label>
-            <mat-icon matPrefix>location_city</mat-icon>
-            <input matInput type="text" [(ngModel)]="data.ciudad" name="ciudad" placeholder="Ciudad o Municipio" required #ciudad="ngModel" (change)="validadorInput()">
-            <mat-error *ngIf="ciudad.invalid && ciudad.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
-        </div>
+            <!-- Talla -->
+            <div class="form-group col-6 col-sm-3" *ngIf="data.talla !== 'Unica' && item.ListTalla.length === 0">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Talla</mat-label>
+                <mat-icon matPrefix>straighten</mat-icon>
+                <input matInput type="text" [(ngModel)]="item.talla" name="item.talla" placeholder="Talla del Producto" required >
+              </mat-form-field>
+            </div>
 
-        <!-- Barrio o Localidad -->
-        <div class="form-group col-12 col-sm-4" [ngClass]="{'has-error': isInvalid(dataForm, 'barrio')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Barrio o Localidad</mat-label>
-            <mat-icon matPrefix>map</mat-icon>
-            <input matInput type="text" [(ngModel)]="data.barrio" name="barrio" placeholder="Barrio o Localidad" required #barrio="ngModel" (change)="validadorInput()">
-            <mat-error *ngIf="barrio.invalid && barrio.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
-        </div>
+            <div class="form-group col-6 col-sm-3" *ngIf="data.talla !== 'Unica' && item.ListTalla.length">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Talla</mat-label>
+                <mat-icon matPrefix>straighten</mat-icon>
+                <mat-select [(ngModel)]="item.talla" name="item.talla" placeholder="Talla del Producto" required>
+                  <mat-option *ngFor="let keyOf of item.ListTalla" [value]="keyOf.tal_descripcion">
+                    {{ keyOf.tal_descripcion }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
-        <!-- Color -->
-        <div class="form-group col-12 col-sm-4" [ngClass]="{'has-error': isInvalid(dataForm, 'color')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Color</mat-label>
-            <mat-icon matPrefix>palette</mat-icon>
-            <input matInput type="text" [(ngModel)]="data.color" name="color" placeholder="Color del Producto" required #color="ngModel" (change)="validadorInput()">
-            <mat-error *ngIf="color.invalid && color.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
-        </div>
-
-        <!-- Talla -->
-        <div class="form-group col-6 col-sm-4" [ngClass]="{'has-error': isInvalid(dataForm, 'talla')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Talla</mat-label>
-            <mat-icon matPrefix>straighten</mat-icon>
-            <input matInput type="text" [(ngModel)]="data.talla" name="talla" placeholder="Talla del Producto" required #talla="ngModel" (change)="validadorInput()">
-            <mat-error *ngIf="talla.invalid && talla.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
-        </div>
-
-        <!-- Cantidad -->
-        <div class="form-group col-6 col-sm-2" [ngClass]="{'has-error': isInvalid(dataForm, 'cantidadAd')}">
-          <mat-form-field appearance="outline" class="example-full-width">
-            <mat-label>Cantidad</mat-label>
-            <mat-icon matPrefix>reorder</mat-icon>
-            <input matInput type="number" [(ngModel)]="data.cantidadAd" name="cantidadAd" (change)="suma(); validadorInput()" placeholder="Cantidad de Producto" required [disabled]="data.opt" #cantidadAd="ngModel">
-            <mat-error *ngIf="cantidadAd.invalid && cantidadAd.touched">Este campo es obligatorio.</mat-error>
-          </mat-form-field>
-        </div>
-
-      </div>
-    </form>
-
-
-
+            <!-- Cantidad -->
+            <div class="form-group col-6 col-sm-2" >
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Cantidad</mat-label>
+                <mat-icon matPrefix>reorder</mat-icon>
+                <input matInput type="number" [(ngModel)]="item.cantidadAd" name="cantidadAd" (change)="suma();" placeholder="Cantidad de Producto" required >
+              </mat-form-field>
+            </div>
+            <div class="form-group col-6 col-sm-1" >
+              <button mat-mini-fab color="warn" aria-label="Example icon button with a filter list icon" (click)="handleDrop( item )">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <br><br>
+        </mat-list-item>
+       </mat-list>
+    </div>
       <div class="col-12">
         <p>
             &nbsp;<img class="tyslo-image" data-v-7cfc0e7c="" height="60"
@@ -166,7 +159,7 @@ color: white;">
                         </div>
                         <div class="label-value" data-v-2b9a7796="" style="box-sizing: border-box;">
                             <span data-v-2b9a7796="" style="box-sizing: border-box;">{{ _tools.monedaChange(
-                                3,2,this.data.costo || 0 ) }}</span>
+                                3,2,this.data.costo1 || 0 ) }}</span>
                         </div>
                     </div>
                     <div class="
@@ -181,34 +174,7 @@ color: white;">
                         <div data-v-2b9a7796="" style="box-sizing: border-box;">Cantidad</div>
                         <div class="total-value" data-v-2b9a7796=""
                             style="box-sizing: border-box; font-size: 20px;">
-                            <span data-v-2b9a7796="" style="box-sizing: border-box;">{{ data.cantidadAd || 1 }}</span>
-                        </div>
-                    </div>
-                    <div class="
-                        d-flex
-                        justify-content-between
-                        my-1
-                        total-row
-                        align-items-baseline
-                        fw-bold
-                  " data-v-2b9a7796=""
-                        style="align-items: baseline !important; border-top: 1px solid rgba(175, 175, 175, 0.34) !important; box-sizing: border-box; display: flex !important; font-weight: 700 !important; justify-content: space-between !important; margin-bottom: 0.25rem !important; margin-top: 0.25rem !important;">
-                        <div data-v-2b9a7796="" style="box-sizing: border-box;">Envio</div>
-                        <div  class="total-value" data-v-2b9a7796=""
-                            style="box-sizing: border-box; font-size: 20px;">
-                            <span *ngIf="!data.pro_vendedor" data-v-2b9a7796="" style="box-sizing: border-box;">
-                              <mat-radio-group [(ngModel)]="data.envioT" (change)="suma()">
-                                <mat-radio-button class="example-margin" value="gratis">
-                                  <span style="font-size: 9px;">Gratis</span>
-                                </mat-radio-button>
-                                <mat-radio-button class="example-margin" value="priorida">
-                                  <span style="font-size: 9px;">$7.000 Envio Prioritario</span>
-                                </mat-radio-button>
-                              </mat-radio-group>
-                            </span>
-                            <span *ngIf="data.pro_vendedor" data-v-2b9a7796="" style="box-sizing: border-box;">
-                              {{ _formato.monedaChange( 3, 2, data.pro_vendedor || 0) }}
-                            </span>
+                            <span data-v-2b9a7796="" style="box-sizing: border-box;">{{ data.cantidadAd1 || 1 }}</span>
                         </div>
                     </div>
                     <div class="
@@ -233,21 +199,11 @@ color: white;">
 
     </div>
   </div>
-  <div class="form row" *ngIf="data.id">
-      <div class="col-12">
-          <div class="d-flex justify-content-center">
-              <div>
-                  <h3>Chatear con un asesor sobre la venta realizada</h3>
-                  <img src="./assets/icons/whatsapp.png" style="width: 80%;" alt="" (click)="mensajeWhat()">
-              </div>
-          </div>
-      </div>
-  </div>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close mat-raised-button color="warn">Cerrar</button>
-  <button mat-button cdkFocusInitial mat-raised-button color="primary" (click)="finalizando()" *ngIf="!data.id" [disabled]="disabled" style=" background: #28a745 !important;">
-      <span>Confirmar Compra</span>
+  <button mat-button cdkFocusInitial mat-raised-button color="primary" (click)="finalizando()" style=" background: #28a745 !important;">
+      <span>Continuar</span>
   </button>
 </mat-dialog-actions>
