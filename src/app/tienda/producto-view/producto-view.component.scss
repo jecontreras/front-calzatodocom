@@ -58,10 +58,10 @@
 
 .fullscreen-overlay {
   position: fixed;
-  top: 0;
+  top: 54px;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 90%;
   background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
@@ -77,10 +77,11 @@
 
 .close-btn {
   position: absolute;
-  top: 20px;
+  top: 11px;
   right: 20px;
-  color: white;
+  color: black;
   z-index: 1001;
+  background: white;
 }
 
 .carousel-btn {
@@ -93,10 +94,14 @@
 
 .prev {
   left: 20px;
+  background: white;
+  color: black;
 }
 
 .next {
   right: 20px;
+  background: white;
+  color: black;
 }
 
 .ancho {
@@ -130,7 +135,7 @@ border-radius: 10px;
 background: #a11495; /* color de fondo */
 color: #f2f4f3 !important; /* color de fuente */
 border: 2px solid #a11495; /* tamaño y color de borde */
-padding: 16px 20px;
+padding: 4px 15px;
 border-radius: 55px; /* redondear bordes */
 position: relative;
 z-index: 1;
@@ -203,14 +208,29 @@ left: 50%;
   color: #333; /* Adjust color as needed */
 }
 
+.fondoArticle{
+  background: #cccccc;
+  border-radius: 10px;
+  margin-bottom: 10px; 
+}
+
+.fondoChat {
+  border-radius: 10px; 
+  font-size: 210%; 
+  background: #008116; 
+  color: white; 
+  border-radius: 11px; 
+  text-align: center;
+}
+
 .precio {
-  font-size: 30px;
+  font-size: 29px;
   font-weight: bold;
   padding: 10px;
 }
 
 .price2 {
-  font-size: 30px;
+  font-size: 18px;
   font-weight: bold;
   color: #ff0000;
 }
@@ -400,7 +420,7 @@ left: 50%;
 
 .purchase-notification {
   position: fixed;
-  bottom: 40px;
+  bottom: 50px;
   left: 20px;
   background-color: white;
   border: 1px solid #ccc;
@@ -456,22 +476,22 @@ left: 50%;
 }
 
 .fixed-footer-button {
+  height: 40px;
   position: fixed; /* El botón se queda fijo en la pantalla */
   bottom: 0; /* Lo ubica en la parte inferior de la ventana */
   left: 0;
   width: 100%; /* Ocupa todo el ancho del viewport */
-  background: #00e534; /* Fondo del botón */
+  background: black; /* Fondo del botón */
   color: white; /* Texto blanco */
   font-size: 18px; /* Tamaño de fuente */
   font-weight: bold; /* Negrita */
   text-align: center; /* Centrado del texto */
-  padding: 15px 0; /* Espaciado interno */
   border: none; /* Sin bordes */
   z-index: 1000; /* Se asegura de que esté encima de otros elementos */
 }
 
 .fixed-footer-button:hover {
-  background: #00c82b; /* Cambia de color al pasar el mouse */
+  background: rgb(125, 125, 125); /* Cambia de color al pasar el mouse */
   cursor: pointer; /* Aparece la mano */
 }
 

@@ -55,16 +55,7 @@ export class ProductosViewComponent implements OnInit {
   listProductosHistorial:any = [];
   tiendaInfo:any = {};
   comentario:any = {};
-  imageObject:any = [
-    {
-      image: "./assets/imagenes/1920x700.png",
-      thumbImage: "./assets/imagenes/1920x700.png",
-      alt: '',
-      check: true,
-      id: 1,
-      title: ""
-    }
-  ];
+  imageObject:any = [];
   imageObject2:any = [
     {
       image: "./assets/imagenes/1920x700.png",
@@ -332,7 +323,8 @@ export class ProductosViewComponent implements OnInit {
       this.data.listComentarios = this.data.listComment || [];
       //console.log("***165", this.data.listComentarios)
       try {
-        this.data.listTallas = this.data.listColor[0].tallaSelect.filter( item => item.cantidad );
+        //this.data.listTallas = this.data.listColor[0].tallaSelect.filter( item => item.cantidad );
+        console.log("***111", this.data)
         //for( let row of this.data.listTallas ) row.tal_descripcion = ( Number( row.tal_descripcion ) || row.tal_descripcion );
         //this.data.listTallas = _.orderBy( this.data.listTallas , ['tal_descripcion'], ['DEC'] );
         //console.log( "129", this.data )
@@ -403,12 +395,20 @@ export class ProductosViewComponent implements OnInit {
     this.viewsImagen = img.pri_imagen || this.data.foto;
   }
 
+  paginateArticle(){
+    this.query.skip++;
+    this.getProductos();
+  }
+
+  disabledReload:boolean = true;
+
   async getProductos(){
     this.query.where.codigo = this.data.codigo;
     delete this.query.where.id;
     if( this.tiendaInfo.id ) this.query.where.empresa = this.tiendaInfo.id;
+    this.disabledReload = true;
     let resultado:any = await this.getArticulos();
-    this.imageObject = [];
+    //this.imageObject = [];
     for( let row of resultado ){
       this.imageObject.push(
         {
@@ -422,17 +422,27 @@ export class ProductosViewComponent implements OnInit {
         }
       );
     }
+
+    this.disabledReload = false;
   }
 
   getArticulos(){
     return new Promise (resolve =>{
       this.query.where.idPrice = this.userId.id;
       this.query.where.id = { '!=' : [ this.id ] }
+      try { this.query.where.pro_categoria = this.data.pro_categoria.id; } catch (error) { }
       //console.log("***210", this.query)
       this._producto.get( this.query ).subscribe((res:any)=>{
         resolve( res.data )
       }, ( error )=> { console.error(error); resolve( [] ); } );
     })
+  }
+
+  handleCatalogoPrev( opt:string ){
+    let idR = this.data.id + 1;
+    if( opt === 'prev' ) idR = this.data.id - 1;
+    this.Router.navigate([ '/tienda/productosView', idR] );
+    setTimeout(()=> location.reload(), 100 );
   }
 
   getTestimonios(){

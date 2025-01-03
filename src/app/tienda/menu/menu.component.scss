@@ -10,12 +10,21 @@
   
   .toolbar-desktop {
     display: flex !important;
+    height: 64px; /* Altura del toolbar en escritorio */
+    background: #bababa; /* Color de fondo */
   }
   
   .toolbar-mobile {
     display: flex !important;
     justify-content: space-between;
+    height: 56px; /* Altura del toolbar en móvil */
+    background: #bababa; /* Color de fondo */
   }
+  
+  @media (max-width: 768px) {
+
+  }
+
   
   .mobile-container {
     display: block !important;

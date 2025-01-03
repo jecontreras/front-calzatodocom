@@ -1,121 +1,121 @@
-<!-- Para escritorio -->
-<mat-toolbar class="toolbar-desktop" style="background: #bababa;">
-    <div class="logo pointer">
-      <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50" routerLink="/tienda">
-    </div>
-    <!--<span class="spacer"></span>-->
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-center">
-                <a class="pointer" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: black;" (click)="handleOpenCategory( itemCategory )">
-                    {{ itemCategory.cat_nombre }}
-                </a>
-            </div>
-        </div>
-    </div>
-    <!--<span class="spacer"></span>-->
-  
-    <!--<span class="spacer"></span>-->
-    <mat-icon class="pointer" (click)="menu2.toggle()" [matBadge]="countCart" matBadgePosition="before" matBadgeColor="accent">shopping_cart</mat-icon>
-</mat-toolbar>
-  
-  <!-- Para móvil -->
-<mat-toolbar class="toolbar-mobile" style="background: #bababa;">
-  <button mat-icon-button (click)="menu.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <div class="logo">
-    <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50" routerLink="/tienda">
-  </div>
-  <span class="spacer"></span>
-  <!--<mat-icon (click)="toggleSearch()">search</mat-icon>-->
-  <mat-icon class="pointer" (click)="menu2.toggle()" [matBadge]="countCart" matBadgePosition="before" matBadgeColor="accent">shopping_cart</mat-icon>
-</mat-toolbar>
-
 <!-- Sidenav para móvil -->
 <mat-sidenav-container class="mobile-container">
-    <mat-sidenav #menu mode="over" class="mobile-sidenav">
-      <mat-nav-list>
-        <a mat-list-item class="pointer" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: black;" (click)="handleOpenCategory( itemCategory )">
-          {{ itemCategory.cat_nombre }}
-        </a>
-      </mat-nav-list>
-    </mat-sidenav>
 
-    <mat-sidenav #menu2 mode="over" class="mobile-sidenav" position="end">
+<mat-sidenav #menu mode="over" class="mobile-sidenav">
+  <mat-nav-list>
+    <a mat-list-item class="pointer" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: black;" (click)="handleOpenCategory( itemCategory )">
+      {{ itemCategory.cat_nombre }}
+    </a>
+  </mat-nav-list>
+</mat-sidenav>
 
-        <div class="cart-widget-side">
-            <div class="wd-heading">
-              <span class="title">Carro de la compra</span>
-              <div class="close-side-widget pointer" (click)="menu2.toggle()">
-                <mat-icon>close</mat-icon>
-              </div>
-            </div>
-          
-            <div class="widget">
-              <div class="shopping-cart-widget-body">
-                <div class="wd-scroll">
-                  <ul class="cart_list">
-                    <li
-                      class="cart_item"
-                      *ngFor="let item of listCart"
-                      [attr.data-key]="item.codigo"
-                    >
-                      <a [routerLink]="urlLocation+'/tienda/productosView'+item.articulo" class="cart-item-image">
-                        <img
-                          [src]="item.foto"
-                          [alt]="item.id"
-                          class="product-thumbnail"
-                          style="border-radius: 10px;"
-                        />
-                      </a>
-          
-                      <div class="cart-info">
-                        <span class="product-title">{{ item.titulo | slice: 0:20 }}</span>
-                        <span class="quantity" *ngIf="item.talla">
-                          TALLA: {{ item.talla }}
-                        </span>
-                        <span class="quantity">
-                            <mat-form-field class="example-full-width">
-                                <mat-label>Cantidad</mat-label>
-                                <input type="number" matInput #postalCode  placeholder="1, 2, 3" [(ngModel)]="item.cantidad">
-                            </mat-form-field>
-                          <span class="price">{{ _tools.monedaChange2( 3, 2, ( item.costoTotal * item.cantidad ) ) }}</span>
-                        </span>
-                      </div>
-                      <button
-                        class="remove btn btn-danger"
-                        (click)="removeItem( item )"
-                        aria-label="Eliminar"
-                        >
-                          <mat-icon>close</mat-icon>
-                        </button>
-                    </li>
-                  </ul>
-                </div>
-          
-                <div class="shopping-cart-widget-footer">
-                  <p class="total">
-                    <strong>Subtotal:</strong>
-                    <span>{{ _tools.monedaChange2( 3, 2, ( calculateSubtotal() ) )  }}</span>
-                  </p>
-                  <div class="buttons">
-                    <button class="btn btn-dark" style="font-size: 15px;" (click)="menu2.toggle()">cerrar</button>
-                    <button class="btn btn-success" routerLink="/tienda/carrito" style="font-size: 15px;" (click)="menu2.toggle()" [disabled]="countCart ===0">
-                      Finalizar compra
-                    </button>
+<mat-sidenav #menu2 mode="over" class="mobile-sidenav" position="end">
+
+    <div class="cart-widget-side">
+        <div class="wd-heading">
+          <span class="title"><strong>CARRO DE COMPRA</strong></span>
+          <button mat-mini-fab color="warn" (click)="menu2.toggle()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      
+        <div class="widget">
+          <div class="shopping-cart-widget-body">
+            <div class="wd-scroll">
+              <ul class="cart_list">
+                <li
+                  class="cart_item"
+                  *ngFor="let item of listCart"
+                  [attr.data-key]="item.codigo"
+                >
+                  <a [routerLink]="urlLocation+'/tienda/productosView'+item.articulo" class="cart-item-image">
+                    <img
+                      [src]="item.foto"
+                      [alt]="item.id"
+                      class="product-thumbnail"
+                      style="border-radius: 10px;"
+                    />
+                  </a>
+      
+                  <div class="cart-info">
+                    <span class="product-title">{{ item.titulo | slice: 0:20 }}</span>
+                    <span class="quantity" *ngIf="item.talla">
+                      TALLA: {{ item.talla }}
+                    </span>
+                    <span class="quantity">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Cantidad</mat-label>
+                            <input type="number" matInput #postalCode  placeholder="1, 2, 3" [(ngModel)]="item.cantidad">
+                        </mat-form-field>
+                      <span class="price">{{ _tools.monedaChange2( 3, 2, ( item.costoTotal * item.cantidad ) ) }}</span>
+                    </span>
                   </div>
-                </div>
+                  <button
+                    class="remove btn btn-danger"
+                    style="border-radius: 25px;"
+                    (click)="removeItem( item )"
+                    aria-label="Eliminar"
+                    >
+                      <mat-icon>close</mat-icon>
+                    </button>
+                </li>
+              </ul>
+            </div>
+      
+            <div class="shopping-cart-widget-footer">
+              <p class="total">
+                <strong>Subtotal:</strong>
+                <span>{{ _tools.monedaChange2( 3, 2, ( calculateSubtotal() ) )  }}</span>
+              </p>
+              <div class="buttons">
+                <button mat-raised-button color="warn" (click)="menu2.toggle()">cerrar</button>
+                <button mat-raised-button color="primary" routerLink="/tienda/carrito" style="font-size: 15px; background: #00ff06;" (click)="menu2.toggle()" [disabled]="countCart ===0">Finalizar compra</button>
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          
-    </mat-sidenav>
-  
-    <mat-sidenav-content style="    height: auto;">
-  
-        <ng-content></ng-content>
       
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+</mat-sidenav>
+
+<mat-sidenav-content style="    height: auto;">
+  <section>
+    <!-- Para escritorio -->
+    <mat-toolbar class="toolbar-desktop" style="background: #000000; color: white;">
+      <div class="logo pointer">
+        <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50" routerLink="/tienda">
+      </div>
+      <!--<span class="spacer"></span>-->
+      <div class="row">
+          <div class="col-12">
+              <div class="d-flex justify-content-center">
+                  <a class="pointer" *ngFor="let itemCategory of lisCategory" style="padding: 5px; color: white;" (click)="handleOpenCategory( itemCategory )">
+                      {{ itemCategory.cat_nombre }}
+                  </a>
+              </div>
+          </div>
+      </div>
+      <!--<span class="spacer"></span>-->
+
+      <!--<span class="spacer"></span>-->
+      <mat-icon class="pointer" (click)="menu2.toggle()" [matBadge]="countCart" matBadgePosition="before" matBadgeColor="accent">shopping_cart</mat-icon>
+    </mat-toolbar>
+
+    <!-- Para móvil -->
+    <mat-toolbar class="toolbar-mobile" style="background: #000000; color: white;">
+    <button mat-icon-button (click)="menu.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="logo">
+      <img [src]="'/assets/imagenes/categorias/0.png' || tiendaInfo.foto" alt="Logo" height="50" routerLink="/tienda">
+    </div>
+    <span class="spacer"></span>
+    <!--<mat-icon (click)="toggleSearch()">search</mat-icon>-->
+    <mat-icon style="margin-right: 10px;" class="pointer" (click)="menu2.toggle()" [matBadge]="countCart" matBadgePosition="before" matBadgeColor="accent">shopping_cart</mat-icon>
+    </mat-toolbar>
+  </section>
+  <ng-content></ng-content>
+  
+</mat-sidenav-content>
+</mat-sidenav-container>

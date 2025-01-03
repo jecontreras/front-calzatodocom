@@ -1,213 +1,250 @@
-<section style="background: #696969;">
+<section>
 
   <section id="aa-product-details">
     <div class="anchos">
       <div class="row">
         <div class="col-12">
+          <br>
+          <div class="d-flex justify-content-around">
+            <div>
+              <button mat-raised-button color="primary" style="background: red;" (click)="handleCatalogoPrev('prev')">Articulo Anterior</button>
+            </div>
+            <div></div>
+            <div>
+              <button mat-raised-button color="primary" style="background: #06da00;" (click)="handleCatalogoPrev('next')">Siguiente Producto</button>
+            </div>
+          </div>
+          <br>
         </div>
-        <div class="col-12">
-          <div class="d-flex flex-row bd-highlight mb-3">
-            <div class="p-2 bd-highlight" style="width: 100%;">
-              <div class="d-flex justify-content-center" style="    background: #15d7ae; border-radius: 10px;">
-                <div>
-                  <h1 class="aa-product-price precio" style="text-align: center;">{{ data.pro_nombre }}</h1>
+        <section *ngIf="!data.id" style="width: 100%;">
+          <div class="d-flex justify-content-center">
+            <div>
+              <mat-spinner></mat-spinner>
+            </div>
+          </div>
+        </section>
+        <section class="col-12" *ngIf="data.id">
+          <div class="col-12">
+            <div class="d-flex flex-row bd-highlight mb-3">
+              <div class="p-2 bd-highlight" style="width: 100%;">
+                <div class="d-flex justify-content-center" style="    background: #15d7ae; border-radius: 10px;">
+                  <div>
+                    <h1 class="aa-product-price precio" style="text-align: center; color: white;"> <strong> {{ data.pro_nombre }} </strong> </h1>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-12">
-          <div class="aa-product-details-area">
-            <div class="aa-product-details-content">
-              <div class="row">
-                <!-- Modal view slider -->
-                <div class="col-md-7 col-sm-7 col-xs-12">
-                  <div id="productCarousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                      <div class="carousel-item" *ngFor="let image of imageObject2; let i = index" [class.active]="i === 0">
-                        <img [src]="image.image" class="d-block w-100" alt="Product Image" style="border-radius: 10px;">
-                        <button mat-icon-button class="fullscreen-btn" (click)="openFullscreen(image.image, i)">
-                          <mat-icon>fullscreen</mat-icon>
+          <div class="col-md-12">
+            <div class="aa-product-details-area">
+              <div class="aa-product-details-content">
+                <div class="row">
+                  <!-- Modal view slider -->
+                  <div class="col-md-7 col-sm-7 col-xs-12">
+                    <div id="productCarousel" class="carousel slide" data-ride="carousel">
+                      <div class="carousel-inner">
+                        <div class="carousel-item" *ngFor="let image of imageObject2; let i = index" [class.active]="i === 0">
+                          <img [src]="image.image" class="d-block w-100" alt="Product Image" style="border-radius: 10px;">
+                          <button mat-icon-button class="fullscreen-btn" (click)="openFullscreen(image.image, i)">
+                            <mat-icon>fullscreen</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                      <button class="carousel-control-prev" type="button" (click)="prev()">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" type="button" (click)="next()">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                      </button>
+                    </div>
+  
+                    <!-- Contenedor de pantalla completa -->
+                    <div class="fullscreen-image" *ngIf="isFullscreen">
+                      <div class="fullscreen-overlay">
+                        <button mat-icon-button class="close-btn" (click)="closeFullscreen()">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                        <img [src]="currentImage" alt="Product Image" class="fullscreen-img" />
+                        <button mat-icon-button class="carousel-btn prev" (click)="prevImage()">
+                          <mat-icon>chevron_left</mat-icon>
+                        </button>
+                        <button mat-icon-button class="carousel-btn next" (click)="nextImage()">
+                          <mat-icon>chevron_right</mat-icon>
                         </button>
                       </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" (click)="prev()">
-                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" (click)="next()">
-                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span class="sr-only">Next</span>
-                    </button>
+  
                   </div>
-
-                  <!-- Contenedor de pantalla completa -->
-                  <div class="fullscreen-image" *ngIf="isFullscreen">
-                    <div class="fullscreen-overlay">
-                      <button mat-icon-button class="close-btn" (click)="closeFullscreen()">
-                        <mat-icon>close</mat-icon>
-                      </button>
-                      <img [src]="currentImage" alt="Product Image" class="fullscreen-img" />
-                      <button mat-icon-button class="carousel-btn prev" (click)="prevImage()" style="background: #8d8d8d;">
-                        <mat-icon>chevron_left</mat-icon>
-                      </button>
-                      <button mat-icon-button class="carousel-btn next" (click)="nextImage()" style="background: #8d8d8d;">
-                        <mat-icon>chevron_right</mat-icon>
-                      </button>
-                    </div>
-                  </div>
-
-                </div>
-                <!-- Modal view content -->
-                <div class="col-md-5 col-sm-5 col-xs-12">
-                  <div class="aa-product-view-content p-3">
-                    <h3>{{ data.pro_nombre }}</h3>
-                    <div class="aa-price-block">
-                      <!--<span class="aa-product-view-price precio">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0 )
-                        }}</span>-->
-                        <span class="aa-product-price precio" style="background: rgb(21 215 174);">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0) }}</span><span
-                        class="aa-product-price price2"><del>{{ _formato.monedaChange( 3, 2, ( data.pro_uni_venta*2 ) || 0 ) }}</del></span>
-                        <div class="aa-product-rating">
-                          <span class="lnr lnr-star"></span>
-                          <span class="lnr lnr-star"></span>
-                          <span class="lnr lnr-star"></span>
-                          <span class="lnr lnr-star"></span>
-                          <span class="lnr lnr-star-empty"></span>
+                  <!-- Modal view content -->
+                  <div class="col-md-5 col-sm-5 col-xs-12">
+                    <div class="aa-product-view-content p-3">
+                      <h1> 
+                        <strong> {{ data.pro_nombre }} </strong>
+                      </h1>
+                      <div class="aa-price-block">
+                        <!--<span class="aa-product-view-price precio">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0 )
+                          }}</span>-->
+                          <span class="aa-product-price precio" style="background: rgb(21 215 174);">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0) }}</span><span
+                          class="aa-product-price price2"><del>{{ _formato.monedaChange( 3, 2, ( data.pro_uni_venta*2 ) || 0 ) }}</del></span>
+                          <div class="aa-product-rating">
+                            <span class="lnr lnr-star"></span>
+                            <span class="lnr lnr-star"></span>
+                            <span class="lnr lnr-star"></span>
+                            <span class="lnr lnr-star"></span>
+                            <span class="lnr lnr-star-empty"></span>
+                          </div>
+                        <p class="aa-product-avilability">Disponibilidad: <span>En stock</span></p>
+                      </div>
+                      <p class="viewing-info">
+                        <span class="view-count">{{ rango }}</span> Viendo este artículo.
+                      </p>
+                      
+                      <p class="delivery-info">
+                        <i class="fas fa-truck"></i> Los productos normalmente te llegaran de 2 a 5 días hábiles.
+                      </p>
+                      <section 
+                        *ngIf="listTallas.length > 0 && data.tallaR !== 'Unica'" 
+                        [ngClass]="{'error-border': !pedido.talla && isValidationActive}"
+                      >
+                        <h4 class="tallaR">TALLA</h4>
+                        <div class="aa-prod-view-size" style="text-align: center;">
+                          <a 
+                            class="pointer" 
+                            *ngFor="let item of listTallas" 
+                            [ngClass]="{selecciono: item.check1}"
+                            (click)="checkTalla(item)"
+                          >
+                            {{ item.tal_descripcion }}
+                          </a>
                         </div>
-                      <p class="aa-product-avilability">Disponibilidad: <span>En stock</span></p>
-                    </div>
-                    <p class="viewing-info">
-                      <span class="view-count">{{ rango }}</span> Viendo este artículo.
-                    </p>
-                    
-                    <p class="delivery-info">
-                      <i class="fas fa-truck"></i> Los productos normalmente te llegaran de 2 a 5 días hábiles.
-                    </p>
-                    <section 
-                      *ngIf="data['listTallas']?.length > 0 && data.tallaR !== 'Unica'" 
-                      [ngClass]="{'error-border': !pedido.talla && isValidationActive}"
-                    >
-                      <h4 class="tallaR">TALLA</h4>
-                      <div class="aa-prod-view-size" style="text-align: center;">
-                        <a 
-                          class="pointer" 
-                          *ngFor="let item of data.listTallas" 
-                          [ngClass]="{selecciono: item.check1}"
-                          (click)="checkTalla(item)"
-                        >
-                          {{ item.tal_descripcion }}
-                        </a>
+                      </section>
+  
+                      <section 
+                        *ngIf="data['listColor']?.length > 0" 
+                        [ngClass]="{'error-border': !data.colorSelect && isValidationActive}"
+                      >
+                        <h4 class="tallaR">COLOR</h4>
+                        <div class="aa-prod-view-size" style="text-align: center;">
+                          <a 
+                            class="pointer" 
+                            *ngFor="let item of data.listColor" 
+                            [ngClass]="{selecciono: item.check1}"
+                            (click)="handleSelect(item)"
+                          >
+                            {{ item.talla }}
+                          </a>
+                        </div>
+                      </section>
+  
+                      <div class="stock-info">
+                        <span class="stock-count">40 Disponible</span>
+                        <span class="stock-indicator"></span>
                       </div>
-                    </section>
-
-                    <section 
-                      *ngIf="data['listColor']?.length > 0" 
-                      [ngClass]="{'error-border': !data.colorSelect && isValidationActive}"
-                    >
-                      <h4 class="tallaR">COLOR</h4>
-                      <div class="aa-prod-view-size" style="text-align: center;">
-                        <a 
-                          class="pointer" 
-                          *ngFor="let item of data.listColor" 
-                          [ngClass]="{selecciono: item.check1}"
-                          (click)="handleSelect(item)"
+                      <section #nextStep>
+                        <button
+                          style="width: 100%; background: #00e534; font-size: 18px; font-weight: bold; color: white;"
+                          mat-raised-button
+                          class="animated-button"
+                          (click)="AgregarCart2(this.data)"
                         >
-                          {{ item.talla }}
+                          Agregar al Carrito 🛒
+                        </button>
+                        <br><br>
+                        <button
+                          style="width: 100%; background: #e5c000; font-size: 18px; font-weight: bold; color: white;"
+                          mat-raised-button
+                          class="animated-button"
+                          *ngFor="let item of data.listPrecios; let i = index"
+                          (click)="comprarArticulo(item.cantidad, true, item.precios)"
+                        >
+                          <span *ngIf="item.cantidad === 1">LLEVA {{ item.cantidad }} PAR POR {{ _formato.monedaChange(3, 2, item.precios || 0) }} 🛒</span>
+                          <span *ngIf="item.cantidad != 1">LLEVA {{ item.cantidad }} PARES POR {{ _formato.monedaChange(3, 2, item.precios || 0) }} 🛒</span>
+                        </button>
+                      </section>
+                      <!--<a (click)="comprarArticulo( 1, false )" class="aa-add-to-cart-btn pointer ov-btn-slide-close">Comprar y pagar en casa</a>-->
+                      <!--<div
+                        *ngFor="let item of data.listPrecios; let i = index"
+                      >
+                        <a (click)="comprarArticulo(item.cantidad, true, item.precios)"
+                          [ngClass]="{ 'jump-animation': isClicked  }"
+                          style="background: #00ed61  !important; color: #ffffff !important;"
+                          class="aa-add-to-cart-btn pointer ov-btn-slide-close">
+                          <span *ngIf="item.cantidad === 1">LLEVA {{ item.cantidad }} PAR POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
+                          <span *ngIf="item.cantidad != 1">LLEVA {{ item.cantidad }} PARES POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
                         </a>
-                      </div>
-                    </section>
-
-                    <div class="stock-info">
-                      <span class="stock-count">40 Disponible</span>
-                      <span class="stock-indicator"></span>
+                      </div>-->
+                      <h2 class="text-success" *ngIf="data['pro_categoria']?.id == 16">
+                        <a (click)="scrollToNextStep( )" class="aa-add-to-cart-btn pointer"
+                        style="font-size: 130%; background: #fbff00; color: #212529; border-radius: 11px;"><span
+                          class="fa fab fa-whatsapp"></span>
+                          LLEVA 2 PARES POR {{ _formato.monedaChange( 3, 2, ( ( data.pro_uni_venta * 2 ) - 20000 ) || 0 ) }}
+                          DESCUENTO 18%
+                        </a>
+                      </h2>
+                      <br>
+                      <!--<img src="./assets/imagenes/enviosG.jpg" alt="" style="width: 45px;">&nbsp; <span class="text-success">Envio Gratis</span>-->
+                        <br>
+                      <!--<div class="aa-prod-quantity">
+                        <h4>Cantidad</h4>
+                        <input class="form-control form-control-sm" type="number" placeholder=".form-control-sm" [(ngModel)]="pedido.cantidad">
+                        <p class="aa-prod-category">
+                          Categoria: <a class="pointer" (click)="categoriasVer()">{{ data['pro_categoria']?.cat_nombre
+                            }}</a>
+                        </p>
+                      </div>-->
                     </div>
                     <section #nextStep>
                       <button
-                        style="width: 100%; background: #00e534; font-size: 18px; font-weight: bold; color: white;"
                         mat-raised-button
-                        class="animated-button"
+                        class="animated-button fixed-footer-button"
                         (click)="AgregarCart2(this.data)"
                       >
                         Agregar al Carrito 🛒
                       </button>
-                      <br><br>
-                      <button
-                        style="width: 100%; background: #e5c000; font-size: 18px; font-weight: bold; color: white;"
-                        mat-raised-button
-                        class="animated-button"
-                        *ngFor="let item of data.listPrecios; let i = index"
-                        (click)="comprarArticulo(item.cantidad, true, item.precios)"
-                      >
-                        <span *ngIf="item.cantidad === 1">LLEVA {{ item.cantidad }} PAR POR {{ _formato.monedaChange(3, 2, item.precios || 0) }} 🛒</span>
-                        <span *ngIf="item.cantidad != 1">LLEVA {{ item.cantidad }} PARES POR {{ _formato.monedaChange(3, 2, item.precios || 0) }} 🛒</span>
-                      </button>
                     </section>
-                    <!--<a (click)="comprarArticulo( 1, false )" class="aa-add-to-cart-btn pointer ov-btn-slide-close">Comprar y pagar en casa</a>-->
-                    <!--<div
-                      *ngFor="let item of data.listPrecios; let i = index"
-                    >
-                      <a (click)="comprarArticulo(item.cantidad, true, item.precios)"
-                        [ngClass]="{ 'jump-animation': isClicked  }"
-                        style="background: #00ed61  !important; color: #ffffff !important;"
-                        class="aa-add-to-cart-btn pointer ov-btn-slide-close">
-                        <span *ngIf="item.cantidad === 1">LLEVA {{ item.cantidad }} PAR POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
-                        <span *ngIf="item.cantidad != 1">LLEVA {{ item.cantidad }} PARES POR {{ _formato.monedaChange(3, 2, item.precios || 0) }}</span>
-                      </a>
-                    </div>-->
-                    <h2 class="text-success" *ngIf="data['pro_categoria']?.id == 16">
-                      <a (click)="scrollToNextStep( )" class="aa-add-to-cart-btn pointer"
-                      style="font-size: 130%; background: #fbff00; color: #212529; border-radius: 11px;"><span
-                        class="fa fab fa-whatsapp"></span>
-                        LLEVA 2 PARES POR {{ _formato.monedaChange( 3, 2, ( ( data.pro_uni_venta * 2 ) - 20000 ) || 0 ) }}
-                        DESCUENTO 18%
-                      </a>
-                    </h2>
-                    <br>
-                    <!--<img src="./assets/imagenes/enviosG.jpg" alt="" style="width: 45px;">&nbsp; <span class="text-success">Envio Gratis</span>-->
-                      <br>
-                    <p [innerHtml]="data.pro_descripcion "></p>
-                    <!--<div class="aa-prod-quantity">
-                      <h4>Cantidad</h4>
-                      <input class="form-control form-control-sm" type="number" placeholder=".form-control-sm" [(ngModel)]="pedido.cantidad">
-                      <p class="aa-prod-category">
-                        Categoria: <a class="pointer" (click)="categoriasVer()">{{ data['pro_categoria']?.cat_nombre
-                          }}</a>
-                      </p>
-                    </div>-->
                   </div>
-                  <section #nextStep>
-                    <button
-                      mat-raised-button
-                      class="animated-button fixed-footer-button"
-                      (click)="AgregarCart2(this.data)"
-                    >
-                      Agregar al Carrito 🛒
-                    </button>
-                  </section>
-                </div>
-                <div class="col-12">
-                  <img style="    width: 100%;
-                  height: 9pc;
-                  border-radius: 20px;" src="./assets/imagenes/1.jpg" alt="">
+                  <!--<div class="col-12">
+                    <img style="    width: 100%;
+                    height: 9pc;
+                    border-radius: 20px;" src="./assets/imagenes/1.jpg" alt="">
+                  </div>-->
                 </div>
               </div>
-            </div>
-            <div class="aa-product-details-bottom">
-              <!--<div class="mx-auto" style="width: 200px;">
-                <ul class="nav nav-tabs centerAncho" id="myTab2">
-                  <li><a href="#description" data-toggle="tab" (click)="this.view = 'descripcion'">Descripcion</a></li>
-                  <li><a href="#review" data-toggle="tab" (click)="this.view = 'comentarios'">Comentarios</a></li>
-                </ul>
-              </div>-->
-
-              <!-- Tab panes -->
-              <div class="container">
-                <!--<div *ngIf="view == 'descripcion'">
-                  <h5 [innerHtml]="data.pro_descripcion"></h5>
+              <div class="aa-product-details-bottom">
+                <!--<div class="mx-auto" style="width: 200px;">
+                  <ul class="nav nav-tabs centerAncho" id="myTab2">
+                    <li><a href="#description" data-toggle="tab" (click)="this.view = 'descripcion'">Descripcion</a></li>
+                    <li><a href="#review" data-toggle="tab" (click)="this.view = 'comentarios'">Comentarios</a></li>
+                  </ul>
                 </div>-->
-                <div class="aa-product-review-area">
-                  <div class="row">
-                    <div class="col-12">
+  
+                <!-- Tab panes -->
+                <div class="container">
+                  <!--<div *ngIf="view == 'descripcion'">
+                    <h5 [innerHtml]="data.pro_descripcion"></h5>
+                  </div>-->
+                  <div class="aa-product-review-area">
+                    <div class="row">
+                      <div class="col-12">
+                        <br><br>
+                        <h1 style="    background: #00dab3;
+                          text-align: center;
+                          border-radius: 10px;
+                          color: white;
+                          font-size: 40px;">Descripcion</h1>
+                      </div>
+                      <div class="col-12">
+                        <p [innerHtml]="data.pro_descripcion "></p>
+                      </div>
+                      <div class="col-12">
+                        <h1 style="    background: #00dab3;
+                          text-align: center;
+                          border-radius: 10px;
+                          color: white;
+                          font-size: 40px;">Comentarios</h1>
+                      </div>
                       <div class="col-12">
                         <div class="reviews-container">
                           <div *ngFor="let comment of listComentario" class="review-card">
@@ -217,114 +254,130 @@
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="col-12">
-                      <h1 style="    background: #00dab3;
-                      text-align: center;
-                      border-radius: 10px;
-                      color: white;
-                      font-size: 40px;">Galeria</h1>
-                    </div>
-                    <div class="col-12 col-sm-6 pointer" *ngFor="let item of listGaleria1; let i = index" (click)="verImagen(item)">
-
-                      <img [src]="item.foto" alt data-sizes=auto class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
-                      <div class="d-flex justify-content-center">
-                        <div>
-                          <a style="text-align: center !important;" (click)="verImagen(item);handleSelect( item ); scrollToNextStep()" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
-                            <span class="aa-product-price precio">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0) }}</span>
-                            <span>Comprar y pagar en casa</span>
-                          </a>
+                      <div class="col-12">
+                        <h1 style="    background: #00dab3;
+                        text-align: center;
+                        border-radius: 10px;
+                        color: white;
+                        font-size: 40px;">Galeria</h1>
+                      </div>
+                      <div class="col-12 col-sm-6 col-md-4 pointer" *ngFor="let item of listGaleria1; let i = index" (click)="verImagen(item)">
+  
+                        <img [src]="item.foto" alt data-sizes=auto class="lazyload" id="product-image" style="object-fit: contain;" width="100%" height="auto">
+                        <div class="d-flex justify-content-center">
+                          <div>
+                            <a style="text-align: center !important;" (click)="verImagen(item);handleSelect( item ); scrollToNextStep()" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
+                              <span class="aa-product-price">{{ _formato.monedaChange( 3, 2, data.pro_uni_venta || 0) }}</span>
+                              <span>Comprar y pagar en casa</span>
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="aa-product-review-area">
-                  <h1 style="    background: #00dab3;
-                  text-align: center;
-                  border-radius: 10px;
-                  color: white;
-                  font-size: 40px;">Detalles</h1>
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="image-container">
-                        <img src="./assets/imagenes/completo.webp" alt="Imagen 1" style="background: white;">
-                        <div class="image-caption">Compra segura</div>
-                      </div>
-                      <div class="image-container">
-                        <img src="./assets/imagenes/camara.webp" alt="Imagen 2" style="background: white;">
-                        <div class="image-caption">Compra segura</div>
-                      </div>
-                      <div class="image-container">
-                        <img src="./assets/img/envios.png" alt="Imagen 2" style="background: white;">
-                        <div class="image-caption">Compra segura</div>
-                      </div>
-                      <div class="image-container">
-                        <img src="./assets/img/paypal.jpg" alt="Imagen 2" style="background: white;">
-                        <div class="image-caption">Compra segura</div>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="d-flex justify-content-center" style="width: 100%;">
-                        <div>
-                          <h5> 🚚 ENVIO A TODA COLOMBIA Y PAGAS CUANDO RECIBES EL PRODUCTO 🚚</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <div class="container">
-              <div class="d-flex justify-content-center" style="width: 100%;">
-                <div>
-                  <a [href]="urlwhat" target="_blank"
-                    class="aa-add-to-cart-btn pointer"
-                    style="    font-size: 210%; background: #008116; color: white; border-radius: 11px; text-align: center;"><span
-                    class="fa fab fa-whatsapp"></span>CHATEA CON UN ASESOR</a>
-                </div>
-              </div>
-              <div class="aa-product-review-area">
-                <div class="row">
-                  <div class="col-12">
+                  <div class="aa-product-review-area">
                     <h1 style="    background: #00dab3;
                     text-align: center;
                     border-radius: 10px;
                     color: white;
-                    font-size: 40px;">Mas Productos</h1>
-                  </div>
-                  <a class="col-12 col-sm-6 pointer" *ngFor="let item of imageObject; let i = index" target="_blank" [routerLink]="[ '/tienda/productosView', item.id ]" >
-
-                    <img [src]="item.image"
-                        alt data-sizes=auto 
-                        class="lazyload" id="product-image" style="object-fit: contain; height: 445px;" width="100%" height="auto">
-                    <div class="d-flex justify-content-center">
-                      <div>
-                        <a style="text-align: center;" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
-                          <span class="aa-product-price precio">{{ item.title }}</span>
-                          <span>Comprar y pagar en casa</span>
-                        </a>
+                    font-size: 40px;">Detalles</h1>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="image-container">
+                          <img src="./assets/imagenes/completo.webp" alt="Imagen 1" style="background: white;">
+                          <div class="image-caption">Compra segura</div>
+                        </div>
+                        <div class="image-container">
+                          <img src="./assets/imagenes/camara.webp" alt="Imagen 2" style="background: white;">
+                          <div class="image-caption">Compra segura</div>
+                        </div>
+                        <div class="image-container">
+                          <img src="./assets/img/envios.png" alt="Imagen 2" style="background: white;">
+                          <div class="image-caption">Compra segura</div>
+                        </div>
+                        <div class="image-container">
+                          <img src="./assets/img/paypal.jpg" alt="Imagen 2" style="background: white;">
+                          <div class="image-caption">Compra segura</div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="d-flex justify-content-center" style="width: 100%;">
+                          <div>
+                            <h5> 🚚 ENVIO A TODA COLOMBIA Y PAGAS CUANDO RECIBES EL PRODUCTO 🚚</h5>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </a>
+                  </div>
+                </div>
+  
+              </div>
+              <div class="container">
+                <div class="d-flex justify-content-center" style="width: 100%;">
+                  <div>
+                    <a [href]="urlwhat" target="_blank" class="aa-add-to-cart-btn pointer fondoChat">
+                      <span class="fa fab fa-whatsapp"></span>CHATEA CON UN ASESOR</a>
+                  </div>
+                </div>
+                <div class="aa-product-review-area">
+                  <div class="row">
+                    <div class="col-12">
+                      <br><br>
+                      <h1 style="    background: #00dab3;
+                      text-align: center;
+                      border-radius: 10px;
+                      color: white;
+                      font-size: 40px;">Mas Productos</h1>
+                      <br><br>
+                    </div>
+                    <a class="col-12 col-sm-6 col-md-4 pointer fondoArticle" *ngFor="let item of imageObject; let i = index" target="_blank" [routerLink]="[ '/tienda/productosView', item.id ]" >
+  
+                      <img [src]="item.image"
+                          alt data-sizes=auto 
+                          class="lazyload" id="product-image" style="object-fit: contain;" width="100%" height="auto">
+                      <div class="d-flex justify-content-center">
+                        <div>
+                          <a style="text-align: center;" class="aa-add-to-cart-btn pointer ov-btn-slide-close pointer">
+                            <span class="aa-product-price">{{ item.title }}</span>
+                            <span>Comprar y pagar en casa</span>
+                          </a>
+                        </div>
+                      </div>
+                    </a>
+                    <br><br><br>
+                  </div>
+                  <div class="row">
+                    <div class="col-12" *ngIf="disabledReload">
+                      <br><br>
+                      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                      <br><br>
+                    </div>
+                    <div class="col-12">
+                      <div class="d-flex justify-content-center">
+                        <div>
+                          <button mat-raised-button color="primary" (click)="paginateArticle()" >VER MAS</button>
+                        </div>
+                      </div>
+                      <br><br><br><br><br><br>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <!--<div class="aa-product-related-item" *ngIf="listEvidencia.length">
+                <div class="d-flex justify-content-center">
+                  <div>
+                    <ul>
+                      <li *ngFor="let item of data.listEvidencia">
+                        <img [src]="item.foto" alt="" style="width: 100%;">
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>-->
+              <!-- Related product -->
             </div>
-            <!--<div class="aa-product-related-item" *ngIf="listEvidencia.length">
-              <div class="d-flex justify-content-center">
-                <div>
-                  <ul>
-                    <li *ngFor="let item of data.listEvidencia">
-                      <img [src]="item.foto" alt="" style="width: 100%;">
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>-->
-            <!-- Related product -->
           </div>
-        </div>
+        </section>
       </div>
     </div>
   </section>
