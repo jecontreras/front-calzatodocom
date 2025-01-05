@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ServiciosService } from '../services/servicios.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,4 +26,9 @@ export class VentasService {
   getCount (query:any){
     return this._model.querys('tblventas/countVenta',query, 'post');
   }
+
+  createCheckout(data: any): Observable<any> {
+    return this._model.querys('tblventas/compraEpayco',data, 'post');
+  }
+
 }

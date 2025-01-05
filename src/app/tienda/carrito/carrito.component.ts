@@ -220,13 +220,13 @@ export class CarritoComponent implements OnInit {
     this.disabled = false;
     this.disabledSpineer = false;
     if( !resul ) return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
+    this.handleCheckTransFer();
     this._tools.presentToast("Exitoso Tu pedido esta en proceso. un accesor se pondra en contacto contigo!");
     setTimeout(()=>this._tools.tooast( { title: "Tu pedido esta siendo procesado "}) ,3000);
     //this.mensajeWhat();
     let accion: any = new CartAction({}, 'drop');
     this._store.dispatch(accion);
-    this._router.navigate(['/tienda/detallepedido']);
-    //this.handleCheckTransFer();
+    //this._router.navigate(['/tienda/detallepedido']);
     //this.dialogRef.close('creo');
 
   }
@@ -307,30 +307,93 @@ export class CarritoComponent implements OnInit {
       });
     });
   }
-
+  checkoutData: any;
+  /*
   handleCheckTransFer(){
-    const datosPago = {
-      name: 'Producto de Prueba',
-      description: 'Descripción del producto',
-      invoice: '123456',
-      currency: 'cop',
-      amount: '50000', // Valor del producto
-      tax_base: '0', // Base del impuesto (si aplica)
-      tax: '0', // Valor del impuesto
-      country: 'CO',
-      lang: 'es',
-      external: 'false',
-      response: 'https://midominio.com/respuesta', // URL de respuesta
-      methods: ['CARD', 'PSE', 'CASH'], // Métodos de pago habilitados
-      email_billing: 'cliente@correo.com',
-      name_billing: 'Nombre del cliente',
-      address_billing: 'Calle 123',
-      type_doc_billing: 'CC',
-      mobilephone_billing: '3001234567',
-      number_doc_billing: '123456789'
+    const paymentDetails = {
+      amount: this.orderSummary.total,
+      tax: 0, // Cambia según corresponda
+      base: this.orderSummary.total,
+      description: 'Compra en Mi Tienda',
+      email: 'cliente@correo.com', // Debes pedir el email al cliente
+      name: 'Juan Pérez', // Debes pedir el nombre al cliente
+      phone: '3001234567', // Debes pedir el teléfono al cliente
     };
 
-    this.epaycoService.pagar(datosPago);
-  }
+    this._ventas.createCheckout(paymentDetails).subscribe(
+      (response) => {
+        this.checkoutData = response.checkoutData;
+        // Redirige al cliente a ePayco
+        const epaycoForm = document.createElement('form');
+        epaycoForm.action = 'https://checkout.epayco.co/checkout.js';
+        epaycoForm.method = 'POST';
+        epaycoForm.target = '_self';
 
+        // Agrega los datos como inputs ocultos
+        for (const key in this.checkoutData) {
+          if (Object.prototype.hasOwnProperty.call(this.checkoutData, key)) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = this.checkoutData[key];
+            epaycoForm.appendChild(input);
+          }
+        }
+
+        document.body.appendChild(epaycoForm);
+        epaycoForm.submit();
+      },
+      (error) => {
+        console.error('Error al generar el checkout:', error);
+        alert('Hubo un problema al generar el pago.');
+      }
+    );
+  }
+    */
+  handleCheckTransFer(){
+    var handler = ePayco.checkout.configure({
+      key: '3daf1fb80ee88b9b394513cefc6f46a19805f726',
+      test: false
+    });
+
+    var data = {
+      // Parámetros obligatorios
+      name: "Vestido Mujer Primavera",
+      description: "Vestido Mujer Primavera",
+      invoice: "MURCIA-1234",
+      currency: "cop", // Moneda
+      amount: "5000", // Total del pedido
+      tax_base: "4000", // Subtotal
+      tax: "500", // IVA
+      tax_ico: "500", // Impuesto al consumo
+      country: "co",
+      lang: "es", // Usa el valor de lang
+  
+      //Onpage="false" - Standard="true"
+      external: "false",
+  
+      // Atributos cliente
+      name_billing: "Nelson Valencia",
+      address_billing: "Carrera 19 numero 14 91",
+      mobilephone_billing: "3005604163",
+      number_doc_billing: "1000898574",
+      email_billing: "email_billing",
+      type_doc_billing: "cc",
+  
+      confirmation: "https://1337-jecontreras-backofertas-l1b6vvtvt7y.ws-us117.gitpod.io/tblventas/checkEpayco",
+      response: "https://calzatodocom.web.app/tienda/detallepedido",
+  
+      // Atributos opcionales
+      extra1: "extra1",
+      extra2: "extra2",
+      extra3: "extra3",
+  
+      // Deshabilitar métodos de pago
+      //methodsDisable: ["TDC", "PSE", "SP", "CASH", "DP"]
+      method_confirmation: ["TDC", "PSE","SP","CASH","DP"],
+  };
+
+  handler.open(data)
+
+  }
 }
