@@ -46,7 +46,8 @@ export class CarritoComponent implements OnInit {
     subtotal: 0,
     extraCharge: 0,
     total: 0,
-    sumCantidad: 0
+    sumCantidad: 0,
+    RestarAdl: 0
   };
 
   // Columnas mostradas en la tabla
@@ -93,6 +94,7 @@ export class CarritoComponent implements OnInit {
     if( !this.data.direccion ) return this.disabled = true;
     if( !this.data.barrio ) return this.disabled = true;
     if( !this.data.ciudad  ) return this.disabled = true;
+    if( !this.data.ven_imagen_conversacion  ) return this.disabled = true;
     this.disabled = false;
   }
 
@@ -104,9 +106,19 @@ export class CarritoComponent implements OnInit {
       this.orderSummary.sumCantidad+=row.cantidad;
     }
     this.orderSummary.subtotal = this.totalSuma;
-    if( this.paymentForm.value.paymentMethod !== "bacs" ) this.orderSummary.extraCharge = 10000;
-    else this.orderSummary.extraCharge = 0;
-    this.orderSummary.total = this.orderSummary.subtotal + this.orderSummary.extraCharge;
+    let RestarAdl = 0;
+    if( this.paymentForm.value.paymentMethod !== "bacs" ) {
+      this.orderSummary.extraCharge = 10000;
+      this.orderSummary.RestarAdl = 0;
+    }
+    else {
+      this.orderSummary.extraCharge = 0;
+      RestarAdl = ( ( this.orderSummary.subtotal / 10 ) );
+      //RestarAdl = RestarAdl * 100;
+      this.orderSummary.RestarAdl = RestarAdl;
+    }
+    this.orderSummary.total = ( this.orderSummary.subtotal + this.orderSummary.extraCharge ) - RestarAdl;
+    this.orderSummary.total = this.orderSummary.total - RestarAdl;
   }
 
   updateCart( item:any ){
@@ -132,6 +144,7 @@ export class CarritoComponent implements OnInit {
   deleteCart( item:any ){
     let accion = new CartAction(item, 'delete');
     this._store.dispatch(accion);
+    this.suma();
   }
 
   onPaymentMethodChange(event: any): void {
@@ -217,12 +230,12 @@ export class CarritoComponent implements OnInit {
     //console.log("****196", idUser)
     data.usu_clave_int = idUser.id;
     let resul = await this.nexCompra( data );
-    this.disabled = false;
-    this.disabledSpineer = false;
     if( !resul ) return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
-    this.handleCheckTransFer();
+    this.handleCheckTransFer( resul );
+    this.disabled = false;
+    /*this.disabledSpineer = false;
     this._tools.presentToast("Exitoso Tu pedido esta en proceso. un accesor se pondra en contacto contigo!");
-    setTimeout(()=>this._tools.tooast( { title: "Tu pedido esta siendo procesado "}) ,3000);
+    setTimeout(()=>this._tools.tooast( { title: "Tu pedido esta siendo procesado "}) ,3000);*/
     //this.mensajeWhat();
     let accion: any = new CartAction({}, 'drop');
     this._store.dispatch(accion);
@@ -350,34 +363,34 @@ export class CarritoComponent implements OnInit {
     );
   }
     */
-  handleCheckTransFer(){
+  handleCheckTransFer( dataBuy ){
     var handler = ePayco.checkout.configure({
-      key: '3daf1fb80ee88b9b394513cefc6f46a19805f726',
-      test: false
+      key: '90506d3b72d22b822f53b54dcf22dc3a',
+      test: true
     });
 
     var data = {
       // Parámetros obligatorios
-      name: "Vestido Mujer Primavera",
-      description: "Vestido Mujer Primavera",
-      invoice: "MURCIA-1234",
+      name: "Comprando en Calzatodo",
+      description: _.map( this.listCarrito, ( item )=> { return " "+ item.titulo } ),
+      invoice: String( dataBuy.id ),
       currency: "cop", // Moneda
-      amount: "5000", // Total del pedido
-      tax_base: "4000", // Subtotal
-      tax: "500", // IVA
-      tax_ico: "500", // Impuesto al consumo
+      amount: dataBuy.ven_tipo === 'PAGO ADELANTADO"' ? this.orderSummary.total : 20000, // Total del pedido
+      tax_base: "0", // Subtotal
+      tax: "0", // IVA
+      tax_ico: "0", // Impuesto al consumo
       country: "co",
       lang: "es", // Usa el valor de lang
   
       //Onpage="false" - Standard="true"
-      external: "false",
+      external: "true",
   
       // Atributos cliente
-      name_billing: "Nelson Valencia",
-      address_billing: "Carrera 19 numero 14 91",
-      mobilephone_billing: "3005604163",
-      number_doc_billing: "1000898574",
-      email_billing: "email_billing",
+      name_billing: this.data.nombre,
+      address_billing: this.data.direccion,
+      mobilephone_billing: this.data.telefono,
+      number_doc_billing: "",
+      email_billing: this.data.ven_imagen_conversacion,
       type_doc_billing: "cc",
   
       confirmation: "https://1337-jecontreras-backofertas-l1b6vvtvt7y.ws-us117.gitpod.io/tblventas/checkEpayco",

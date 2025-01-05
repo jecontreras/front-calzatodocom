@@ -24,6 +24,16 @@
                 </mat-form-field>
               </div>
 
+              <!-- Correo electronico -->
+              <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'ven_imagen_conversacion')}">
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <mat-label>Correo Electronico</mat-label>
+                  <mat-icon matPrefix>email</mat-icon>
+                  <input matInput type="email" [(ngModel)]="data.ven_imagen_conversacion" name="ven_imagen_conversacion" placeholder="Email Personal" required #ven_imagen_conversacion="ngModel" (change)="validadorInput()">
+                  <mat-error *ngIf="ven_imagen_conversacion.invalid && ven_imagen_conversacion.touched">Este campo es obligatorio.</mat-error>
+                </mat-form-field>
+              </div>
+
               <!-- Número de Teléfono -->
               <div class="form-group" [ngClass]="{'has-error': isInvalid(dataForm, 'telefono')}">
                 <mat-form-field appearance="outline" class="example-full-width">
@@ -110,12 +120,16 @@
 
               <table class="summary-table">
                   <tr>
-                  <th>Subtotal</th>
-                  <td> {{ _tools.monedaChange2( 3, 2, orderSummary.subtotal ) }} </td>
+                    <th>Subtotal</th>
+                    <td> {{ _tools.monedaChange2( 3, 2, orderSummary.subtotal ) }} </td>
                   </tr>
                   <tr>
-                  <th>Cargo adicional contra entrega</th>
-                  <td> {{ _tools.monedaChange2( 3, 2, orderSummary.extraCharge ) }} </td>
+                    <th>Cargo adicional contra entrega</th>
+                    <td> {{ _tools.monedaChange2( 3, 2, orderSummary.extraCharge ) }} </td>
+                  </tr>
+                  <tr>
+                    <th>Descuento por pago anticipado</th>
+                    <td> {{ _tools.monedaChange2( 3, 2, orderSummary.RestarAdl ) }} </td>
                   </tr>
                   <tr class="order-total">
                   <th>Total</th>
@@ -136,15 +150,24 @@
                       <!-- Transferencia bancaria -->
                       <mat-radio-button value="bacs" style="width: 100%;">Transferencia bancaria directa</mat-radio-button>
                       <div *ngIf="paymentForm.get('paymentMethod').value === 'bacs'" class="payment-box">
-                        <p>Realiza tu pago directamente en nuestra cuenta bancaria. Por favor, usa el número del pedido como referencia de pago.</p>
-                        <p>NOTA: tu pedido no se procesará hasta que se haya recibido el comprobante de pago en nuestro único WhatsApp: <strong>{{ ShopConfig.numeroCelular }}</strong>.</p>
+                        <p>Realiza tu pago directamente con Epayco de Forma segura.</p>
+                        <p>NOTA: 🎉 ¡Atención, Clientes Exclusivos! 🎉
+
+                          🚨 Promoción Especial: Compra Adelantada 🚨
+                          Por tus compras adelantadas, te ofrecemos un 10% de descuento en tu pedido. 🎁 Además, tu pedido será priorizado y despachado de inmediato en los días hábiles. ¡Aprovecha esta oportunidad única!
+                          
+                          📦 Envíos rápidos y gratis a toda Colombia.
+                          
+                          ✨ Garantía y Confianza
+
+                          💬 WhatsApp oficial: <strong>{{ ShopConfig.numeroCelular }}</strong> 📲.</p>
                       </div>
             
                       <!-- Pago contra entrega -->
                       <mat-radio-button value="cod" style="width: 100%;">Contra entrega</mat-radio-button>
                       <div *ngIf="paymentForm.get('paymentMethod').value === 'cod'" class="payment-box">
                         <p>💡 Ofrecemos el servicio de pago contra entrega para mayor comodidad de nuestros clientes. Pagarás tu pedido en el momento de la entrega.</p>
-                        <p>Se requiere un pago previo de $10.000 que será descontado del total del pago o compra.</p>
+                        <p>Se requiere un pago previo de $20.000 que será descontado del total del pago o compra.</p>
                         <p>Asegúrate de estar disponible en la dirección proporcionada o designar a alguien para recibir y pagar el pedido.</p>
                       </div>
             

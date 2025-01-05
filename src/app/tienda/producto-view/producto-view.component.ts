@@ -107,7 +107,7 @@ export class ProductosViewComponent implements OnInit {
   };
 
   showNotification = false;
-  lastPurchase = { user: 'Julio de Valledupar', name: 'Articulo', price: '$150.000', image: 'assets/imagenes/perfil.png' };
+  lastPurchase = { user: 'Julio de Valledupar', name: 'Articulo', price: '$150.000', image: 'https://segundav2.s3.us-east-2.amazonaws.com/optional/a4192d10-87da-40db-aa0b-87b0fc062888.webp' };
   dataList:any = [
     {
       txt: "Compro Andres Ciudad Armenia"

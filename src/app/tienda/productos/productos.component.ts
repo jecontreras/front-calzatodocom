@@ -21,7 +21,7 @@ export class ProductosComponent implements OnInit {
   products = [];
 
   showNotification = false;
-  lastPurchase = { user: 'Julio de Valledupar', name: 'Rolex Submariner RX31', price: '$89.900,00', image: 'assets/rolex_submariner_rx31.jpg' };
+  lastPurchase = { user: 'Julio de Valledupar', name: 'Adidas Chinax', price: '$145.900,00', image: 'https://segundav2.s3.us-east-2.amazonaws.com/optional/a4192d10-87da-40db-aa0b-87b0fc062888.webp' };
 
   
   tiendaInfo:any = {};
