@@ -57,6 +57,7 @@ export class VentasComponent implements OnInit {
   dateHoy = moment().format("DD/MM/YYYY");
   sumCantidad:any = 0;
   ShopConfig:any = {};
+  filterQ:any = { };
 
   constructor(
     public dialog: MatDialog,
@@ -218,6 +219,23 @@ export class VentasComponent implements OnInit {
       });
   }
 
+  handleFilterCategory(){
+    this.loader = false;
+    this.notscrolly = true
+    this.notEmptyPost = true;
+    this.dataTable.dataRows = [];
+    this.query = {
+      where:{
+        ven_sw_eliminado: 0,
+        ven_estado: { '!=': 4 }
+      },
+      page: 0,
+      limit: 10
+    };
+    if( this.filterQ.txtEstado ) this.query.where.ven_estado = this.filterQ.txtEstado;
+    this.cargarTodos();
+  }
+
   async buscar() {
     this.loader = false;
     this.notscrolly = true
@@ -231,8 +249,9 @@ export class VentasComponent implements OnInit {
           ven_sw_eliminado: 0,
           ven_estado: { '!=': 4 }
         },
-        page: 0
-      }
+        page: 0,
+        limit: 10
+      };
       if(this.dataUser.usu_perfil.prf_descripcion != 'administrador') this.query.where.usu_clave_int = this.dataUser.id;
       this.cargarTodos();
     } else {
@@ -271,6 +290,21 @@ export class VentasComponent implements OnInit {
       this.cargarTodos();
       this.sumCantidad = await this.getVentasHoy();
     }
+  }
+
+  async handleWhatsapp(row){
+    let dataInput:any = await this._tools.alertInput( { 
+      title: "Escriba tu mensaje",
+      confirme: "Enviar por Whatsapp"
+    } );
+    //console.log("***300", dataInput )
+    this._ventas.createVentaWhatsapp( { 
+      celular: row.ven_telefono_cliente,
+      msx: dataInput.value
+    } ).subscribe( res => {
+      console.log("***", res.data )
+      this._tools.basic( "Envio mensaje Whatsapp" );
+    });
   }
 
 }

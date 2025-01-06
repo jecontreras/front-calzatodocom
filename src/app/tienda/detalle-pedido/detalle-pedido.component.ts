@@ -72,8 +72,8 @@ export class DetallePedidoComponent implements OnInit {
       footerRow: this.Header,
       dataRows: []
     };
+    await this.cargarTodos();
     if( this.dataUser.id ) {
-      await this.cargarTodos();
       try {
         setTimeout(()=> this.handleWhatsapp( this.dataUltV ), 5000 );
       } catch (error) { 

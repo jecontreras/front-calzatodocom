@@ -31,4 +31,8 @@ export class VentasService {
     return this._model.querys('tblventas/compraEpayco',data, 'post');
   }
 
+  createVentaWhatsapp(data: any): Observable<any> {
+    return this._model.querys('tblventas/createWhatsapp',data, 'post');
+  }
+
 }

@@ -24,32 +24,41 @@
                 [fullScreen]="false">
               </ngx-spinner>
             </div>
-            <div id="datatables_filter" class="dataTables_filter row" *ngIf="activando">
-              <div class="col-12">
-                <div class="d-flex justify-content-center">
-                  <div>
-                    <h3> Cantidad de Ventas de Hoy {{ dateHoy }} <span class="text-danger">{{ sumCantidad }}</span> </h3>
-                  </div>
+            <div class="col-12">
+              <div class="d-flex justify-content-center">
+                <div>
+                  <h3> Cantidad de Ventas de Hoy {{ dateHoy }} <span class="text-danger">{{ sumCantidad }}</span> </h3>
                 </div>
               </div>
-              <label class="form-group col">
-                <input [(ngModel)]="datoBusqueda" type="search" class="form-control form-control-sm" (change)="buscar()"
-                  placeholder="Buscar Retiros" aria-controls="datatables"></label>
-              <div>
-                <button (click)="buscar()" [disabled]="loader" mat-raised-button mat-min-fab
-                  class="btn btn-primary btn-just-icon btn-round">
-                  <i class="material-icons">search</i>
-                </button>
-                <button *ngIf="activando" (click)="darPuntos()" class="btn btn-primary btn-just-icon btn-round" mat-raised-button
-                  mat-min-fab>
-                  <i class="material-icons">redeem</i>
-                </button>
-                <button (click)="crear(false)" class="btn btn-primary btn-just-icon btn-round" mat-raised-button
-                  mat-min-fab>
-                  <i class="material-icons">add_circle_outline</i>
-                </button>
+            </div>
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <mat-form-field class="example-full-width">
+                    <mat-label>Buscar Ventas</mat-label>
+                    <input matInput placeholder="Buscar Ventas" [(ngModel)]="datoBusqueda">
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field appearance="fill">
+                    <mat-label>Estados</mat-label>
+                    <mat-select [(ngModel)]="filterQ.txtEstado" name="txtEstado" (selectionChange)="handleFilterCategory();">
+                      <mat-option value="0">Pendiente</mat-option>
+                      <mat-option value="1">Venta exitosa</mat-option>
+                      <mat-option value="2">Rechazada</mat-option>
+                      <mat-option value="3">Despachado</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div>
+                  <button (click)="buscar()" [disabled]="loader" mat-mini-fab color="primary" aria-label="Buscar contenido">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                  <!--<button (click)="crear(false)"  mat-mini-fab color="accent" aria-label="agregar productos">
+                    <mat-icon>add_circle</mat-icon>
+                  </button>-->
+                </div>
               </div>
-
             </div>
             <div class="col-12 row">
               <div class="col-12">
@@ -94,6 +103,9 @@
                           </button>
                           <button (click)="delete(row, idx)" class="btn btn-danger btn-just-icon btn-round" *ngIf="activando">
                             <i class="material-icons">delete_forever</i>
+                          </button>
+                          <button (click)="handleWhatsapp(row)" class="btn btn-primary btn-just-icon btn-round">
+                            <mat-icon>settings_cell</mat-icon>
                           </button>
                         </td>
                         <td>{{ row['ven_nombre_cliente'] }}</td>

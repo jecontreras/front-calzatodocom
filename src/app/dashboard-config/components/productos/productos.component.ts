@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as _ from 'lodash';
 import { CART } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
+import { CategoriasService } from 'src/app/servicesComponents/categorias.service';
 
 declare interface DataTable {
   headerRow: string[];
@@ -42,6 +43,10 @@ export class ProductosComponent implements OnInit {
   notscrolly:boolean=true;
   notEmptyPost:boolean = true;
   tiendaInfo:any = {};
+  filterQ:any = {
+    
+  };
+  listCategory:any = [];
 
   constructor(
     public dialog: MatDialog,
@@ -49,6 +54,7 @@ export class ProductosComponent implements OnInit {
     private _productos: ProductoService,
     private spinner: NgxSpinnerService,
     private _store: Store<CART>,
+    private _category: CategoriasService
   ) {
     this._store.subscribe((store: any) => {
       store = store.name;
@@ -57,12 +63,40 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.dataTable = {
       headerRow: this.Header,
       footerRow: this.Header,
       dataRows: []
     };
+    this.cargarTodos();
+    this.getCategory();
+    let category = await this.getCategory();
+    this.listCategory = category;
+  }
+
+  getCategory(){
+    return new Promise( resolve => {
+      this._category.get( { where: { cat_activo:0 }, limit: 100 } ).subscribe( res => {
+        resolve( res.data );
+      })
+    });
+  }
+
+  handleFilterCategory(){
+    console.log("..", this.filterQ );
+    this.query = {
+      where:{
+        pro_activo: 0
+      },
+      limit: 10,
+      page: 0
+    };
+    this.loader = false;
+    this.notscrolly = true
+    this.notEmptyPost = true;
+    this.dataTable.dataRows = [];
+    this.query.where.pro_categoria = this.filterQ.txtCategory;
     this.cargarTodos();
   }
 
@@ -135,7 +169,8 @@ export class ProductosComponent implements OnInit {
         where:{
           pro_activo: 0
         },
-        limit: 10
+        limit: 10,
+        page: 0
       }
       this.cargarTodos();
     } else {

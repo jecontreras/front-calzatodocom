@@ -10,6 +10,7 @@ import { VentasService } from 'src/app/servicesComponents/ventas.service';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { EpaycoService } from 'src/app/services/epayco.service';
+import { environment } from 'src/environments/environment';
 declare var ePayco: any;
 
 @Component({
@@ -41,16 +42,16 @@ export class CarritoComponent implements OnInit {
   disabledSpineer: boolean = false;
   // Lista de indicativos de países
   countryCodes = [
-    { name: 'Colombia', code: '+57' },
-    { name: 'Estados Unidos', code: '+1' },
-    { name: 'México', code: '+52' },
-    { name: 'Argentina', code: '+54' },
-    { name: 'España', code: '+34' },
-    { name: 'Chile', code: '+56' },
-    { name: 'Perú', code: '+51' },
-    { name: 'Ecuador', code: '+593' },
-    { name: 'Venezuela', code: '+58' },
-    { name: 'Brasil', code: '+55' },
+    { name: 'Colombia', code: '57' },
+    { name: 'Estados Unidos', code: '1' },
+    { name: 'México', code: '52' },
+    { name: 'Argentina', code: '54' },
+    { name: 'España', code: '34' },
+    { name: 'Chile', code: '56' },
+    { name: 'Perú', code: '51' },
+    { name: 'Ecuador', code: '593' },
+    { name: 'Venezuela', code: '58' },
+    { name: 'Brasil', code: '55' },
     // Agrega más países si es necesario
   ];
 
@@ -188,9 +189,9 @@ export class CarritoComponent implements OnInit {
       "usu_clave_int": 1,
       "ven_usu_creacion": "arleytienda@gmail.com",
       "ven_fecha_venta": moment().format("DD/MM/YYYY"),
-      "cob_num_cedula_cliente": this.data.telefono,
+      "cob_num_cedula_cliente": ( this.data.indicativo || '57' ) + this.data.telefono,
       "ven_nombre_cliente": this.data.nombre,
-      "ven_telefono_cliente": ( this.data.indicativo || '+57' )+ this.data.telefono,
+      "ven_telefono_cliente": ( this.data.indicativo || '57' )+ this.data.telefono,
       "ven_ciudad": this.data.ciudad,
       "ven_barrio": this.data.barrio,
       "ven_direccion_cliente": this.data.direccion,
@@ -402,8 +403,8 @@ export class CarritoComponent implements OnInit {
       email_billing: this.data.ven_imagen_conversacion,
       type_doc_billing: "cc",
   
-      confirmation: "https://1337-jecontreras-backofertas-l1b6vvtvt7y.ws-us117.gitpod.io/tblventas/checkEpayco",
-      response: "https://calzatodocom.web.app/tienda/detallepedido/"+dataBuy.id,
+      confirmation: environment.url+"/tblventas/checkEpayco",
+      response: location.origin+"/tienda/detallepedido/"+dataBuy.id,
   
       // Atributos opcionales
       extra1: "extra1",
