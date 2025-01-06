@@ -24,23 +24,6 @@ export class CarritoComponent implements OnInit {
   paymentForm: FormGroup;
   data:any = {};
   disabled:boolean = true;
-
-  // Lista de productos en el pedido
-  orderItems = [
-    {
-      name: 'ADIDAS BOUNCE NEGRO BLANCO PE',
-      size: 37,
-      quantity: 2,
-      subtotal: 390000,
-    },
-    {
-      name: 'ADIDAS BOUNCE NEGRO BLANCO PE',
-      size: 40,
-      quantity: 1,
-      subtotal: 195000,
-    },
-  ];
-
   // Resumen del pedido
   orderSummary = {
     subtotal: 0,
@@ -56,6 +39,20 @@ export class CarritoComponent implements OnInit {
   dataUser:any = {};
   ShopConfig:any = {};
   disabledSpineer: boolean = false;
+  // Lista de indicativos de países
+  countryCodes = [
+    { name: 'Colombia', code: '+57' },
+    { name: 'Estados Unidos', code: '+1' },
+    { name: 'México', code: '+52' },
+    { name: 'Argentina', code: '+54' },
+    { name: 'España', code: '+34' },
+    { name: 'Chile', code: '+56' },
+    { name: 'Perú', code: '+51' },
+    { name: 'Ecuador', code: '+593' },
+    { name: 'Venezuela', code: '+58' },
+    { name: 'Brasil', code: '+55' },
+    // Agrega más países si es necesario
+  ];
 
   constructor(
     private _store: Store<CART>,
@@ -89,6 +86,7 @@ export class CarritoComponent implements OnInit {
 
   validadorInput(){
     //console.log("*********", this.data)
+    //console.log(`Indicativo: ${this.data.indicativo}, Teléfono: ${this.data.telefono}`);
     if( !this.data.nombre ) return this.disabled = true;
     if( !this.data.telefono ) return this.disabled = true;
     if( !this.data.direccion ) return this.disabled = true;
@@ -192,7 +190,7 @@ export class CarritoComponent implements OnInit {
       "ven_fecha_venta": moment().format("DD/MM/YYYY"),
       "cob_num_cedula_cliente": this.data.telefono,
       "ven_nombre_cliente": this.data.nombre,
-      "ven_telefono_cliente": this.data.telefono,
+      "ven_telefono_cliente": ( this.data.indicativo || '+57' )+ this.data.telefono,
       "ven_ciudad": this.data.ciudad,
       "ven_barrio": this.data.barrio,
       "ven_direccion_cliente": this.data.direccion,
@@ -230,12 +228,17 @@ export class CarritoComponent implements OnInit {
     //console.log("****196", idUser)
     data.usu_clave_int = idUser.id;
     let resul = await this.nexCompra( data );
-    if( !resul ) return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
+    if( !resul ) {
+      this.disabled = false;
+      this.disabledSpineer = false;
+      return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
+    }
     this.handleCheckTransFer( resul );
     this.disabled = false;
-    /*this.disabledSpineer = false;
+    this.disabledEpaycoSpinner = true;
+    //this.disabledSpineer = false;
     this._tools.presentToast("Exitoso Tu pedido esta en proceso. un accesor se pondra en contacto contigo!");
-    setTimeout(()=>this._tools.tooast( { title: "Tu pedido esta siendo procesado "}) ,3000);*/
+    setTimeout(()=>this._tools.tooast( { title: "Tu pedido esta siendo procesado "}) ,3000);
     //this.mensajeWhat();
     let accion: any = new CartAction({}, 'drop');
     this._store.dispatch(accion);
@@ -243,6 +246,8 @@ export class CarritoComponent implements OnInit {
     //this.dialogRef.close('creo');
 
   }
+
+  disabledEpaycoSpinner:boolean = false;
 
   mensajeWhat(){
     let mensaje: string = ``;
@@ -284,7 +289,7 @@ export class CarritoComponent implements OnInit {
     return new Promise( resolve =>{
       this._ventas.create( data ).subscribe(( res:any )=>{
         this.data.id = res.id;
-        resolve( true );
+        resolve( res );
       },( error:any )=> {
         //this._tools.presentToast("Error de servidor")
         resolve( false );
@@ -364,18 +369,22 @@ export class CarritoComponent implements OnInit {
   }
     */
   handleCheckTransFer( dataBuy ){
+    console.log("DST", dataBuy)
     var handler = ePayco.checkout.configure({
-      key: '90506d3b72d22b822f53b54dcf22dc3a',
-      test: true
+      key: this.ShopConfig.keyEpayco,
+      test: this.ShopConfig.epaycoDev
     });
 
     var data = {
+      url: "https://recaudos.pagosinteligentes.com/CollectForm.aspx?Token=be3c7e95-5c30-47e3-9209-9e88a2e6f57d",
+      otrourl: "https://publihazclick.s3.amazonaws.com/paquetes/19fd8728-c89b-44c7-951b-79dcbbace3ff.jpg",
+      wester: "https://www.google.com.co/",
+      imgwester: "https://www.viviendocali.com/wp-content/uploads/2017/10/Western-Union-en-bucaramanga.jpg",
       // Parámetros obligatorios
-      name: "Comprando en Calzatodo",
-      description: _.map( this.listCarrito, ( item )=> { return " "+ item.titulo } ),
-      invoice: String( dataBuy.id ),
+      name: "Comprando",
+      invoice: dataBuy.id,
       currency: "cop", // Moneda
-      amount: dataBuy.ven_tipo === 'PAGO ADELANTADO"' ? this.orderSummary.total : 20000, // Total del pedido
+      amount: dataBuy.ven_tipo === 'PAGO ADELANTADO' ? this.orderSummary.total : 20000, // Total del pedido
       tax_base: "0", // Subtotal
       tax: "0", // IVA
       tax_ico: "0", // Impuesto al consumo
@@ -394,19 +403,54 @@ export class CarritoComponent implements OnInit {
       type_doc_billing: "cc",
   
       confirmation: "https://1337-jecontreras-backofertas-l1b6vvtvt7y.ws-us117.gitpod.io/tblventas/checkEpayco",
-      response: "https://calzatodocom.web.app/tienda/detallepedido",
+      response: "https://calzatodocom.web.app/tienda/detallepedido/"+dataBuy.id,
   
       // Atributos opcionales
       extra1: "extra1",
       extra2: "extra2",
       extra3: "extra3",
-  
-      // Deshabilitar métodos de pago
-      //methodsDisable: ["TDC", "PSE", "SP", "CASH", "DP"]
-      method_confirmation: ["TDC", "PSE","SP","CASH","DP"],
   };
 
+  console.log("***410", data)
   handler.open(data)
+  /*let obj:any = {
+    url: "https://recaudos.pagosinteligentes.com/CollectForm.aspx?Token=be3c7e95-5c30-47e3-9209-9e88a2e6f57d",
+    otrourl: "https://publihazclick.s3.amazonaws.com/paquetes/19fd8728-c89b-44c7-951b-79dcbbace3ff.jpg",
+    wester: "https://www.google.com.co/",
+    imgwester: "https://www.viviendocali.com/wp-content/uploads/2017/10/Western-Union-en-bucaramanga.jpg",
+    name: "Comprando en Calzatodo",
+    description: "Calzado Importado",
+    invoice: dataBuy.id,
+    currency: 'cop',
+    amount: dataBuy.ven_tipo === 'PAGO ADELANTADO"' ? this.orderSummary.total : 20000, // Total del pedido
+    tax_base: '0',
+    tax: '0',
+    country: 'co',
+    test: false,
+    lang: 'eng',
+    external: 'true',
+    extra1: 'extra1',
+    extra2: 'extra2',
+    extra3: 'extra3',
+    name_billing: this.dataUser.name + ' ' + this.dataUser.lastname,
+    email_billing: this.dataUser.email,
+    address_billing: this.dataUser.ciudad || 'cucuta',
+    type_doc_billing: this.dataUser.tipdoc,
+    mobilephone_billing: this.dataUser.celular,
+    number_doc_billing: this.dataUser.celular
+};
+//console.log( obj)
+try {
+  const handler: any = ePayco.checkout.configure({
+    key: '90506d3b72d22b822f53b54dcf22dc3a',
+    test: true
+  })
+    ;
+  handler.open(obj);
+} catch (error) {
+  console.log("************", error)
+  this._tools.tooast("Eror en el proceso de compra");
+}*/
 
   }
 }

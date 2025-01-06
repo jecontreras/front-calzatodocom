@@ -104,14 +104,13 @@
                           $ {{ ( row['ven_total'] || 0 ).toLocaleString(1) }} COP
                         </td>
                         <td>
-                          <img *ngIf="row.ven_tipo === 'whatsapp'" [src]="row['ven_imagen_producto']" class="foto">
-                          <img *ngIf="row.ven_tipo === 'carrito'" [src]="row['pro_clave_int']?.foto" class="foto">
+                          <span *ngIf="row.ven_imagen_conversacion">Pago Epayco Transferencia</span>
+                          <span *ngIf="!row.ven_imagen_conversacion">No Pago Epayco Transferencia</span>
                         </td>
                         <td *ngIf="row['ven_estado'] == 0">Pendiente</td>
                         <td *ngIf="row['ven_estado'] == 1">Venta Exitosa</td>
                         <td *ngIf="row['ven_estado'] == 2">Rechazada</td>
                         <td *ngIf="row['ven_estado'] == 3">Despachado</td>
-                        <td>{{ row['ven_tallas'] }}</td>
                       </tr>
                     </tbody>
                   </table>

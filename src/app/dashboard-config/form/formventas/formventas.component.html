@@ -101,6 +101,10 @@
             <label for="exampleFormControlInput1">Valores extras: </label>
             <span>$ {{ ( data.ven_ganancias || 0 ).toLocaleString(1) }} COP</span>
         </div>
+        <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6">
+            <label for="exampleFormControlInput1">Id Transferencia Epayco: </label>
+            <span>$ {{ data.ven_imagen_conversacion }}</span>
+        </div>
         <div class="form-group col-md-6 col-sm-4 col-lg-4 col-xs-6" *ngIf="data.id && superSub && data.ven_imagen_guia">
             <div class="mx-auto" style="width: 200px;">
                 <a [href]="data.ven_imagen_guia" target="_blank">

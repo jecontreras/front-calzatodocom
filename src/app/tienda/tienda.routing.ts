@@ -53,6 +53,10 @@ const routes: Routes = [
             component: DetallePedidoComponent
           },
           {
+            path: 'detallepedido/:id',
+            component: DetallePedidoComponent
+          },
+          {
             path: 'catalogo/:id',
             component: CatalogoComponent
           }

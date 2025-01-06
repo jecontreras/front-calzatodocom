@@ -8,6 +8,7 @@ import { STORAGES } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
 import { ToolsService } from 'src/app/services/tools.service';
 import { VentasProductosService } from 'src/app/servicesComponents/ventas-productos.service';
+import { ActivatedRoute } from '@angular/router';
   
 declare interface DataTable {
   headerRow: string[];
@@ -42,6 +43,7 @@ export class DetallePedidoComponent implements OnInit {
   urlHref: string="";
   ShopConfig:any = {};
   dataUltV:any = { };
+  id:any;
 
   constructor(
     private _ventas: VentasService,
@@ -49,6 +51,7 @@ export class DetallePedidoComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private _store: Store<STORAGES>,
     public _tools: ToolsService,
+    private activate: ActivatedRoute,
     private _ventasPro: VentasProductosService
   ) { 
     this._store.subscribe((store: any) => {
@@ -61,6 +64,9 @@ export class DetallePedidoComponent implements OnInit {
 
   async ngOnInit() {
     this.urlHref = window.location.origin + "/login";
+    if((this.activate.snapshot.paramMap.get('id'))){
+      this.id = this.activate.snapshot.paramMap.get('id');
+    }
     this.dataTable = {
       headerRow: this.Header,
       footerRow: this.Header,
@@ -97,7 +103,8 @@ export class DetallePedidoComponent implements OnInit {
   cargarTodos() {
     return new Promise( resolve =>{
       this.spinner.show();
-      this.query.where.usu_clave_int = this.dataUser.id
+      if( !this.id ) this.query.where.usu_clave_int = this.dataUser.id;
+      if( this.id ) this.query.where.id = this.id;
       this._ventas.get( this.query )
       .subscribe(
         (response: any) => {

@@ -46,7 +46,7 @@ export class VentasComponent implements OnInit {
     sort: "createdAt ASC",
     page: 0
   };
-  Header:any = [ 'Acciones','Nombre Cliente','Teléfono Cliente','Fecha Venta','Cantidad','Precio','Imagen Producto','Estado', 'Tallas' ];
+  Header:any = [ 'Acciones','Nombre Cliente','Teléfono Cliente','Fecha Venta','Cantidad','Precio','Id Epayco','Estado' ];
   $:any;
   public datoBusqueda = '';
 

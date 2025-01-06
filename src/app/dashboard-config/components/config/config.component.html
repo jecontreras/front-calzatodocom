@@ -67,165 +67,21 @@
                       Activar Venta
                     </label>
                 </div>
+                <div class="col-6">
+                    <label>Key Epayco</label>
+                    <input type="text" [(ngModel)]="data.keyEpayco" class="form-control form-control-sm">
+                </div>
+                <div class="col-6">
+                    <label>Epayco Dev</label>
+                    <mat-checkbox class="example-margin" [(ngModel)]="data.epaycoDev">
+                        <span *ngIf="!data.epaycoDev">Produccion</span>
+                        <span *ngIf="data.epaycoDev">Pruebas</span>
+                    </mat-checkbox>
+                </div>
                 <div class="col-12">
                     <label>Descripcion de la empresa</label>
                     <input type="text" [(ngModel)]="data.decripcion" class="form-control form-control-sm">
                 </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div *ngFor="let item of data.foto1; let idx = index;" class="col-md-3 col-sm-4 col-lg-2 col-xs-6 col-6">
-                            <div class="">
-                                <img [src]="item.foto" class="imgPerfil">
-                                <input type="text" [(ngModel)]="item.titulo" placeholder="Titulo" (change)="Actualizar()" class="form-control form-control-sm">
-                                <button type="button" class="btn btn-danger" (click)="this.data.foto1.splice(idx, 1); Actualizar()">Borrar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row container">
-                        <label>Foto de portada 1 Tamaño 1920x700</label>
-                        <button class="btn btn-primary btn-just-icon btn-round" (click)="subirFile('foto1')" *ngIf="files.length > 0">
-                            Subir Imagen
-                        </button>
-                    </div>
-                    <ngx-dropzone (change)="onSelect($event, true)">
-                        <ngx-dropzone-label>Abrir archivos</ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                            [file]="f" [removable]="true" (removed)="onRemove(f)" multiple="false">
-                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                        </ngx-dropzone-image-preview>
-                    </ngx-dropzone>
-                </div>
-                <div class="col-12">
-                    <div class="row">
-                        <div *ngFor="let item of data.foto2; let idx = index;" class="col-md-3 col-sm-4 col-lg-2 col-xs-6 col-6">
-                            <img [src]="item.foto" class="imgPerfil">
-                            <input type="text" [(ngModel)]="item.titulo" (change)="Actualizar()" placeholder="Titulo" class="form-control form-control-sm">
-                            <button type="button" class="btn btn-danger" (click)="this.data.foto2.splice(idx, 1); Actualizar()">Borrar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row container">
-                        <label>Foto de Marcas Tamaño 300x320</label>
-                        <button class="btn btn-primary btn-just-icon btn-round" (click)="subirFile('foto2')" *ngIf="files.length > 0">
-                            Subir Imagen
-                        </button>
-                    </div>
-                    <ngx-dropzone (change)="onSelect($event, true)">
-                        <ngx-dropzone-label>Abrir archivos</ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                            [file]="f" [removable]="true" (removed)="onRemove(f)" multiple="false">
-                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                        </ngx-dropzone-image-preview>
-                    </ngx-dropzone>
-                </div>
-                <div class="col-12 mx-auto">
-                    <div class="mx-auto" style="width: 200px;">
-                        <img [src]="data.portada1" class="imgPerfil">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row container">
-                        <label>Portada 1 tamaño 1170*170</label>
-                        <button class="btn btn-primary btn-just-icon btn-round" (click)="subirFile('portada1')" *ngIf="files.length > 0">
-                            Subir Imagen
-                        </button>
-                    </div>
-                    <ngx-dropzone (change)="onSelect($event, false)">
-                        <ngx-dropzone-label>Abrir archivos</ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                            [file]="f" [removable]="true" (removed)="onRemove(f)" multiple="false">
-                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                        </ngx-dropzone-image-preview>
-                    </ngx-dropzone>
-                </div>
-                <div class="col-12 mx-auto">
-                    <div class="mx-auto" style="width: 200px;">
-                        <img [src]="data.comentario1" class="imgPerfil">
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="row container">
-                        <label>Fotos de Comentarios</label>
-                        <button class="btn btn-primary btn-just-icon btn-round" (click)="subirFile('comentario1')" *ngIf="files.length > 0">
-                            Subir Imagen
-                        </button>
-                    </div>
-                    <ngx-dropzone (change)="onSelect($event, false)">
-                        <ngx-dropzone-label>Abrir archivos</ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                            [file]="f" [removable]="true" (removed)="onRemove(f)" multiple="false">
-                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                        </ngx-dropzone-image-preview>
-                    </ngx-dropzone>
-                </div>
-                <div class="col-12 mx-auto">
-                    <div class="mx-auto" style="width: 200px;">
-                        <img [src]="data.portada2" class="imgPerfil">
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="row container">
-                        <label>Fotos de Producto tamaño 1920*300</label>
-                        <button class="btn btn-primary btn-just-icon btn-round" (click)="subirFile('portada2')" *ngIf="files.length > 0">
-                            Subir Imagen
-                        </button>
-                    </div>
-                    <ngx-dropzone (change)="onSelect($event, false)">
-                        <ngx-dropzone-label>Abrir archivos</ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                            [file]="f" [removable]="true" (removed)="onRemove(f)" multiple="false">
-                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                        </ngx-dropzone-image-preview>
-                    </ngx-dropzone>
-                </div>
-                <div class="col-12 mx-auto">
-                    <div class="mx-auto" style="width: 200px;">
-                        <img [src]="data.portada3" class="imgPerfil">
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="row container">
-                        <label>Fotos de Producto detalle 1920*300</label>
-                        <button class="btn btn-primary btn-just-icon btn-round" (click)="subirFile('portada3')" *ngIf="files.length > 0">
-                            Subir Imagen
-                        </button>
-                    </div>
-                    <ngx-dropzone (change)="onSelect($event, false)">
-                        <ngx-dropzone-label>Abrir archivos</ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                            [file]="f" [removable]="true" (removed)="onRemove(f)" multiple="false">
-                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                        </ngx-dropzone-image-preview>
-                    </ngx-dropzone>
-                </div>
-
-                <div class="col-12 mx-auto">
-                    <div class="mx-auto" style="width: 200px;">
-                        <img [src]="data.portada4" class="imgPerfil">
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <div class="row container">
-                        <label>Fotos de Contactos 1920*300</label>
-                        <button class="btn btn-primary btn-just-icon btn-round" (click)="subirFile('portada4')" *ngIf="files.length > 0">
-                            Subir Imagen
-                        </button>
-                    </div>
-                    <ngx-dropzone (change)="onSelect($event, false)">
-                        <ngx-dropzone-label>Abrir archivos</ngx-dropzone-label>
-                        <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files"
-                            [file]="f" [removable]="true" (removed)="onRemove(f)" multiple="false">
-                            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                        </ngx-dropzone-image-preview>
-                    </ngx-dropzone>
-                </div>
-
 
                 <div class="col-6">
                     <br>

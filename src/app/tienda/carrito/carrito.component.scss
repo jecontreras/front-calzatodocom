@@ -49,6 +49,22 @@
   }
   
   /* Formulario */
+/*
+  .form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }*/
+  
+  mat-form-field {
+    flex: 1;
+  }
+  
+  mat-form-field[style*="width: 25%;"] {
+    min-width: 100px;
+  }
+
+  
   .form-group {
     margin-bottom: 15px;
   }
