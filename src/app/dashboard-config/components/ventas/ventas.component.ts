@@ -27,7 +27,6 @@ declare const $: any;
 export class VentasComponent implements OnInit {
 
   dataTable: DataTable;
-  dataTable2: DataTable;
   pagina = 10;
   paginas = 0;
   loader = true;
@@ -36,14 +35,6 @@ export class VentasComponent implements OnInit {
       ven_sw_eliminado: 0,
       ven_estado: { '!=': 4 }
     },
-    page: 0
-  };
-  query2:any = {
-    where:{
-      ven_sw_eliminado: 0,
-      ven_estado: 0
-    },
-    sort: "createdAt ASC",
     page: 0
   };
   Header:any = [ 'Acciones','Nombre Cliente','Teléfono Cliente','Fecha Venta','Cantidad','Precio','Id Epayco','Estado' ];
@@ -82,13 +73,7 @@ export class VentasComponent implements OnInit {
       footerRow: this.Header,
       dataRows: []
     };
-    this.dataTable2 = {
-      headerRow: this.Header,
-      footerRow: this.Header,
-      dataRows: []
-    };
     this.cargarTodos();
-    this.cargarTodos2();
     this.sumCantidad = await this.getVentasHoy();
   }
 
@@ -122,13 +107,6 @@ export class VentasComponent implements OnInit {
           if( idx >= 0 ) {
             console.log("**",this.dataTable['dataRows'][idx], filtro)
             this.dataTable['dataRows'][idx] = { ven_estado: filtro.ven_estado, ...filtro};
-          }
-
-          idx = _.findIndex( this.dataTable2.dataRows, [ 'id', obj.id ] );
-          console.log("**",idx)
-          if( idx >= 0 ) {
-            console.log("**",this.dataTable2['dataRows'][idx], filtro)
-            this.dataTable2['dataRows'][idx] = { ven_estado: filtro.ven_estado, ...filtro};
           }
       }
     });
@@ -164,6 +142,7 @@ export class VentasComponent implements OnInit {
         this._ventas.update(data).subscribe((res:any)=>{
           this.dataTable.dataRows.splice(idx, 1);
           this._tools.presentToast("Eliminado")
+          this.sumCantidad = this.sumCantidad -1;
         },(error)=>{console.error(error); this._tools.presentToast("Error de servidor") })
       }
     });
@@ -175,10 +154,6 @@ export class VentasComponent implements OnInit {
        this.query.page++;
        this.cargarTodos();
      }
-  }
-  onScroll2(){
-    this.query2.page++;
-    this.cargarTodos2();
   }
 
   cargarTodos() {
@@ -198,21 +173,6 @@ export class VentasComponent implements OnInit {
             this.notEmptyPost =  false;
           }
           this.notscrolly = true;
-      },
-      error => {
-        console.log('Error', error);
-      });
-  }
-
-  cargarTodos2() {
-    this.spinner.show();
-    this._ventas.get( this.query2 )
-    .subscribe(
-      (response: any) => {
-        this.dataTable2.headerRow = this.dataTable2.headerRow;
-        this.dataTable2.footerRow = this.dataTable2.footerRow;
-        this.dataTable2.dataRows.push(... response.data)
-        this.dataTable2.dataRows = _.unionBy(this.dataTable2.dataRows || [], this.dataTable2.dataRows, 'id');
       },
       error => {
         console.log('Error', error);
@@ -290,6 +250,7 @@ export class VentasComponent implements OnInit {
       this.cargarTodos();
       this.sumCantidad = await this.getVentasHoy();
     }
+    this.sumCantidad = await this.getVentasHoy();
   }
 
   async handleWhatsapp(row){
@@ -297,6 +258,7 @@ export class VentasComponent implements OnInit {
       title: "Escriba tu mensaje",
       confirme: "Enviar por Whatsapp"
     } );
+    if( !dataInput.value ) return false;
     //console.log("***300", dataInput )
     this._ventas.createVentaWhatsapp( { 
       celular: row.ven_telefono_cliente,
