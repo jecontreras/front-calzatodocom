@@ -119,7 +119,7 @@ export class ChecktDialogComponent implements OnInit {
     //console.log("***89", item, filterPhot)
     if( filterPhot ) {
       item.foto = filterPhot.foto;
-      item.ListTalla = ( filterPhot.tallaSelect.filter( row => row.check === true && row.cantidad ) ) || [];
+      item.ListTalla = ( filterPhot.tallaSelect.filter( row => row.check === true ) ) || [];
       item.talla = item.ListTalla[0].tal_descripcion;
     }
   }

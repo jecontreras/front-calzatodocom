@@ -41,7 +41,7 @@
                 <div class="row">
                   <!-- Modal view slider -->
                   <div class="col-md-7 col-sm-7 col-xs-12">
-                    <div id="productCarousel" class="carousel slide" data-ride="carousel">
+                    <div id="productCarousel" #productCarousel class="carousel slide" data-ride="carousel">
                       <div class="carousel-inner">
                         <div class="carousel-item" *ngFor="let image of imageObject2; let i = index" [class.active]="i === 0">
                           <img [src]="image.image" class="d-block w-100" alt="Product Image" style="border-radius: 10px;">
@@ -153,7 +153,7 @@
                         </button>
                         <br><br>
                         <button
-                          style="width: 100%; background: #e5c000; font-size: 18px; font-weight: bold; color: white;"
+                          style="width: 100%; background: #e5c000; font-size: 18px; font-weight: bold; color: white; margin-bottom: 10px;"
                           mat-raised-button
                           class="animated-button"
                           *ngFor="let item of data.listPrecios; let i = index"

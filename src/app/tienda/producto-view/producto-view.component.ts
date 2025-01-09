@@ -20,6 +20,7 @@ import { PizzaPartyComponent } from '../catalogo/catalogo.component';
 
 // Declara jQuery para que Angular lo reconozca
 declare var $: any;
+declare var bootstrap: any;
 @Component({
   selector: 'app-producto-view',
   templateUrl: './producto-view.component.html',
@@ -135,6 +136,7 @@ export class ProductosViewComponent implements OnInit {
   ];
 
   @ViewChild('nextStep', { static: false }) nextStep: ElementRef;
+  @ViewChild('productCarousel', { static: false }) productCarousel: ElementRef;
   listComentario:any =[];
 
   constructor(
@@ -368,6 +370,8 @@ export class ProductosViewComponent implements OnInit {
         }
       )
       this.bucleImg();
+      this.listTallas = _.orderBy( this.listTallas, ['tal_descripcion'], ['asc']);
+      try { this.handleSelect( this.data.listColor[0] ); } catch (error) { }
       //console.log("****357", window.document.scrollingElement)
       setTimeout(()=> window.document.scrollingElement.scrollTop=0, 200 );
     }, error=> { console.error(error); this._tools.presentToast('Error de servidor'); });
@@ -678,12 +682,28 @@ export class ProductosViewComponent implements OnInit {
   }
 
   handleSelect( item ){
-    //console.log("***364", item)
+    //console.log("***364", item, this.imageObject2 )
+    try {
+      this.listTallas = item.tallaSelect.filter( row => row.check === true );
+    } catch (error) { }
     this.viewsImagen = item.foto;
-    this._tools.openFotoAlert( this.viewsImagen );
+    //this._tools.openFotoAlert( this.viewsImagen );
     this.data.colorSelect = item.talla;
     for( let row of this.data.listColor) row.check1 = false;
     item.check1 = true;
+    let findIndex = _.findIndex( this.imageObject2, { 'image': item.foto } );
+    //console.log("****11", findIndex )
+    if( findIndex >= 0 ) this.showImage( findIndex );
+  }
+
+  // Función para mostrar la imagen que elijas
+  showImage(index: number): void {
+    //console.log("****701", this.nextStep )
+    if( this.productCarousel ){
+      const carousel = this.productCarousel.nativeElement;
+      const bootstrapCarousel = new bootstrap.Carousel(carousel); // Crear instancia del carrusel
+      bootstrapCarousel.to(index); // Cambiar al índice específico
+    }
   }
 
   checkTalla( item ){

@@ -1,4 +1,4 @@
-<div class="row">
+<div>
   <div class="col-12" *ngFor="let item of listCategorias">
     <div class="text-center my-4">
       <h1> <strong>  {{ item.cat_nombre }} </strong> </h1>
@@ -18,10 +18,20 @@
             </mat-card-subtitle>
           </mat-card>
         </div>
+        <div class="col-12" *ngIf="disabledReload">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div class="col-12">
+          <div class="d-flex justify-content-center">
+            <div>
+              <button mat-raised-button color="primary" (click)="paginateArticle()" >VER MAS</button>
+            </div>
+          </div>
+        </div>
       </div>
       <div>
-        <div style="width: 100%; text-align: center;">
-          <h2>Lo Sentimos no tenemos información</h2>
+        <div style="width: 100%; text-align: center;" *ngIf="item.articleData.length === 0">
+          <h2><strong>Lo Sentimos no tenemos información</strong></h2>
         </div>
       </div>
     </div>

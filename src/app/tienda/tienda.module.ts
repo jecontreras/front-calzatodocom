@@ -27,10 +27,11 @@ import { SliderComponent } from './slider/slider.component';
 import { MenuLateralComponent } from './menu-lateral/menu-lateral.component';
 import { ProductosTComponent } from './productos-t/productos-t.component';
 import { MatTableModule } from '@angular/material';
+import { OpcinAlertComponent } from './opcin-alert/opcin-alert.component';
 
 @NgModule({
-  entryComponents: [ InfoProductoComponent,ChecktDialogComponent ],
-  declarations: [MainsComponent, TiendaComponent, ProductosComponent, FooterComponent, MenuComponent, InfoProductoComponent, ProductosViewComponent, ContactoComponent, ChecktComponent, CarritoComponent, CompletarComponent, ChecktDialogComponent, DetallePedidoComponent, CatalogoComponent, AlertBannerComponent, SliderComponent, MenuLateralComponent, ProductosTComponent ],
+  entryComponents: [ InfoProductoComponent,ChecktDialogComponent, OpcinAlertComponent ],
+  declarations: [MainsComponent, TiendaComponent, ProductosComponent, FooterComponent, MenuComponent, InfoProductoComponent, ProductosViewComponent, ContactoComponent, ChecktComponent, CarritoComponent, CompletarComponent, ChecktDialogComponent, DetallePedidoComponent, CatalogoComponent, AlertBannerComponent, SliderComponent, MenuLateralComponent, ProductosTComponent, OpcinAlertComponent ],
   imports: [
     TiendaRoutingModule,
     CommonModule,

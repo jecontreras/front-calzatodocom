@@ -1,0 +1,45 @@
+<h2 mat-dialog-title style="text-align: center; color: #d81b60;"><strong>METODO DE PAGO</strong></h2>
+<mat-dialog-content class="mat-typography">
+  <div>
+    <section class="example-section">
+      <mat-radio-group
+        [(ngModel)]="decision"
+        style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px;">
+
+        <!-- Opción: Transferencia bancaria directa -->
+        <mat-radio-button
+          class="payment-option"
+          value="bacs">
+          <div>
+            <strong style="font-size: 16px; color: #333;">Transferencia Bancaria Directa</strong>
+            <p>
+              NOTA: 🎉 ¡Atención, Clientes Exclusivos! 🎉<br>
+              🚨 Promoción Especial: Compra Adelantada 🚨<br>
+              Por tus compras adelantadas, te ofrecemos un 10% de descuento en tu pedido. 🎁 Además, tu pedido será priorizado y despachado de inmediato en los días hábiles.<br>
+              📦 Envíos rápidos y gratis a toda Colombia.<br>
+              ✨ Garantía y Confianza.
+            </p>
+          </div>
+        </mat-radio-button>
+
+        <!-- Opción: Pago Contra Entrega -->
+        <mat-radio-button
+          class="payment-option"
+          value="cod">
+          <div>
+            <strong style="font-size: 16px; color: #333;">Pago Contra Entrega</strong>
+            <p>
+              💡 Ofrecemos el servicio de pago contra entrega para mayor comodidad de nuestros clientes. Pagarás tu pedido en el momento de la entrega.<br>
+              Se requiere un pago previo de $20.000 que será descontado del total del pago o compra.<br>
+              Asegúrate de estar disponible en la dirección proporcionada o designar a alguien para recibir y pagar el pedido.
+            </p>
+          </div>
+        </mat-radio-button>
+
+      </mat-radio-group>
+    </section>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button cdkFocusInitial mat-raised-button color="primary"  (click)="submit()">Siguiente</button>
+</mat-dialog-actions>

@@ -44,6 +44,7 @@ export class ProductosComponent implements OnInit {
   dataSeleccionda:string;
   listCategorias:any = [];
   idCategory:string;
+  disabledReload:boolean = false;
 
   constructor(
     private _productos: ProductoService,
@@ -81,6 +82,19 @@ export class ProductosComponent implements OnInit {
     }, 3000); // Simular la compra después de 3 segundos
   }
 
+  async paginateArticle(){
+    this.query.page++;
+    this.disabledReload = true;
+    for( let item of this.listCategorias ) {
+      this.query.where.pro_categoria = this.idCategory;
+      let data:any = await this.getProductos( );
+      if( !item.articleData ) item.articleData = [];
+      item.articleData.push( ...data );
+      item.articleData =_.unionBy( item.articleData || [], item.articleData, 'id');
+    }
+    this.disabledReload = false;
+  }
+
   async getCategorias(){
     this._categorias.get( { where:{ cat_activo: 0, id: this.idCategory }, limit: 100 } ).subscribe( async (res:any)=>{
       this.listCategorias = res.data;
@@ -89,13 +103,6 @@ export class ProductosComponent implements OnInit {
         item.articleData = await this.getProductos( );
       }
     });
-  }
-
-  handleCategory(){
-    this.query = { where:{ pro_activo: 0,  } ,limit: 30, page: 0 };
-    this.listProductos = [];
-    this.loader = true;
-    this.getProductos();
   }
   
   buscar() {
@@ -157,6 +164,7 @@ export class ProductosComponent implements OnInit {
     return new Promise( async ( resolve ) =>{
       if( this.tiendaInfo.id ) this.query.where.empresa = this.tiendaInfo.id;
       else this.query.where.empresa = 4;
+      //console.log("****164", this.query )
       this._productos.get( this.query ).subscribe( ( res:any )=>{
         //this.listProductos = _.unionBy(this.listProductos || [], res.data, 'id');
         resolve( res.data );

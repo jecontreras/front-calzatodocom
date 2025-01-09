@@ -11,6 +11,8 @@ import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { EpaycoService } from 'src/app/services/epayco.service';
 import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material';
+import { OpcinAlertComponent } from '../opcin-alert/opcin-alert.component';
 declare var ePayco: any;
 
 @Component({
@@ -62,7 +64,8 @@ export class CarritoComponent implements OnInit {
     private _user: UsuariosService,
     private _ventas: VentasService,
     private _router: Router,
-    private epaycoService: EpaycoService
+    private epaycoService: EpaycoService,
+    public dialog: MatDialog
   ) { 
     this.paymentForm = this.fb.group({
       paymentMethod: ['bacs', Validators.required] // Valor predeterminado: "Contra entrega"
@@ -179,11 +182,33 @@ export class CarritoComponent implements OnInit {
     return true;
   }
 
+  handleDecision(){
+    return new Promise( resolve =>{
+      const dialogRef = this.dialog.open(OpcinAlertComponent,{
+        width: '90%', // Se adapta al 90% del ancho de la pantalla
+        maxWidth: '500px', // Máximo ancho en pantallas grandes
+        data: {
+          opt: this.paymentForm.value.paymentMethod
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log(`Dialog result: ${result}`);
+        resolve( result );
+      });
+    });
+  }
+
   async finalizando(){
     if( this.disabled ) return false;
     this.disabled = true;
     let validador = await this.validador();
     if( !validador ) { this.disabled = false; return false;}
+    let decionOpt = await this.handleDecision();
+    if( !decionOpt ) { this.disabled = false; return false;}
+    this.paymentForm.value.paymentMethod = decionOpt;
+    console.log(decionOpt, this.paymentForm.value.paymentMethod);
+    this.suma();
     let data:any = {
       "ven_tipo": this.orderSummary.extraCharge === 0 ? 'PAGO ADELANTADO' : 'PAGA EN CASA',
       "usu_clave_int": 1,
