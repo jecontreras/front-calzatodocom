@@ -5,7 +5,7 @@
     </div>
 
     <div class="content">
-      <div class="row" *ngIf="item.articleData.length">
+      <div class="row" *ngIf="item.articleData">
         <div class="col-6 col-sm-4 col-md-3 col-lg-2" *ngFor="let product of item.articleData">
           <mat-card style="padding: 0 !important" class="product-card" [routerLink]="[ '/tienda/productosView', product.id ]">
             <div class="image-container">
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div>
+      <div *ngIf="item.articleData">
         <div style="width: 100%; text-align: center;" *ngIf="item.articleData.length === 0">
           <h2><strong>Lo Sentimos no tenemos información</strong></h2>
         </div>
