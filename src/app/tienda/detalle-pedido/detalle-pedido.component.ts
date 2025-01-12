@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { ToolsService } from 'src/app/services/tools.service';
 import { VentasProductosService } from 'src/app/servicesComponents/ventas-productos.service';
 import { ActivatedRoute } from '@angular/router';
+import { EpaycoService } from 'src/app/services/epayco.service';
   
 declare interface DataTable {
   headerRow: string[];
@@ -52,7 +53,8 @@ export class DetallePedidoComponent implements OnInit {
     private _store: Store<STORAGES>,
     public _tools: ToolsService,
     private activate: ActivatedRoute,
-    private _ventasPro: VentasProductosService
+    private _ventasPro: VentasProductosService,
+    private epaycoService: EpaycoService
   ) { 
     this._store.subscribe((store: any) => {
       store = store.name;
@@ -73,13 +75,13 @@ export class DetallePedidoComponent implements OnInit {
       dataRows: []
     };
     await this.cargarTodos();
-    if( this.dataUser.id ) {
+    /*if( this.dataUser.id ) {
       try {
         setTimeout(()=> this.handleWhatsapp( this.dataUltV ), 5000 );
       } catch (error) { 
         console.log("**74", error )
       }
-    }
+    }*/
   }
 
   crear(obj:any){
@@ -154,6 +156,10 @@ export class DetallePedidoComponent implements OnInit {
     let url:string = window.origin;
     url+="/tienda/productosView/"+item.id;
     window.open( url )
+  }
+
+  async handleBuyEpayco(){
+    await this.epaycoService.pagar( this.dataUltV );
   }
 
 }

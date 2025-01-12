@@ -120,7 +120,7 @@ export class CarritoComponent implements OnInit {
       this.orderSummary.RestarAdl = RestarAdl;
     }
     this.orderSummary.total = ( this.orderSummary.subtotal + this.orderSummary.extraCharge ) - RestarAdl;
-    this.orderSummary.total = this.orderSummary.total - RestarAdl;
+    //this.orderSummary.total = this.orderSummary.total - RestarAdl;
   }
 
   updateCart( item:any ){
@@ -221,7 +221,7 @@ export class CarritoComponent implements OnInit {
       "ven_barrio": this.data.barrio,
       "ven_direccion_cliente": this.data.direccion,
       "ven_total": ( this.orderSummary.total ),
-      "ven_ganancias": this.orderSummary.extraCharge,
+      "ven_ganancias": this.orderSummary.extraCharge || this.orderSummary.RestarAdl,
       "ven_observacion": this.data.ven_observacion || "",
       "ven_estado": 0,
       "create": moment().format("DD/MM/YYYY"),
@@ -352,131 +352,10 @@ export class CarritoComponent implements OnInit {
     });
   }
   checkoutData: any;
-  /*
-  handleCheckTransFer(){
-    const paymentDetails = {
-      amount: this.orderSummary.total,
-      tax: 0, // Cambia según corresponda
-      base: this.orderSummary.total,
-      description: 'Compra en Mi Tienda',
-      email: 'cliente@correo.com', // Debes pedir el email al cliente
-      name: 'Juan Pérez', // Debes pedir el nombre al cliente
-      phone: '3001234567', // Debes pedir el teléfono al cliente
-    };
-
-    this._ventas.createCheckout(paymentDetails).subscribe(
-      (response) => {
-        this.checkoutData = response.checkoutData;
-        // Redirige al cliente a ePayco
-        const epaycoForm = document.createElement('form');
-        epaycoForm.action = 'https://checkout.epayco.co/checkout.js';
-        epaycoForm.method = 'POST';
-        epaycoForm.target = '_self';
-
-        // Agrega los datos como inputs ocultos
-        for (const key in this.checkoutData) {
-          if (Object.prototype.hasOwnProperty.call(this.checkoutData, key)) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = key;
-            input.value = this.checkoutData[key];
-            epaycoForm.appendChild(input);
-          }
-        }
-
-        document.body.appendChild(epaycoForm);
-        epaycoForm.submit();
-      },
-      (error) => {
-        console.error('Error al generar el checkout:', error);
-        alert('Hubo un problema al generar el pago.');
-      }
-    );
-  }
-    */
-  handleCheckTransFer( dataBuy ){
+  
+  async handleCheckTransFer( dataBuy ){
     console.log("DST", dataBuy)
-    var handler = ePayco.checkout.configure({
-      key: this.ShopConfig.keyEpayco,
-      test: this.ShopConfig.epaycoDev
-    });
-
-    var data = {
-      url: "https://recaudos.pagosinteligentes.com/CollectForm.aspx?Token=be3c7e95-5c30-47e3-9209-9e88a2e6f57d",
-      otrourl: "https://publihazclick.s3.amazonaws.com/paquetes/19fd8728-c89b-44c7-951b-79dcbbace3ff.jpg",
-      wester: "https://www.google.com.co/",
-      imgwester: "https://www.viviendocali.com/wp-content/uploads/2017/10/Western-Union-en-bucaramanga.jpg",
-      // Parámetros obligatorios
-      name: "Comprando",
-      invoice: dataBuy.id,
-      currency: "cop", // Moneda
-      amount: dataBuy.ven_tipo === 'PAGO ADELANTADO' ? this.orderSummary.total : 20000, // Total del pedido
-      tax_base: "0", // Subtotal
-      tax: "0", // IVA
-      tax_ico: "0", // Impuesto al consumo
-      country: "co",
-      lang: "es", // Usa el valor de lang
-  
-      //Onpage="false" - Standard="true"
-      external: "true",
-  
-      // Atributos cliente
-      name_billing: this.data.nombre,
-      address_billing: this.data.direccion,
-      mobilephone_billing: this.data.telefono,
-      number_doc_billing: "",
-      email_billing: this.data.ven_imagen_conversacion,
-      type_doc_billing: "cc",
-  
-      confirmation: environment.url+"/tblventas/checkEpayco",
-      response: location.origin+"/tienda/detallepedido/"+dataBuy.id,
-  
-      // Atributos opcionales
-      extra1: "extra1",
-      extra2: "extra2",
-      extra3: "extra3",
-  };
-
-  console.log("***410", data)
-  handler.open(data)
-  /*let obj:any = {
-    url: "https://recaudos.pagosinteligentes.com/CollectForm.aspx?Token=be3c7e95-5c30-47e3-9209-9e88a2e6f57d",
-    otrourl: "https://publihazclick.s3.amazonaws.com/paquetes/19fd8728-c89b-44c7-951b-79dcbbace3ff.jpg",
-    wester: "https://www.google.com.co/",
-    imgwester: "https://www.viviendocali.com/wp-content/uploads/2017/10/Western-Union-en-bucaramanga.jpg",
-    name: "Comprando en Calzatodo",
-    description: "Calzado Importado",
-    invoice: dataBuy.id,
-    currency: 'cop',
-    amount: dataBuy.ven_tipo === 'PAGO ADELANTADO"' ? this.orderSummary.total : 20000, // Total del pedido
-    tax_base: '0',
-    tax: '0',
-    country: 'co',
-    test: false,
-    lang: 'eng',
-    external: 'true',
-    extra1: 'extra1',
-    extra2: 'extra2',
-    extra3: 'extra3',
-    name_billing: this.dataUser.name + ' ' + this.dataUser.lastname,
-    email_billing: this.dataUser.email,
-    address_billing: this.dataUser.ciudad || 'cucuta',
-    type_doc_billing: this.dataUser.tipdoc,
-    mobilephone_billing: this.dataUser.celular,
-    number_doc_billing: this.dataUser.celular
-};
-//console.log( obj)
-try {
-  const handler: any = ePayco.checkout.configure({
-    key: '90506d3b72d22b822f53b54dcf22dc3a',
-    test: true
-  })
-    ;
-  handler.open(obj);
-} catch (error) {
-  console.log("************", error)
-  this._tools.tooast("Eror en el proceso de compra");
-}*/
-
+    dataBuy.telefono = this.data.telefono;
+    await this.epaycoService.pagar( dataBuy );
   }
 }

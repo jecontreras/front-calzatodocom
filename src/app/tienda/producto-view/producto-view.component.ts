@@ -173,7 +173,7 @@ export class ProductosViewComponent implements OnInit {
     setInterval(()=>{
       //this.openSnackBar();
       terv++;
-      if( terv >= 5 && terv <=5 ){
+      if( terv >= 10 && terv <=10 ){
         this.rango++;
         this.showNotification = true;
         function getRandomInt(max) {
@@ -182,7 +182,7 @@ export class ProductosViewComponent implements OnInit {
         this.lastPurchase.user = this.dataList[getRandomInt(10)].txt;
         this.lastPurchase.image = this.viewsImagen;
       }
-      if( terv >= 10 ){
+      if( terv >= 14 ){
         this.showNotification = false;
         terv = 0;
       }

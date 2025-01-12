@@ -1,18 +1,3 @@
-<!-- catg header banner section -->
-<section id="aa-catg-head-banner">
-    <img [src]="tiendaInfo.portada4 || './assets/img/fashion/fashion-header-bg-8.jpg'" class="anchosBanner" alt="fashion img">
-    <div class="aa-catg-head-banner-area">
-      <div class="container">
-       <div class="aa-catg-head-banner-content">
-         <h2>Contactos</h2>
-         <ol class="breadcrumb">
-            <li><a href="#" [routerLink]="[ '/tienda' ]">Inicio</a></li>
-           <li class="active">Contactos</li>
-         </ol>
-       </div>
-      </div>
-    </div>
-   </section>
    <!-- / catg header banner section -->
  <!-- start contact section -->
   <section id="aa-contact">
@@ -69,11 +54,11 @@
                 <div class="col-md-4">
                   <div class="aa-contact-address-right">
                     <address>
-                      <h4>{{ tiendaInfo.nombreTienda || 'Locomproaqui' }}</h4>
-                      <p>{{ tiendaInfo.decripcion || 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum modi dolor facilis! Nihil error, eius' }}</p>
-                      <p><span class="fa fa-home"></span>{{ tiendaInfo.direccionTienda || 'Huntsville, AL 35813, USA' }}</p>
-                      <p><span class="fa fa-phone"></span>{{ tiendaInfo.numeroCelular || '+ 021.343.7575' }}</p>
-                      <p><span class="fa fa-envelope"></span>Email: {{ tiendaInfo.emailTienda || 'support@dailyshop.com' }}</p>
+                      <h4>{{ tiendaInfo.nombreTienda || 'Landing' }}</h4>
+                      <p>{{ tiendaInfo.decripcion }}</p>
+                      <p><span class="fa fa-home"></span>{{ tiendaInfo.direccionTienda || 'direccion' }}</p>
+                      <p><span class="fa fa-phone"></span>{{ tiendaInfo.numeroCelular || 'telefeno' }}</p>
+                      <p><span class="fa fa-envelope"></span>Email: {{ tiendaInfo.emailTienda || 'correo' }}</p>
                     </address>
                   </div>
                 </div>

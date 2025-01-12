@@ -9,6 +9,7 @@ import { CarritoComponent } from './carrito/carrito.component';
 import { ChecktComponent } from './checkt/checkt.component';
 import { DetallePedidoComponent } from './detalle-pedido/detalle-pedido.component';
 import { CatalogoComponent } from './catalogo/catalogo.component';
+import { PoliciesComponent } from './policies/policies.component';
 
 
 const routes: Routes = [
@@ -59,6 +60,10 @@ const routes: Routes = [
           {
             path: 'catalogo/:id',
             component: CatalogoComponent
+          },
+          {
+            path: 'politicas',
+            component: PoliciesComponent
           }
         ]
       },

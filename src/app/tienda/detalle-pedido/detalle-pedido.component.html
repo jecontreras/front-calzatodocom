@@ -59,6 +59,22 @@
             </span>
           
             <section class="woocommerce-order-details">
+              <div class="d-flex justify-content-center">
+                <div *ngIf="!dataUltV.ven_imagen_conversacion">
+                  <br>
+                  <a
+                    id="sendbtn"
+                    style="background: #ffaf00; font-size: 220%;"
+                    (click)="handleBuyEpayco()"
+                    class="pointer"
+                  >
+                    <strong>Pagar con Epayco</strong>
+                  </a>
+                </div>
+                <div *ngIf="dataUltV.ven_imagen_conversacion">
+                  <h2><strong>YA TENEMOS TU PAGO FELICIDADES</strong></h2>
+                </div>
+              </div><br><br>
               <h2>Detalles del pedido</h2>
               <div class="responsive-table">
                 <table class="woocommerce-table order_details">
@@ -83,7 +99,10 @@
                       <td>{{ _tools.monedaChange2( 3,2, ( this.dataUltV.ven_precio ) ) }}</td>
                     </tr>
                     <tr>
-                      <th>Cargo adicional:</th>
+                      <th>
+                        <span *ngIf="dataUltV.ven_tipo !== 'PAGO ADELANTADO' ">Cargo adicional:</span>
+                        <span *ngIf="dataUltV.ven_tipo === 'PAGO ADELANTADO' ">Descuento por pago anticipado</span>
+                      </th>
                       <td>{{ _tools.monedaChange2( 3,2, ( this.dataUltV.ven_ganancias ) ) }}</td>
                     </tr>
                     <tr>

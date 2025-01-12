@@ -1,92 +1,40 @@
-<!-- footer -->
-<footer id="aa-footer">
-    <!-- footer bottom -->
-    <div class="aa-footer-top">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="aa-footer-top-area">
-                        <div class="row">
-                            <div class="col-md-3 col-sm-6">
-                                <div class="aa-footer-widget">
-                                    <h3>Menú principal</h3>
-                                    <ul class="aa-footer-nav">
-                                        <li><a class="pointer" [routerLink]="[ '/tienda' ]" >Inicio</a></li>
-                                        <li><a class="pointer" [routerLink]="[ '/tienda/productos' ]">Productos</a></li>
-                                        <li><a class="pointer" [routerLink]="[ '/tienda' ]">Sobre nosotras </a></li>
-                                        <li><a class="pointer" (click)="handleContacto()">Contacto</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="aa-footer-widget">
-                                    <div class="aa-footer-widget">
-                                        <h3>Detalles</h3>
-                                        <ul class="aa-footer-nav">
-                                            <li><a href="#">Entrega</a></li>
-                                            <li><a href="#">Devoluciones</a></li>
-                                            <li><a href="#">Servicios</a></li>
-                                            <li><a href="#">Descuento</a></li>
-                                            <li><a href="#">Oferta especial</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="aa-footer-widget">
-                                    <div class="aa-footer-widget">
-                                        <h3>Enlaces útiles</h3>
-                                        <ul class="aa-footer-nav">
-                                            <li><a href="#">Mapa del sitio</a></li>
-                                            <li><a href="#">Buscar</a></li>
-                                            <li><a href="#">Búsqueda Avanzada</a></li>
-                                            <li><a href="#">Proveedoras</a></li>
-                                            <li><a href="#">FAQ</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-sm-6">
-                                <div class="aa-footer-widget">
-                                    <div class="aa-footer-widget">
-                                        <h3>Contactos</h3>
-                                        <address>
-                                            <!--<p> 25 Astor Pl, NY 10003, USA</p>-->
-                                            <p><span class="fa fa-phone"></span>+57{{ tiendaInfo.numeroCelular }} </p>
-                                            <p><span class="fa fa-envelope"></span>{{ tiendaInfo.emailTienda }} </p>
-                                        </address>
-                                        <div class="aa-footer-social">
-                                            <a class="pointer"><span class="fa fa-facebook"></span></a>
-                                            <a class="pointer"><span class="fa fa-twitter"></span></a>
-                                            <a class="pointer"><span class="fa fa-google-plus"></span></a>
-                                            <a class="pointer"><span class="fa fa-youtube"></span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<footer class="footer">
+    <div class="footer-container">
+      <!-- Sede Bogotá -->
+      <div class="footer-section">
+        <h3> <strong> {{ tiendaInfo.nombreTienda }} </strong> </h3>
+        <p>📞 {{ tiendaInfo.numeroCelular }}</p>
+        <p>📧 {{ tiendaInfo.emailTienda }}</p>
+        <p>📍 {{ tiendaInfo.direccionTienda }}</p>
+        <p>Bogotá, Colombia</p>
+      </div>
+  
+      <!-- Logo y redes sociales -->
+      <div class="footer-center">
+        <img [src]="tiendaInfo.logo" alt="Logo Distriburban" class="footer-logo" />
+        <div class="social-icons">
+          <a href="#" target="_blank">🔵</a>
+          <a href="#" target="_blank">🟢</a>
+          <a href="#" target="_blank">🔴</a>
+          <a href="#" target="_blank">🔘</a>
         </div>
-    </div>
-    <!-- footer-bottom -->
-    <div class="aa-footer-bottom">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="aa-footer-bottom-area">
-                        <p>Dilisoft Group <a href="http://www.markups.io/">Ishop</a></p>
-                        <div class="aa-footer-payment">
-                            <span class="fa fa-cc-mastercard"></span>
-                            <span class="fa fa-cc-visa"></span>
-                            <span class="fa fa-paypal"></span>
-                            <span class="fa fa-cc-discover"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="footer-links">
+          <a class="pointer" [routerLink]="[ '/tienda/politicas']">Términos y condiciones</a>
+          <a class="pointer" [routerLink]="[ '/tienda/politicas']" >Política de privacidad</a>
+          <a class="pointer" [routerLink]="[ '/tienda/contacto']">Nosotros</a>
+          <a class="pointer" [routerLink]="[ '/tienda/contacto']">Contacto</a>
         </div>
+      </div>
+  
+      <!-- Sede Casanare -->
+      <div class="footer-section">
+        <h3> <strong> Cúcuta Norte de Santander </strong> </h3>
+        <p>📞 {{ tiendaInfo.numeroCelular }}</p>
+        <p>📧 {{ tiendaInfo.emailTienda }}</p>
+        <p>📍 {{ tiendaInfo.direccionTienda }}</p>
+        <p>Cúcuta, Norte de santander - Colombia</p>
+      </div>
     </div>
-</footer>
-<!-- / footer -->
+    <br><br>
+  </footer>
+  
