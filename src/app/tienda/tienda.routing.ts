@@ -10,6 +10,7 @@ import { ChecktComponent } from './checkt/checkt.component';
 import { DetallePedidoComponent } from './detalle-pedido/detalle-pedido.component';
 import { CatalogoComponent } from './catalogo/catalogo.component';
 import { PoliciesComponent } from './policies/policies.component';
+import { CompletarComponent } from './completar/completar.component';
 
 
 const routes: Routes = [
@@ -64,6 +65,10 @@ const routes: Routes = [
           {
             path: 'politicas',
             component: PoliciesComponent
+          },
+          {
+            path: 'nosotros',
+            component: CompletarComponent
           }
         ]
       },

@@ -259,7 +259,7 @@ export class CarritoComponent implements OnInit {
       this.disabledSpineer = false;
       return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
     }
-    this.handleCheckTransFer( resul );
+    if( data.ven_tipo === 'PAGO ADELANTADO' ) this.handleCheckTransFer( resul );
     this.disabled = false;
     this.disabledEpaycoSpinner = true;
     //this.disabledSpineer = false;
