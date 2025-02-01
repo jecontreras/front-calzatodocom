@@ -260,6 +260,9 @@ export class CarritoComponent implements OnInit {
       return this._tools.presentToast("TENEMOS PROBLEMAS AL REGISTRAR LA VENTA");
     }
     if( data.ven_tipo === 'PAGO ADELANTADO' ) this.handleCheckTransFer( resul );
+    else {
+      setTimeout(()=> { this.mensajeWhat(); this._router.navigate(['/tienda/detallepedido']); }, 2000 )
+    }
     this.disabled = false;
     this.disabledEpaycoSpinner = true;
     //this.disabledSpineer = false;
@@ -280,14 +283,14 @@ export class CarritoComponent implements OnInit {
     mensaje = `https://wa.me/57${ this.ShopConfig.numeroCelular }?text=${encodeURIComponent(`
       Hola Servicio al cliente, como esta, saludo cordial,
       para confirmar adquiere este producto
-      Nombre de cliente: ${ this.data.nombre }
+      *Nombre de cliente*: ${ this.data.nombre }
       *Celular:*${ this.data.telefono }
       *Ciudad:* ${ this.data.ciudad }
       *Barrio:*${ this.data.barrio }
       *Dirección:* ${ this.data.direccion }
-      *Nombre Cliente:*${ this.data.pro_nombre }
+      *Producto:*${ this.data.pro_nombre }
 
-      TOTAL FACTURA ${( this.data.costo + ( this.data.pro_vendedor || 0 ) )}
+      TOTAL FACTURA ${( this._tools.monedaChange2( 3, 2, ( this.orderSummary.total || 0 ) ) )}
       🤝Gracias por su atención y quedo pendiente para recibir por este medio la imagen de la guía de despacho`)}`;
     console.log(mensaje);
     window.open(mensaje);

@@ -1,6 +1,6 @@
 {
-  "configVersion": 440,
-  "timestamp": 1736832844223,
+  "configVersion": 1,
+  "timestamp": 1737141124877,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -8,8 +8,8 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "urls": [
-        "/5-es2015.ed2fc5b22ce18ff890f7.js",
-        "/5-es5.ed2fc5b22ce18ff890f7.js",
+        "/5-es2015.ddd05c4a74f539f99060.js",
+        "/5-es5.ddd05c4a74f539f99060.js",
         "/favicon.ico",
         "/index.html",
         "/main-es2015.3b02fbf915e87c7d89b6.js",
@@ -17,8 +17,8 @@
         "/manifest.webmanifest",
         "/polyfills-es2015.3fd94ed6a324eee92aec.js",
         "/polyfills-es5.c219b7059a7feb126472.js",
-        "/runtime-es2015.823fdf5325e8cf0a05a2.js",
-        "/runtime-es5.823fdf5325e8cf0a05a2.js",
+        "/runtime-es2015.cd251201678c440f6aed.js",
+        "/runtime-es5.cd251201678c440f6aed.js",
         "/scripts.301eb7eab5d0bbc1eace.js",
         "/styles.eb7b1c26091a47599f71.css"
       ],
@@ -404,8 +404,8 @@
   ],
   "dataGroups": [],
   "hashTable": {
-    "/5-es2015.ed2fc5b22ce18ff890f7.js": "c6b943bed08adf6a03912f9685f25e77690108cc",
-    "/5-es5.ed2fc5b22ce18ff890f7.js": "0bc01630ad0bedaf1d0680ff187195343ead3db8",
+    "/5-es2015.ddd05c4a74f539f99060.js": "944f1c2ab6d700ec31db96ca5fd8bcd1d6014799",
+    "/5-es5.ddd05c4a74f539f99060.js": "74c03584c11db85fed0db78473ef1a645aa2611f",
     "/assets/LOCOMPROAQUI.COM _ Dashboard_files/10.jpg": "b379c2a251b48471ddcd5eeda01313cdc85a8478",
     "/assets/LOCOMPROAQUI.COM _ Dashboard_files/11.jpg": "761fe92d6b3ae4039855a012a591794327edb35b",
     "/assets/LOCOMPROAQUI.COM _ Dashboard_files/12.jpg": "d86914a1ebc20e7d8ceac962bb3503110a98f0b4",
@@ -776,14 +776,14 @@
     "/assets/scss/style.scss": "84f2f30d4f3961cbd4580ebff60c85e9cc5c3628",
     "/assets/sonidos/notificando.mp3": "8cb50b036f790a28fafb04b0e57576f358b37196",
     "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/index.html": "1c8f8ace6d50101e1d688ed59b62e50efaaeafc5",
+    "/index.html": "05e847b0ea69905f81ca989c00406b4c6e6c67bf",
     "/main-es2015.3b02fbf915e87c7d89b6.js": "dbf5dd79c63722e9b0014635cd42e0e0e3822e85",
     "/main-es5.3b02fbf915e87c7d89b6.js": "83d40e1d8a48c6d052014e467dffe5218dc741b1",
     "/manifest.webmanifest": "d6d9b3459b7e6c8c5e8bd494b35f6da3bed91db1",
     "/polyfills-es2015.3fd94ed6a324eee92aec.js": "72ad4ccc0a3916ae4598199447cdeadd6d380570",
     "/polyfills-es5.c219b7059a7feb126472.js": "a1952ab74a5c94bc1d08b7e3ed1e8852f2b26af3",
-    "/runtime-es2015.823fdf5325e8cf0a05a2.js": "339082c640e22c538309e2aa8d41e478d78c9236",
-    "/runtime-es5.823fdf5325e8cf0a05a2.js": "576a918ca62d155d4e16294a9ca2e198179b43d8",
+    "/runtime-es2015.cd251201678c440f6aed.js": "44a252d831cbe75d2883e67eed1bf6d2fa9cc508",
+    "/runtime-es5.cd251201678c440f6aed.js": "b4662c1b287175b44a1c849b3e33f77fac2dea14",
     "/scripts.301eb7eab5d0bbc1eace.js": "b5678e0eb7cbfa98d7c1c7591113badc2fdb680a",
     "/styles.eb7b1c26091a47599f71.css": "411c21a5c2c94e0f45aa70f7229270eec48ab8e5"
   },
